@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     #her, this function is used to recieve data from the site manager (where the enoslib script is executed)
     DATAS_RECIEVED = recieveObject()
-
+    print(DATAS_RECIEVED)
     #get the ID and IP of the actual site 
     SITE_ID = DATAS_RECIEVED["SITE_ID"] 
     CACHE_SIZE = DATAS_RECIEVED["CACHE_SIZE"] 
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     cm.output.write(f"{SITE_ID} {REP_PORT} {DATAS_RECIEVED}")
 
     cm.start()
-            
+          
     """poller = zmq.Poller()
     poller.register(cvm.sub_socket, zmq.POLLIN)"""
     
@@ -56,10 +56,7 @@ if __name__ == "__main__":
         
         time.sleep(3)
         cm.site = "A"
-        new_data = Data(
-            id_data = 0,
-            size=5
-        )
+        new_data = None
         cm.addData(id_data=0, data=new_data)
     
     if cm.id == 1:
@@ -86,10 +83,7 @@ if __name__ == "__main__":
         cm.output.write(f"\nreceived {message.type} message from {message.id_sender} source:{message.id_source}")
         print(f"\nreceived {message.type} message from {message.id_sender} source:{message.id_source}")
         cm.processMessage(message)
-        
-        #thread = threading.Thread(target=cm.processMessage, args=(message,))
-        #thread.start()
-        break 
+          
     
     cm.stop()
 

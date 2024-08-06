@@ -3,8 +3,8 @@ import subprocess
 import time
 from configuration.configuration import Configuration
 from communication.send_data import sendObject
-from communication.communication import CommunicationREQREP
-from tasks_manager import TaskManager
+from communication.communication import CommunicationREQREP, CommunicationDelear
+from replicaManager import ReplicaManager
 
 def run_command(command):
     
@@ -16,8 +16,8 @@ def InfosToSend(id_peer:int,graphe_info,ip_address, rep_port, cache_size):
     data["CACHE_SIZE"] = cache_size
     data["infos"] = []
     data["SITE_ID"] = id_peer
-    data["REP_PORT"] = rep_port + ip_address
-    data["IP_ADDESS"] = str(ip_address[id_peer])
+    data["REP_PORT"] = rep_port + id_peer
+    data["IP_ADDRESS"] = str(ip_address[id_peer])
     
     """
     SITE_ID = sys.argv[1] 
@@ -30,6 +30,7 @@ def InfosToSend(id_peer:int,graphe_info,ip_address, rep_port, cache_size):
     for i in range(len(graphe_info)):
         if graphe_info[id_peer,i] > 0:
             peer = {
+                'latency' : graphe_info[id_peer,i],
                 "id": i,
                 "ip" : ip_address[i], 
                 "rep_port" : rep_port+i, 
@@ -37,10 +38,12 @@ def InfosToSend(id_peer:int,graphe_info,ip_address, rep_port, cache_size):
 
             data["infos"].append(peer)
     return data
+
 ###### Start a reservation
-PATH_TO_CONFIG_FILE = "./configuration/conf.yaml"
+PATH_TO_CONFIG_FILE = "/Users/cherif/Documents/Traveaux/traces-simulator/cache-exp/configuration/conf.yaml"
 PATH_TO_TASKS ="/Users/cherif/Documents/Traveaux/traces-simulator/cache-exp/exp/traces/traces_with_datasets.csv" 
-port_rep = 8080
+      
+port_rep = 8780
 
 if __name__ == "__main__":
 
@@ -57,12 +60,14 @@ if __name__ == "__main__":
     ## deplot memcached
     config.deployMemcached()
 
-    task_manager = TaskManager(
+    task_manager = ReplicaManager(
         traces_path=PATH_TO_TASKS,
-        connection = CommunicationREQREP(
+        connection = CommunicationDelear(
             3030,
-            nieghbors=None
-        )
+            nieghbors=None,
+            
+        ),
+        graphes= config.getGraphe()
     )
 
     ## get the data needed by the actors
@@ -73,11 +78,11 @@ if __name__ == "__main__":
     if config.execution_local:
         import threading
         for i, machine in enumerate(config.machines):
-            data = InfosToSend(i,graphe, ips_address,8780,5555,config.storage_capacities[i])
-            print(data)
+            data = InfosToSend(i,graphe, ips_address,8780,config.storage_capacities[i])
+            
             thread = threading.Thread(
                 target=run_command, 
-                args=(f"python ./main.py.py ",))
+                args=(f"python cache-exp/main.py ",))
             
             thread.start()
             
@@ -87,11 +92,12 @@ if __name__ == "__main__":
             infos_nodes.append({"node_ip":ips_address[i], "node_port":port_rep})
             port_rep += 1
             time.sleep(1)
-
-        task_manager.node_infos = infos_nodes
+            
+        task_manager.connection.nieghbors = infos_nodes
+        task_manager.nodes_infos = infos_nodes
         task_manager.nb_nodes = config.nb_sites
         task_manager.start()
-
+ 
     else:
         
         for i, machine in enumerate(config.machines):
@@ -127,7 +133,7 @@ if __name__ == "__main__":
             sendObject(data, ips_address[i])
 
         #lunching the tasks manager
-        task_manager.node_infos = infos_nodes
+        task_manager.nodes_infos = infos_nodes
         task_manager.nb_nodes = config.nb_sites
         task_manager.start()
 

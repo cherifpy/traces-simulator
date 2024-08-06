@@ -1,1 +1,1 @@
-NB_NODES = 5
+NB_NODES = 2

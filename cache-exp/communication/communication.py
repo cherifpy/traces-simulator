@@ -1,6 +1,8 @@
 import zmq
 import time
-
+import socket
+import json
+"""
 class RequestObject(object):
     def __init__(self, dist, sender,object_key) -> None:
         self.dist = dist
@@ -16,12 +18,41 @@ class SendObject:
 
 class Task:
     def __init__(self,id_task, id_node, infos, id_dataset, ds_size) -> None:
+        self.dist = id_node
         self.id_task = id_task
         self.id_node = id_node
         self.infos = infos
         self.id_dataset = id_dataset
         self.ds_size = ds_size
+    
+    def to_dict(self):
+        return {
+            'id_task': self.id_task,
+            'id_node': self.id_node,
+            'infos': self.infos,
+            'id_dataset': self.id_dataset,
+            'ds_size': self.ds_size
+        }
 
+    @staticmethod
+    def from_dict(data):
+        return Task(data['id_task'], data['id_node'], data['infos'], data['id_dataset'], data['ds_size'])
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
+    @staticmethod
+    def from_json(data):
+        return Task.from_dict(json.loads(data))
+    
+    def __str__(self):
+        return f"Task(id_task={self.id_task}, id_node={self.id_node}, infos={self.infos}, id_dataset={self.id_dataset}, ds_size={self.ds_size})"
+
+class endMessage:
+    def __init__(self,id_node, end_message) -> None:
+        self.dist = id_node
+        self.end_message = end_message
+"""
 class Communication(object):
 
     def __init__(self,ip_address, pub_port, sub_port):
@@ -71,21 +102,21 @@ class CommunicationREQREP(object):
         self.listner_port = listner_port
         self.nieghbors = nieghbors
         self.context = zmq.Context()
-        self.rep_socket = self.context.socket(zmq.REP)
-
+        self.dealer_socket = self.context.socket(zmq.DEALER)
+    
     def send(self,ip,port,data):
-        socket = self.context.socket(zmq.REQ)
-        socket.connect(f"tcp://{ip}:{port}")
-        self.req_socket.send_pyobj(data) 
-        time.time(0.02)
-        self.req_socket.close()
-
+        with zmq.Context() as context:
+            with context.socket(zmq.REQ) as socket:    
+                socket.connect(f"tcp://{ip}:{port}")
+                socket.send_pyobj(data) 
 
     def connect(self):
-        pub_address = f"tcp://*:{self.rep_socket}"        
-        self.pub_socket.bind(pub_address)
+        
+        self.dealer_socket = self.context.socket(zmq.REQ)
+        pub_address = f"tcp://localhost:{self.listner_port}"       
+        self.rep_socket.bind(pub_address)
 
-    def recv(self) -> SendObject:
+    def recv(self):
         return self.rep_socket.recv_pyobj()
 
     def stop(self):
@@ -97,5 +128,36 @@ class CommunicationREQREP(object):
         self.rep_socket.close()
         self.context.term()
     
+
+
+class CommunicationDelear(object):
+    def __init__(self, listner_port, nieghbors = []) -> None:
+        self.listner_port = listner_port
+        self.nieghbors = nieghbors
+        self.context = zmq.Context()
+        self.socket = self.context.socket(zmq.DEALER)
+    
+    def send(self,ip,port,data):
+        return self.socket.send_pyobj(data) 
+
+
+    def connect(self):
+        for n in self.nieghbors:
+            node_ip = n["node_ip"]
+            node_port = n["node_port"]
+            self.socket.connect(f"tcp://{node_ip}:{node_port}")
+            print(f"tcp://{node_ip}:{node_port}")
+
+    def recv(self):
+        return self.rep_socket.recv_pyobj()
+
+    def stop(self):
+        """
+            stop all the connexion with the other peers
+        """
+        #close pub sub socket
+        self.sub_socket.close() 
+        self.rep_socket.close()
+        self.context.term()
 
 

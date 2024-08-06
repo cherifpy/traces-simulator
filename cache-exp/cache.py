@@ -15,11 +15,13 @@ class Cache:
         self.time_to_live = np.zeros((len(self.ids_data,)))
         self.data_requested_hostoric = []
         self.data_access_frequency = {}
-        self.client = None
-        self.memory_used = None
+        self.client = {}
+        self.memory_used = 0
+        self.is_memcached_installed = False
 
 
     def addDataOnCache(self, id_data,data_size):
+        
         if id_data in self.ids_data:
             return False
         
@@ -70,6 +72,8 @@ class Cache:
 
     def deleteFromCache(self, key):
         """Deletes a value from Memcached."""
+        if not self.is_memcached_installed:
+            return False
         try:
             self.client.delete(key)
             return True
