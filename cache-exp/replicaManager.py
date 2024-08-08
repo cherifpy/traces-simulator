@@ -208,3 +208,6 @@ if __name__ == "__main__":
 
     task_manager.nodes_infos = data["infos"]
     task_manager.start()
+
+
+    

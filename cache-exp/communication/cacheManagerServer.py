@@ -118,6 +118,5 @@ if __name__ == '__main__':
 
     # Trigger shutdown
     
-    flask_process.terminate()
-    flask_process.join()
+    
 

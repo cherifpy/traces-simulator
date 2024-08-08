@@ -1,0 +1,30 @@
+---
+job_name: test_conf
+user_id: csimohammed
+exp_env: debian11-min
+exp_walltime: 0:50:00
+execution_local: True
+machines:
+  - cluster: paravance
+    nodes: 1
+    roles: [A]
+    storage: 120
+  - cluster: paravance
+    nodes: 1
+    roles: [B]
+    storage: 120
+
+
+network_constraints:
+  - default_delay: 20ms
+    default_rate: 1gbit
+    constraints: 
+      - src: A 
+        dst: B
+        delay: 2ms
+        symmetric: True
+
+
+
+
+
