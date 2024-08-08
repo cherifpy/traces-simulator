@@ -6,7 +6,7 @@ from pymemcache.client import base
 
 class Cache:
     def __init__(self, cache_size, node_id):
-        self.node = node_id
+        self.id_node = node_id
         self.cache_size = cache_size
         self.client = None
         self.ids_data = []
@@ -23,13 +23,15 @@ class Cache:
     def addDataOnCache(self, id_data,data_size):
         
         if id_data in self.ids_data:
-            return False
-        
+            return 0
         else:
-            self.ids_data.append(id_data)
-            self.datas_sizes[id_data] = data_size
-            self.cache_size = self.cache_size - data_size
-            return True
+            if self.memory_used + data_size < self.cache_size:  
+                self.memory_used = self.memory_used + data_size
+                self.ids_data.append(id_data)
+                self.datas_sizes[id_data] = data_size
+                return 1
+            else: return -1
+            
     
     def getStats(self, verbos):
         stats = self.client.stats()

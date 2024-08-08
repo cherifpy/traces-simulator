@@ -3,12 +3,13 @@ from communication.messages import SendObject, RequestObject, Task
 from cache import Cache
 import pickle
 import queue
-from communication.api.cacheManagerServer import CacheManagerServer
+from communication.cacheManagerServer import CacheManagerServer
+import requests
 
 class CacheManager(object):
 
-    def __init__(self, id, storage_space,listner_port,neighbors) -> None:
-        self.id = id
+    def __init__(self, id, storage_space,listner_port,neighbors, data_manager_ip,data_manager_port) -> None:
+        self.id_node = id
         self.storage_space = storage_space
         self.time_limite = 0
         self.neighbors = neighbors
@@ -18,6 +19,8 @@ class CacheManager(object):
         self.future_task = queue.Queue()
         self.cache_server = None
         self.server_is_running = False
+        self.data_manager_ip = data_manager_ip
+        self.data_manager_port = data_manager_port
 
     def start(self):
 
@@ -25,7 +28,8 @@ class CacheManager(object):
         self.server_is_running = self.cache_server.run()
         
         while True:
-
+            if self.cache.cache_size <= self.cache.memory_used:
+                pass
             if self.server_is_running and self.cache_server.recieved_task.qsize() != 0:
                 
                 message = self.cache_server.recieved_task.get()
@@ -73,3 +77,18 @@ class CacheManager(object):
         infos = self.neighbors[id]
         return self.communication.send(infos["ip"], infos["port"] ,sendingrequest)
         
+    def deleteData(self, ip_address, node_port, id_dataset, dataset_size):
+        url = f'http://{ip_address}:{node_port}/add-data'
+        data = {
+            "id_node": self.id_node, 
+            "id_dataset":id_dataset,
+            "dataset_size": dataset_size,
+        }
+            
+
+        response = requests.post(url, json=data).json
+
+        if response["status"]:
+            self.location_table[node_i].append(key)
+            return True
+        return False #response.json()
