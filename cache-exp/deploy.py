@@ -126,7 +126,7 @@ if True:
                 p.apt(name=["git","python3-pip"], state="present")
                 p.command(
                     task_name = "Delete the last version of the repo",
-                    cmd = "rm -rf /home/csimohammed/traces-simulator"
+                    cmd = "rm -rf /home/csimohammed/exp"
                 )
                 p.command(
                     task_name="clone repo",
