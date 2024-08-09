@@ -10,7 +10,7 @@ PORT_FOR_OPENING_SOCKET = 3333
 """
 
 def sendObject(obj:object, ip:str):
-    time.sleep(1)
+    time.sleep(2)
     #serialize the object
     data = pickle.dumps(obj)
     # Envoi via un socket

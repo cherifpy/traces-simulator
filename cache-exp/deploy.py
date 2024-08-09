@@ -70,7 +70,7 @@ if True:
     NB_NODES = config.nb_sites
     CONFIG_GRAPHE = config.getGraphe()
     IPS_ADDRESS = config.getAllIPs()
-
+    print(IPS_ADDRESS)
     #config.provider.destroy()
     
     infos_nodes= []
