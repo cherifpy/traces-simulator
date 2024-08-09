@@ -74,7 +74,7 @@ class Configuration:
             return False
 
         for i,machine in enumerate(self.machines):
-            print("storage restriction for ", machine["roles"])
+            print("storage restriction using memcached for ", machine["roles"])
             with self.enoslib.actions(roles=self.roles[machine["roles"][0]]) as p:
                 p.apt(name=['memcached'],state="present",)
                 p.command(
@@ -90,7 +90,7 @@ class Configuration:
                 p.command(task_name="enable memcached",cmd="systemctl enable memcached")
                 p.command(task_name="restart memcached",cmd="service memcached restart")
 
-                p.command(task_name="restart memcached",cmd="memcached -I 120", background=True)
+                p.command(task_name="change max value size memcached",cmd="memcached -I 120", background=True)
                 #
     def setNetworkConstraintes(self):
         if self.execution_local:
