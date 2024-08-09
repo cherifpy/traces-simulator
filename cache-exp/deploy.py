@@ -86,7 +86,7 @@ if True:
                 
                 thread = threading.Thread(
                     target=run_command, 
-                    args=(f"python cache-exp/replicaManager.py ",))
+                    args=(f"python replicaManager.py ",))
                 
                 thread.start()
                 
@@ -104,7 +104,7 @@ if True:
                 
                 thread = threading.Thread(
                     target=run_command, 
-                    args=(f"python cache-exp/main.py ",))
+                    args=(f"python cacheManager.py ",))
                 
                 thread.start()
                 
@@ -143,7 +143,7 @@ if True:
                 with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
                     p.command(
                         task_name = "Executing the code on a site",
-                        cmd = f"python3 /home/csimohammed/exp/cache-exp/replicaManger.py",
+                        cmd = f"python3 /home/csimohammed/exp/cache-exp/replicaManager.py",
                         background=True
                     )
                 print(IPS_ADDRESS[i])
@@ -155,7 +155,7 @@ if True:
                 with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
                     p.command(
                         task_name = "Executing the code on a site",
-                        cmd = f"python3 /home/csimohammed/exp/cache-exp/cacheManager.py >> out.txt",
+                        cmd = f"python3 /home/csimohammed/exp/cache-exp/cacheManager.py",
                         background=True
                     )
                 sendObject(data, IPS_ADDRESS[i])
