@@ -53,7 +53,7 @@ def SendInfoToManager(config,ips_address, rep_port):
   
 port_rep = 8780
 
-if __name__ == "__main__":
+if False:
 
     config = Configuration(
         config_file_path = PATH_TO_CONFIG_FILE,
@@ -131,7 +131,7 @@ if __name__ == "__main__":
 
                 p.command(
                     task_name = "installing python libs",
-                    cmd = "pip3 install pandas pylibmc numpy sockets PyYAML"
+                    cmd = "pip3 install pandas pylibmc numpy sockets PyYAML Flask"
                 )
 
             if i==0:

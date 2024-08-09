@@ -1,6 +1,5 @@
 import time
 import numpy as np
-from pymemcache.client import base
 
 
 

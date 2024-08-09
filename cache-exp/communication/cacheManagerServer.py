@@ -1,8 +1,12 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from flask import Flask, request, jsonify
-from messages import Task
+from communication.messages import Task
 from queue import Queue
 import multiprocessing
-from ..cache import Cache
+import importlib.util
+from cache import Cache
 
 class CacheManagerServer:
     def __init__(self, cache:Cache,host='localhost', port=8888):
