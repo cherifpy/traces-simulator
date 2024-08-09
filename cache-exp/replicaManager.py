@@ -7,7 +7,7 @@ import multiprocessing
 import pandas as pd
 import time
 import requests
-from pylibmc
+import pylibmc
 import os
 
 #path_to_tasks ="/Users/cherif/Documents/Traveaux/traces-simulator/cache-exp/exp/traces/traces_with_datasets.csv" ##"/exp/traces/traces_with_datasets.csv"
