@@ -3,7 +3,7 @@ job_name: test_conf
 user_id: csimohammed
 exp_env: debian11-min
 exp_walltime: 0:10:00
-execution_local: True
+execution_local: False
 machines:
   - cluster: paravance
     nodes: 1
