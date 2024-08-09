@@ -151,31 +151,24 @@ if True:
                 
 
             else:
-                data = SendInfoToManager(CONFIG_GRAPHE,IPS_ADDRESS, REP_PORT)
+                data = InfosToSend(i,CONFIG_GRAPHE, IPS_ADDRESS,8780,machine["storage"])
                 with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
                     p.command(
                         task_name = "Executing the code on a site",
                         cmd = f"python3 /home/csimohammed/exp/cache-exp/cacheManager.py",
-                        background=True
                     )
                 sendObject(data, IPS_ADDRESS[i])
-                data = InfosToSend(i,CONFIG_GRAPHE, IPS_ADDRESS,8780,machine["storage"])
+                
             
                 print(f"node {i} ========")
                 print(data)
             
             #config.enoslib.ensure_python3(True,roles=config.roles[machine["roles"][0]])
             
-                p.command(
-                    task_name = "Executing the code on a site",
-                    cmd = f"python3 ./main.py > /tmp/strout_{i}.out >> /tmp/strerr_{i}.err",
-                    background=True
-                )
             infos_nodes.append({"node_ip":IPS_ADDRESS[i], "node_port":port_rep})
             port_rep += 1
             
-            print(f"adresse IP du node {i} : {IPS_ADDRESS[i]}")
-            sendObject(data, IPS_ADDRESS[i])
+            
 
         print("Waiting for Outputs:")
         count = 0
