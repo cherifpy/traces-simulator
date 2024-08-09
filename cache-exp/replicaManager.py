@@ -26,7 +26,7 @@ class ReplicaManager:
     def __init__(self,nb_nodes ,traces_path,graphe, ip, port) -> None:
         self.nb_nodes = nb_nodes
         self.traces_path = traces_path
-        self.nodes_infos =[]
+        self.nodes_infos ={}
         self.api_server = None
         self.graphe_infos = graphe
         self.location_table = {}
