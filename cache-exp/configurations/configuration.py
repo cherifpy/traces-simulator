@@ -90,7 +90,7 @@ class Configuration:
                 p.command(task_name="enable memcached",cmd="systemctl enable memcached")
                 p.command(task_name="restart memcached",cmd="service memcached restart")
 
-                p.command(task_name="change max value size memcached",cmd="memcached -I 120", background=True)
+                p.command(task_name="change max value size memcached",cmd="memcached -I 120m", background=True)
                 #
     def setNetworkConstraintes(self):
         if self.execution_local:
