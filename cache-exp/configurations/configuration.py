@@ -79,7 +79,7 @@ class Configuration:
                 p.apt(name=['memcached'],state="present",)
                 p.command(
                     task_name="changine de size",
-                    cmd=f"sed -i 's/-m 64/-m {machine["storage"]}/g' /etc/memcached.conf"
+                    cmd=f"sed -i 's/-m 64/-m {machine['storage']}/g' /etc/memcached.conf"
                 )
                 p.command(
                     task_name="changing IP",
@@ -89,7 +89,7 @@ class Configuration:
                 p.command(task_name="start memcached",cmd="systemctl start memcached")
                 p.command(task_name="enable memcached",cmd="systemctl enable memcached")
                 p.command(task_name="restart memcached",cmd="service memcached restart")
-                
+
                 p.command(task_name="restart memcached",cmd="memcached -I 120", background=True)
                 #
     def setNetworkConstraintes(self):
