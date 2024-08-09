@@ -123,7 +123,6 @@ if __name__ == '__main__':
     flask_process = multiprocessing.Process(target=run_flask_app)
     flask_process.start()
     time.sleep(1)
-    main_algorithm()
 
     # Trigger shutdown
     
