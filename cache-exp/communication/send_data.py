@@ -2,7 +2,7 @@ from multiprocessing.synchronize import SemLock
 import pickle
 import socket
 import time
-PORT_FOR_OPENING_SOCKET = 3333
+PORT_FOR_OPENING_SOCKET = 8888
 
 """ 
     J'aurais besoin de ca pour envoyer les données vers chaqu'un des nodes au debut de l'exp
@@ -23,7 +23,7 @@ def recieveObject():
 
     # Créer un socket
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.bind(('localhost', PORT_FOR_OPENING_SOCKET))
+        s.bind((socket.gethostname(), PORT_FOR_OPENING_SOCKET))
         s.listen()
         #attendre une connexion
         conn, addr = s.accept()
