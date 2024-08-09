@@ -1,4 +1,3 @@
-from communication.communication import CommunicationREQREP
 from communication.messages import SendObject, RequestObject, Task
 from cache import Cache
 import pickle
@@ -8,8 +7,9 @@ import requests
 #TOD
 class CacheManager(object):
 
-    def __init__(self, id, storage_space,listner_port,neighbors, data_manager_ip,data_manager_port) -> None:
+    def __init__(self, id, storage_space,listner_port,neighbors, data_manager_ip,data_manager_port,host) -> None:
         self.id_node = id
+        self.host = host
         self.storage_space = storage_space
         self.time_limite = 0
         self.neighbors = neighbors
@@ -24,7 +24,7 @@ class CacheManager(object):
 
     def start(self):
 
-        self.cache_server = CacheManagerServer(port=self.listner_port)
+        self.cache_server = CacheManagerServer(host=self.host,port=self.listner_port)
         self.server_is_running = self.cache_server.run()
         
     

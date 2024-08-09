@@ -1,7 +1,6 @@
 from client import CacheManager
 from communication.send_data import recieveObject
 import sys
-import zmq
 import time
 import threading 
 """
@@ -30,6 +29,7 @@ if __name__ == "__main__":
         })
 
     cm = CacheManager(
+        host=IP_ADDRESS,
         id=int(SITE_ID),
         storage_space = CACHE_SIZE,
         listner_port=REP_PORT,
