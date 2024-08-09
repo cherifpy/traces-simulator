@@ -53,7 +53,7 @@ def SendInfoToManager(config,ips_address, rep_port):
   
 port_rep = 8780
 
-if False:
+if True:
 
     config = Configuration(
         config_file_path = PATH_TO_CONFIG_FILE,

@@ -53,7 +53,7 @@ class Configuration:
             params:
                 - none
         """
-        conf = self.enoslib.G5kConf.from_settings(job_type=self.job_type, walltime=self.walltime,env_name=self.env_name)
+        conf = self.enoslib.G5kConf.from_settings(job_type=self.job_type, walltime=self.walltime)
 
         for machine in self.machines :
             conf.add_machine(
