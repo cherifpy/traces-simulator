@@ -139,13 +139,13 @@ if True:
                     cmd = "pip3 install pandas pylibmc numpy sockets PyYAML Flask"
                 )
 
-            if i==(len(config.machines)-1):
+            if i==0:
                 data = SendInfoToManager(CONFIG_GRAPHE,IPS_ADDRESS, REP_PORT)
                 with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
                     p.command(
                         task_name = "Executing the code on a site",
                         cmd = f"python3 /home/csimohammed/exp/cache-exp/replicaManager.py",
-                        background=True
+                        
                     )
                 print(IPS_ADDRESS[i])
                 sendObject(data, IPS_ADDRESS[i])
