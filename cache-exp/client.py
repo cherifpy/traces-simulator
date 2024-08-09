@@ -5,7 +5,7 @@ import pickle
 import queue
 from communication.cacheManagerServer import CacheManagerServer
 import requests
-
+#TOD
 class CacheManager(object):
 
     def __init__(self, id, storage_space,listner_port,neighbors, data_manager_ip,data_manager_port) -> None:
@@ -15,7 +15,7 @@ class CacheManager(object):
         self.neighbors = neighbors
         self.listner_port = listner_port
         self.cache = Cache(self.storage_space, self.id)
-        self.output = open(f"/Users/cherif/Documents/Traveaux/traces-simulator/cache-exp/exp/outputs/log_{self.id}.txt",'w')
+        self.output = open(f"/home/csimohammed/exp/cache-exp/exp/outputs/log_{self.id}.txt",'w')
         self.future_task = queue.Queue()
         self.cache_server = None
         self.server_is_running = False
@@ -27,19 +27,8 @@ class CacheManager(object):
         self.cache_server = CacheManagerServer(port=self.listner_port)
         self.server_is_running = self.cache_server.run()
         
-        while True:
-            if self.cache.cache_size <= self.cache.memory_used:
-                pass
-            if self.server_is_running and self.cache_server.recieved_task.qsize() != 0:
-                
-                message = self.cache_server.recieved_task.get()
-
-                self.output.write(f'\n{str(message)}')
-                
-                if message.dist == self.id:
-                    self.processMessage(message) 
     
-    #TODO coninue cette fonction
+    
     def processMessage(self, message):
         if isinstance(message,Task):
             it_exist = True #self.cache.checkExistence(message.id_dataset)
@@ -92,3 +81,18 @@ class CacheManager(object):
             self.location_table[node_i].append(key)
             return True
         return False #response.json()
+    
+
+    """        
+        while True:
+            if self.cache.cache_size <= self.cache.memory_used:
+                pass
+            if self.server_is_running and self.cache_server.recieved_task.qsize() != 0:
+                
+                message = self.cache_server.recieved_task.get()
+
+                self.output.write(f'\n{str(message)}')
+                
+                if message.dist == self.id:
+                    self.processMessage(message) 
+    """

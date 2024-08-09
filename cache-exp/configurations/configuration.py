@@ -85,14 +85,12 @@ class Configuration:
                     task_name="changing IP",
                     cmd=f"sed -i 's/-l 127.0.0.1/-l 0.0.0.0/g' /etc/memcached.conf"
                 )
-                p.command(
-                    task_name="changing max item size",
-                    cmd=f"sed -i '$ a -I 1024m' /etc/memcached.conf"
-                )
                 # 
                 p.command(task_name="start memcached",cmd="systemctl start memcached")
                 p.command(task_name="enable memcached",cmd="systemctl enable memcached")
                 p.command(task_name="restart memcached",cmd="service memcached restart")
+                
+                p.command(task_name="restart memcached",cmd="memcached -I 120", background=True)
                 #
     def setNetworkConstraintes(self):
         if self.execution_local:

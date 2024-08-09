@@ -1,5 +1,5 @@
 #here i have to manage tasks
-from exp.params import NB_NODES, SERVER_REPLICA_MANAGER_PORT
+from exp.params import NB_NODES, SERVER_REPLICA_MANAGER_PORT, PATH_TO_TASKS
 from communication.send_data import recieveObject
 from communication.messages import Task
 from communication.cacheManagerServer import CacheManagerServer
@@ -10,7 +10,7 @@ import requests
 from pylibmc
 import os
 
-path_to_tasks ="/Users/cherif/Documents/Traveaux/traces-simulator/cache-exp/exp/traces/traces_with_datasets.csv" ##"/exp/traces/traces_with_datasets.csv"
+#path_to_tasks ="/Users/cherif/Documents/Traveaux/traces-simulator/cache-exp/exp/traces/traces_with_datasets.csv" ##"/exp/traces/traces_with_datasets.csv"
 
 #ce que je veux faire: 
 """
@@ -32,7 +32,7 @@ class ReplicaManager:
         self.location_table = {}
         self.port = port
         self.ip = ip
-
+        self.nb_data_trasnfert = 0
         
     def start(self):
 
@@ -66,18 +66,20 @@ class ReplicaManager:
             )
             
             node_id = row["node_id"]
-            self.send_task()
-            condidated_nodes = self.getEmptyNode() 
-            if len(condidated_nodes) != 0:
-                pass
-            else:
-                index = condidated_nodes[0]
 
             node_ip = self.nodes_infos[node_id]["node_ip"]
             node_port = self.nodes_infos[node_id]["node_port"]
             
             response = self.send_task(task,node_port, node_ip)
-               
+            if response['sendData']:
+                #if with eviction change here add the condition to send the data somewhere
+                self.sendDataSet(node_ip, id_ds=task.id_dataset, ds_size=task.ds_size)
+                self.nb_data_trasnfert +=1
+                self.addToLocationTable(id_dataset=task["dataset"],id_node=node_id)
+                
+            else:
+                pass
+
             print(str(task), response)
             i+=1
             
@@ -142,14 +144,16 @@ class ReplicaManager:
         for i, val in enumerate(node_neighbors):
             if val > 0:
                 if i in self.location_table[id_dataset]:
-                    return True, i
+                    return True, {"sendData":"good"}
         
         return False, None
     
     def getDataSetLocation(self,id_ds):
         return self.location_table[id_ds]
 
+
     def send_task(self, task:Task, port, ip="localhost"):
+
         url = f'http://{ip}:{port}/execut'
         data = {"task": task.to_json(), "type":"task"}
 
@@ -186,13 +190,20 @@ class ReplicaManager:
         self.api_server = CacheManagerServer(host=self.ip, port=self.port)
         server_is_running = self.api_server.run()
 
+
+    def addToLocationTable(self, id_node, id_dataset):
+        if id_dataset in self.location_table.keys():
+            self.location_table[id_dataset].append(id_node)
+        else:
+            self.location_table[id_dataset] = [id_node]
+
     def startThread(self):
         flask_process = multiprocessing.Process(target=self.startFlaskServer)
         flask_process.start()
         time.sleep(0.2)
         return flask_process
 
-PATH_TO_TASKS ="/Users/cherif/Documents/Traveaux/traces-simulator/cache-exp/exp/traces/traces_with_datasets.csv" 
+
     
 
 if __name__ == "__main__":
@@ -208,6 +219,3 @@ if __name__ == "__main__":
 
     task_manager.nodes_infos = data["infos"]
     task_manager.start()
-
-
-    

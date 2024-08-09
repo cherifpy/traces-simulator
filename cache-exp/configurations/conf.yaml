@@ -2,17 +2,33 @@
 job_name: test_conf
 user_id: csimohammed
 exp_env: debian11-min
-exp_walltime: 0:50:00
-execution_local: True
+exp_walltime: 1:30:00
+execution_local: False
 machines:
   - cluster: paravance
     nodes: 1
     roles: [A]
-    storage: 120
+    storage: 200
   - cluster: paravance
     nodes: 1
     roles: [B]
-    storage: 120
+    storage: 256
+  - cluster: paravance
+    nodes: 1
+    roles: [B]
+    storage: 256
+  - cluster: paravance
+    nodes: 1
+    roles: [C]
+    storage: 256
+  - cluster: paravance
+    nodes: 1
+    roles: [D]
+    storage: 256
+  - cluster: paravance
+    nodes: 1
+    roles: [E]
+    storage: 256
 
 
 network_constraints:
@@ -22,6 +38,42 @@ network_constraints:
       - src: A 
         dst: B
         delay: 2ms
+        symmetric: True
+      - src: A 
+        dst: C
+        delay: 2ms
+        symmetric: True
+      - src: A 
+        dst: D
+        delay: 2ms
+        symmetric: True
+      - src: A 
+        dst: E
+        delay: 2ms
+        symmetric: True
+      - src: C 
+        dst: B
+        delay: 8ms
+        symmetric: True
+      - src: E 
+        dst: B
+        delay: 1ms
+        symmetric: True
+      - src: D 
+        dst: B
+        delay: 30ms
+        symmetric: True
+      - src: C 
+        dst: D
+        delay: 15ms
+        symmetric: True
+      - src: C 
+        dst: E
+        delay: 10ms
+        symmetric: True
+      - src: D 
+        dst: E
+        delay: 20ms
         symmetric: True
 
 

@@ -2,10 +2,10 @@ from flask import Flask, request, jsonify
 from messages import Task
 from queue import Queue
 import multiprocessing
-#from .cache import Cache
+from ..cache import Cache
 
 class CacheManagerServer:
-    def __init__(self, cache ,host='localhost', port=8888):
+    def __init__(self, cache:Cache,host='localhost', port=8888):
         self.app = Flask(__name__)
         self.host = host
         self.port = port
@@ -19,10 +19,15 @@ class CacheManagerServer:
         def process_data():
             data = request.json
 
-            processed_data = {"response":"good"}
+            task = Task.from_json(data["task"])
             #{"task": data["task"], "type":data["type"] ,"status": "processed"}
-            self.recieved_task.put(Task.from_json(data["task"]))
-
+            self.recieved_task.put(task)
+            b = self.cache.checkOnCacheMemorie(task.id_dataset)
+            if b:
+                processed_data = {"sendData":False}
+            else:
+                processed_data = {"sendData":True}
+                
             return jsonify(processed_data)
         
         @self.app.route('/infos', methods=['GET'])

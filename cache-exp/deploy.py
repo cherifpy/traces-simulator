@@ -1,9 +1,9 @@
 from client import CacheManager
 import subprocess
 import time
-from configuration.configuration import Configuration
+from configurations.configuration import Configuration
 from communication.send_data import sendObject
-from exp.params import REP_PORT
+from exp.params import REP_PORT, PATH_TO_TASKS, PATH_TO_CONFIG_FILE
 
 def run_command(command):
     
@@ -17,6 +17,7 @@ def InfosToSend(id_peer:int,graphe_info,ip_address, rep_port, cache_size):
     data["SITE_ID"] = id_peer
     data["REP_PORT"] = rep_port + id_peer
     data["IP_ADDRESS"] = str(ip_address[id_peer])
+
     
     for i in range(len(graphe_info)):
         if graphe_info[id_peer,i] > 0:
@@ -25,7 +26,7 @@ def InfosToSend(id_peer:int,graphe_info,ip_address, rep_port, cache_size):
                 "id": i,
                 "ip" : ip_address[i], 
                 "rep_port" : rep_port+i,
-                "storage_space":cache_size 
+                
             } 
 
             data["infos"].append(peer)
@@ -49,7 +50,6 @@ def SendInfoToManager(config,ips_address, rep_port):
     return data
 
 ###### Start a reservation
-PATH_TO_CONFIG_FILE = "/Users/cherif/Documents/Traveaux/traces-simulator/cache-exp/configuration/conf.yaml"
   
 port_rep = 8780
 
@@ -68,7 +68,7 @@ if __name__ == "__main__":
 
     ## deplot memcached
     config.deployMemcached()
-
+    """
     infos_nodes= []
     
     if config.execution_local:
@@ -106,7 +106,7 @@ if __name__ == "__main__":
                 
                 print(f"adresse IP du node {i} : {IPS_ADDRESS[i]}")
                 
-                sendObject(data, IPS_ADDRESS[i])
+                sendObject(data, "localhost")
                 infos_nodes.append({"node_ip":IPS_ADDRESS[i], "node_port":port_rep})
                 port_rep += 1
                 time.sleep(1)
@@ -117,25 +117,50 @@ if __name__ == "__main__":
         
         for i, machine in enumerate(config.machines):
 
-            data = InfosToSend(i,CONFIG_GRAPHE, IPS_ADDRESS,8780,machine["storage"])
-            
-            print(f"node {i} ========")
-            print(data)
-            
-            #config.enoslib.ensure_python3(True,roles=config.roles[machine["roles"][0]])
             with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
                 #p.ensure_python()
                 p.apt(name=["git","python3-pip"], state="present")
                 p.command(
                     task_name = "Delete the last version of the repo",
-                    cmd = "rm -rf /home/csimohammed/as-cast-implementation"
+                    cmd = "rm -rf /home/csimohammed/traces-simulator"
                 )
-                p.git(repo="https://github.com/cherifpy/as-cast-implementation.git", dest="/home/csimohammed/as-cast-implementation")
+                p.command(
+                    task_name="clone repo",
+                    cmd="git clone --single-branch --branch new_main https://github.com/cherifpy/traces-simulator.git /home/csimohammed/exp"
+                )
 
                 p.command(
                     task_name = "installing python libs",
-                    cmd = "pip3 install pyzmq eclipse-zenoh numpy sockets"
+                    cmd = "pip3 install pandas pylibmc numpy sockets PyYAML"
                 )
+
+            if i==0:
+                data = SendInfoToManager(CONFIG_GRAPHE,IPS_ADDRESS, REP_PORT)
+                with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
+                    p.command(
+                        task_name = "Executing the code on a site",
+                        cmd = f"python3 /home/csimohammed/exp/cache-exp/replicaManger.py",
+                        background=True
+                    )
+                sendObject(data, IPS_ADDRESS[i])
+                
+
+            else:
+                data = SendInfoToManager(CONFIG_GRAPHE,IPS_ADDRESS, REP_PORT)
+                with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
+                    p.command(
+                        task_name = "Executing the code on a site",
+                        cmd = f"python3 /home/csimohammed/exp/cache-exp/cacheManager.py",
+                        background=True
+                    )
+                sendObject(data, IPS_ADDRESS[i])
+                data = InfosToSend(i,CONFIG_GRAPHE, IPS_ADDRESS,8780,machine["storage"])
+            
+                print(f"node {i} ========")
+                print(data)
+            
+            #config.enoslib.ensure_python3(True,roles=config.roles[machine["roles"][0]])
+            
                 p.command(
                     task_name = "Executing the code on a site",
                     cmd = f"python3 ./main.py > /tmp/strout_{i}.out >> /tmp/strerr_{i}.err",
@@ -165,3 +190,4 @@ if __name__ == "__main__":
                     count +=1                    
                 except:
                     continue
+        """
