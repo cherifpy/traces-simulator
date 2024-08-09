@@ -146,6 +146,7 @@ if True:
                         cmd = f"python3 /home/csimohammed/exp/cache-exp/replicaManger.py",
                         background=True
                     )
+                print(IPS_ADDRESS[i])
                 sendObject(data, IPS_ADDRESS[i])
                 
 
