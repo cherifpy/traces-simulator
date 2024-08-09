@@ -15,10 +15,6 @@ machines:
     storage: 256
   - cluster: paravance
     nodes: 1
-    roles: [B]
-    storage: 256
-  - cluster: paravance
-    nodes: 1
     roles: [C]
     storage: 256
   - cluster: paravance
