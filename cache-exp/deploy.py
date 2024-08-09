@@ -70,7 +70,9 @@ if True:
     NB_NODES = config.nb_sites
     CONFIG_GRAPHE = config.getGraphe()
     IPS_ADDRESS = config.getAllIPs()
-    """
+
+    #config.provider.destroy()
+    
     infos_nodes= []
     
     if config.execution_local:
@@ -182,7 +184,6 @@ if True:
                 break
 
             for i, machine in enumerate(config.machines): 
-                
                 try:
                     with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
                         p.fetch(src=f"/tmp/log_{i}.txt", dest="~")  
@@ -192,4 +193,4 @@ if True:
                     count +=1                    
                 except:
                     continue
-        """
+        

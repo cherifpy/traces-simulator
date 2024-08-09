@@ -9,7 +9,7 @@ import logging
 
 class Configuration:
 
-    def __init__(self, cluster = None, config_file_path="/"):
+    def __init__(self, cluster = None, config_file_path="/", memcached_listening_port=3030):
         """
             classe constructor is used to create an instence of the class
             i dont know if i have to remove the param = cluster
@@ -38,6 +38,7 @@ class Configuration:
         self.nb_sites = len(self.machines)
         self.python_libs:list = None
         self.enoslib = None if self.execution_local else en #en
+        self.memcached_listening_port = memcached_listening_port
         
         if not self.execution_local:
             self.enoslib.init_logging(level=logging.INFO)
@@ -77,7 +78,7 @@ class Configuration:
             print("storage restriction using memcached for ", machine["roles"])
             with self.enoslib.actions(roles=self.roles[machine["roles"][0]]) as p:
                 p.apt(name=['memcached'],state="present",)
-                p.command(
+                """p.command(
                     task_name="changine de size",
                     cmd=f"sed -i 's/-m 64/-m {machine['storage']}/g' /etc/memcached.conf"
                 )
@@ -90,7 +91,14 @@ class Configuration:
                 p.command(task_name="enable memcached",cmd="systemctl enable memcached")
                 p.command(task_name="restart memcached",cmd="service memcached restart")
 
-                p.command(task_name="change max value size memcached",cmd="memcached -I 120m", background=True)
+                p.command(task_name="change max value size memcached",cmd="memcached -I 120m", background=True)"""
+                p.command(
+                    task_name="Start memcached with a pecifique config",
+                    cmd=f"memcached -m {machine['storage']} -I {int(machine['storage'])//2}m -l 0.0.0.0 -p {self.memcached_listening_port} -u nobody", 
+                    background=True
+                )
+                
+
                 #
     def setNetworkConstraintes(self):
         if self.execution_local:

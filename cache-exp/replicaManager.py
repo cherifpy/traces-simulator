@@ -33,6 +33,7 @@ class ReplicaManager:
         self.port = port
         self.ip = ip
         self.nb_data_trasnfert = 0
+        self.output = open(f"/home/csimohammed/exp/cache-exp/exp/outputs/log_{self.id}.txt",'w')
         
     def start(self):
 
@@ -79,8 +80,6 @@ class ReplicaManager:
                 
             else:
                 pass
-
-            print(str(task), response)
             i+=1
             
             time.sleep(1)  
