@@ -59,15 +59,17 @@ if True:
         config_file_path = PATH_TO_CONFIG_FILE,
     )
     
-    NB_NODES = config.nb_sites
-    CONFIG_GRAPHE = config.getGraphe()
-    IPS_ADDRESS = config.getAllIPs()
+    
 
     provider = config.setReservation()
     netem = config.setNetworkConstraintes()
 
     ## deplot memcached
     config.deployMemcached()
+
+    NB_NODES = config.nb_sites
+    CONFIG_GRAPHE = config.getGraphe()
+    IPS_ADDRESS = config.getAllIPs()
     """
     infos_nodes= []
     
