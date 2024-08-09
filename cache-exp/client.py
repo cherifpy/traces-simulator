@@ -78,7 +78,7 @@ class CacheManager(object):
         response = requests.post(url, json=data).json
 
         if response["status"]:
-            self.location_table[node_i].append(key)
+            self.location_table["node_i"].append("key")
             return True
         return False #response.json()
     
