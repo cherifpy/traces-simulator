@@ -77,7 +77,7 @@ class ReplicaManager:
                 self.sendDataSet(node_ip, id_ds=task.id_dataset, ds_size=task.ds_size)
                 self.nb_data_trasnfert +=1
                 self.addToLocationTable(id_dataset=task["dataset"],id_node=node_id)
-                
+                self.output.write(f"task:{task.id_task},ds:{task.id_dataset},size:{task.ds_size},dist:{node_id}")
             else:
                 pass
             i+=1
