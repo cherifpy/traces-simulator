@@ -96,7 +96,7 @@ class ReplicaManager:
             return False, []
         
         for i, infos in enumerate(self.nodes_infos):
-            url = f'http://{infos['node_ip']}:{infos["node_port"]}/infos'
+            url = f'http://{infos["node_ip"]}:{infos["node_port"]}/infos'
             response = requests.post(url).json()
             
             self.nodes_infos[i]["storage_space"] = response["storage_space"]
