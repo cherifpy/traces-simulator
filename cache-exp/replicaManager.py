@@ -88,6 +88,7 @@ class ReplicaManager:
 
             process.terminate()
             process.join()
+        self.output.close()
         return True
     
 

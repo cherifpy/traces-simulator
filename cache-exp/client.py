@@ -4,7 +4,10 @@ import pickle
 import queue
 from communication.cacheManagerServer import CacheManagerServer
 import requests
-#TOD
+import multiprocessing 
+import time
+
+#TODO
 class CacheManager(object):
 
     def __init__(self, id, storage_space,listner_port,neighbors, data_manager_ip,data_manager_port,host, cache) -> None:
@@ -24,11 +27,21 @@ class CacheManager(object):
         self.cache = cache
 
     def start(self):
+        process = self.startThread()
+        time.sleep(30)
+        process.terminate()
+        process.join()
 
+        
+    def startManagerFlaskServer(self):
         self.cache_server = CacheManagerServer(host=self.host,port=self.listner_port)
         self.server_is_running = self.cache_server.run()
-        
     
+    def startThread(self):
+        flask_process = multiprocessing.Process(target=self.startFlaskServer)
+        flask_process.start()
+        time.sleep(0.2)
+        return flask_process
     
     def processMessage(self, message):
         if isinstance(message,Task):
