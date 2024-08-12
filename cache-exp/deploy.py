@@ -138,7 +138,7 @@ if True:
                     cmd = "pip3 install pandas pylibmc numpy sockets PyYAML Flask pymemcache"
                 )
 
-            if i==len(NB_NODES-1):
+            if i==NB_NODES-1:
 
                 data = SendInfoToManager(CONFIG_GRAPHE,IPS_ADDRESS, REP_PORT)
                 print(f"======= node {i} ========")
