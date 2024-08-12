@@ -7,7 +7,7 @@ import multiprocessing
 import pandas as pd
 import time
 import requests
-from exp.params import SERVER_REPLICA_MANAGER_PORT
+from exp.params import SERVER_REPLICA_MANAGER_PORT, MEMCACHED_LISTENING_PORT
 #import pylibmc
 import os
 
@@ -35,6 +35,7 @@ class ReplicaManager:
         self.ip = ip
         self.nb_data_trasnfert = 0
         self.output = open(f"/tmp/log_M.txt",'w')
+        self.local_execution = True
         
     def start(self):
 
@@ -48,6 +49,7 @@ class ReplicaManager:
         i = 0
 
         b, self.nodes_infos = self.collecteData()
+        self.output.write(str(self.nodes_infos))
         if not b:
             return False
         
@@ -68,25 +70,21 @@ class ReplicaManager:
             )
             
             node_id = row["node_id"]
-
-            node_ip = self.nodes_infos[node_id]["node_ip"]
+            print(node_id)
+            #print(self.nodes_infos[int(node_id)])
+            node_ip = self.nodes_infos[int(node_id)]["node_ip"]
             node_port = self.nodes_infos[node_id]["node_port"]
             
-            response = self.send_task(task,node_port, node_ip)
+            response = self.sendTask(task,node_port, node_ip)
             if response['sendData']:
                 #if with eviction change here add the condition to send the data somewhere
-                #self.sendDataSet(node_ip, id_ds=task.id_dataset, ds_size=task.ds_size)
+                self.sendDataSet(node_ip, id_ds=task.id_dataset, ds_size=task.ds_size)
                 self.nb_data_trasnfert +=1
-                self.addToLocationTable(id_dataset=task["dataset"],id_node=node_id)
-                self.output.write(f"task:{task.id_task},ds:{task.id_dataset},size:{task.ds_size},dist:{node_id}")
-                print(f"task:{task.id_task},ds:{task.id_dataset},size:{task.ds_size},dist:{node_id}")
+                self.addToLocationTable(id_dataset=task.id_dataset,id_node=node_id)
+                self.output.write(f"{task.id_task},{task.id_dataset},{task.ds_size},{node_id},\n")
+                print(f"{task.id_task},{task.id_dataset},{task.ds_size},{node_id}\n")
             else:
                 pass
-            i+=1
-            
-            time.sleep(1)  
-            if i >= NB_NODES:
-                i = 0
 
             #process.terminate()
             #process.join()
@@ -100,11 +98,11 @@ class ReplicaManager:
         
         for key in self.nodes_infos.keys():
             url = f'http://{self.nodes_infos[key]["node_ip"]}:{self.nodes_infos[key]["node_port"]}/infos'
-            response = requests.post(url).json()
+            response = requests.get(url).json()
             
             self.nodes_infos[key]["storage_space"] = response["storage_space"]
             self.nodes_infos[key]["remaining_space"] = response["remaining_space"]
-            print(f"received data from {key}, {self.nodes_infos[key]}")
+            #print(f"received data from {key}, {self.nodes_infos[key]}")
         return True, self.nodes_infos
     
 
@@ -128,7 +126,6 @@ class ReplicaManager:
             else:
                 nodes.append(i)
         return nodes
-
 
     def choseNode(self, task:Task):
         if self.datasetOnNeigbors():
@@ -154,7 +151,7 @@ class ReplicaManager:
         return self.location_table[id_ds]
 
 
-    def send_task(self, task:Task, port, ip="localhost"):
+    def sendTask(self, task:Task, port, ip="localhost"):
 
         url = f'http://{ip}:{port}/execut'
         data = {"task": task.to_json(), "type":"task"}
@@ -173,7 +170,8 @@ class ReplicaManager:
             return "migrate"
         
     def sendDataSet(self, ip_node, id_ds,ds_size):
-        
+        if self.local_execution:
+            return True
         file_name = '/exp/tmp/tmp.bin'
         file_size_octet = ds_size*1024*1024
         with open(file_name, "wb") as p:
@@ -182,10 +180,10 @@ class ReplicaManager:
         with open(file_name, "rb") as p:
             content = p.read()
          # Données massives de 5 MB
-        servers = [f"{ip_node}:11211"]  # Adresse du serveur Memcached
+        servers = [f"{ip_node}:MEMCACHED_LISTENING_PORT"]  # Adresse du serveur Memcached
         
         #client = pylibmc.Client(servers, binary=True, behaviors={"tcp_nodelay": True})
-
+        #TODO Check if the data is sended and ask the client to access id to set the LRu
         return True #client.set(id_ds, content)
     
     def startFlaskServer(self):
@@ -205,6 +203,8 @@ class ReplicaManager:
         time.sleep(0.2)
         return flask_process
 
+    def transfertCost(self, latency, data_size, ):
+        pass
 
     
 

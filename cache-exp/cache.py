@@ -30,7 +30,11 @@ class Cache:
                 self.datas_sizes[id_data] = data_size
                 return 1
             else: return -1
-            
+
+
+    def acceddData(self, id_dataset):
+        value = self.client.get(id_dataset)
+        return False if value is None else True
     
     def getStats(self, verbos):
         stats = self.client.stats()
@@ -43,7 +47,10 @@ class Cache:
 
     def checkOnCacheMemorie(self, id_data):
         return True if id_data in self.ids_data else False
-
+    
+    def addData(self, id_data):
+        return self.ids_data.append(id_data)
+    
     def connectToMemcache(self,host='localhost', port=11211):
         
         try:
@@ -53,14 +60,6 @@ class Cache:
             print(f"Error connecting to Memcached: {e}")
             return None
 
-    def addToMemcache(self, key, value, expires=0):
-        
-        try:
-            self.client.add(key, value, expires=expires)
-            return True
-        except Exception as e:
-            print(f"Error adding to Memcached: {e}")
-            return False
 
     def getFromCache(self, key):
        

@@ -193,6 +193,6 @@ if True:
                         #p.fetch(src=f"/tmp/log_{i}.out", dest="~")    
                     print("Output fetched")
                     count +=1                    
-                except:
+                except Exception:
                     continue
         

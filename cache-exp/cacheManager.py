@@ -40,7 +40,7 @@ if __name__ == "__main__":
         host=IP_ADDRESS,
         
     )
-    cm.output.write(f"{SITE_ID} {REP_PORT} {DATAS_RECIEVED}")
+    cm.cache_server.output.write(f"{SITE_ID} {REP_PORT} {DATAS_RECIEVED}") 
 
     cm.start()
           

@@ -27,22 +27,36 @@ class CacheManagerServer:
             task = Task.from_json(data["task"])
             #{"task": data["task"], "type":data["type"] ,"status": "processed"}
             self.recieved_task.put(task)
-            b = self.cache.checkOnCacheMemorie(task.id_dataset)
-            if b:
-                processed_data = {"sendData":False}
+            
+            b1 = self.cache.checkOnCacheMemorie(task.id_dataset)
+            b2 = True if (self.cache.memory_used + int(task.ds_size) > self.cache.cache_size) else False
+            if b1:
+                processed_data = {"sendData":False, "eviction":False}
             else:
-                processed_data = {"sendData":True}
-                
+                #TODO:need to know wich data will be evicted
+                processed_data = {"sendData":True, "eviction":b2}
+                self.cache.addData(task.id_dataset)
+            self.output.write(f"task recieved {str(task)} asking th controller to send the data:{not b1}\n")
             return jsonify(processed_data)
         
         @self.app.route('/infos', methods=['GET'])
         def get_info():
+            self.output.write("info sended\n")
             data = {
                 "id_node": self.cache.id_node,
                 "storage_space": self.cache.cache_size,
                 "remaining_space":self.cache.cache_size - self.cache.memory_used,
             }
             return jsonify(data)
+
+        @self.app.route("/check-data", methods=['GET'])
+        def ckeckData():
+            
+            id_ds = request.args.get("id_dataset")
+            b = self.cache.accessData(id_ds)
+            
+            return jsonify({"reponse":b})
+        
 
         @self.app.route('/send-data', methods=['GET'])
         def send_data():
@@ -58,10 +72,12 @@ class CacheManagerServer:
         @self.app.route('/add-data', methods=['POST'])
         def add_data():
             data = request.json
-            self.cache.addToMemcache(data["key"], data["value"])
-            
-            processed_data = {"response":"good"}
-            
+            b = self.cache.checkOnCacheMemorie(data['id_dataset'])
+            if b:
+                processed_data = {"sendData":False}
+            else:
+                processed_data = {"sendData":True}
+
             return jsonify(processed_data) 
         
         @self.app.route('/delete-data', methods=['PULL'])

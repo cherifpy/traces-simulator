@@ -20,19 +20,18 @@ class CacheManager(object):
         self.cache = Cache(self.storage_space, self.id_node)
         
         self.future_task = queue.Queue()
-        self.cache_server = None
-        self.server_is_running = False
-        self.data_manager_ip = data_manager_ip
-        self.data_manager_port = data_manager_port
-        self.output = open(f"/tmp/log_{self.id_node}.txt",'w')
-        
-
-    def start(self):
         self.cache_server = CacheManagerServer(
             cache=self.cache,
             host=self.host,
             port=self.listner_port
         )
+        self.server_is_running = False
+        self.data_manager_ip = data_manager_ip
+        self.data_manager_port = data_manager_port
+        
+
+    def start(self):
+        
         self.server_is_running = self.cache_server.run()
         return True
         process = self.startThread()
