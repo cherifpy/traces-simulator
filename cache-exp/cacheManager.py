@@ -1,5 +1,6 @@
 from client import CacheManager
 from communication.send_data import recieveObject
+from cache import Cache
 import sys
 import time
 import threading 
@@ -34,6 +35,11 @@ if __name__ == "__main__":
         storage_space = CACHE_SIZE,
         listner_port=REP_PORT,
         neighbors=neighbors,
+        cache=Cache(
+            cache_size=CACHE_SIZE,
+            node_id=int(SITE_ID)
+        )
+        
     )
     cm.output.write(f"{SITE_ID} {REP_PORT} {DATAS_RECIEVED}")
 

@@ -15,7 +15,8 @@ class CacheManagerServer:
         self.port = port
         self.recieved_task = Queue()
         self.setup_routes()
-        self.cache = None
+        self.cache = cache
+        self.output = open(f"/tmp/log_{self.cache.id_node}.txt",'w')
 
     def setup_routes(self):
 
@@ -104,7 +105,7 @@ class CacheManagerServer:
           
         
     
-
+"""
 import threading
 import time
 
@@ -125,6 +126,6 @@ if __name__ == '__main__':
     time.sleep(1)
 
     # Trigger shutdown
-    
+    """
     
 

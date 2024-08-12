@@ -7,7 +7,7 @@ import requests
 #TOD
 class CacheManager(object):
 
-    def __init__(self, id, storage_space,listner_port,neighbors, data_manager_ip,data_manager_port,host) -> None:
+    def __init__(self, id, storage_space,listner_port,neighbors, data_manager_ip,data_manager_port,host, cache) -> None:
         self.id_node = id
         self.host = host
         self.storage_space = storage_space
@@ -15,12 +15,13 @@ class CacheManager(object):
         self.neighbors = neighbors
         self.listner_port = listner_port
         self.cache = Cache(self.storage_space, self.id)
-        self.output = open(f"/home/csimohammed/exp/cache-exp/exp/outputs/log_{self.id}.txt",'w')
+        
         self.future_task = queue.Queue()
         self.cache_server = None
         self.server_is_running = False
         self.data_manager_ip = data_manager_ip
         self.data_manager_port = data_manager_port
+        self.cache = cache
 
     def start(self):
 
