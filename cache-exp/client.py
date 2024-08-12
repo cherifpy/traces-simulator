@@ -10,23 +10,31 @@ import time
 #TODO
 class CacheManager(object):
 
-    def __init__(self, id, storage_space,listner_port,neighbors, data_manager_ip,data_manager_port,host, cache) -> None:
+    def __init__(self, id, storage_space,listner_port,neighbors, data_manager_ip,data_manager_port,host) -> None:
         self.id_node = id
         self.host = host
         self.storage_space = storage_space
         self.time_limite = 0
         self.neighbors = neighbors
         self.listner_port = listner_port
-        self.cache = Cache(self.storage_space, self.id)
+        self.cache = Cache(self.storage_space, self.id_node)
         
         self.future_task = queue.Queue()
         self.cache_server = None
         self.server_is_running = False
         self.data_manager_ip = data_manager_ip
         self.data_manager_port = data_manager_port
-        self.cache = cache
+        self.output = open(f"/tmp/log_{self.id_node}.txt",'w')
+        
 
     def start(self):
+        self.cache_server = CacheManagerServer(
+            cache=self.cache,
+            host=self.host,
+            port=self.listner_port
+        )
+        self.server_is_running = self.cache_server.run()
+        return True
         process = self.startThread()
         time.sleep(30)
         process.terminate()
@@ -38,7 +46,7 @@ class CacheManager(object):
         self.server_is_running = self.cache_server.run()
     
     def startThread(self):
-        flask_process = multiprocessing.Process(target=self.startFlaskServer)
+        flask_process = multiprocessing.Process(target=self.startManagerFlaskServer)
         flask_process.start()
         time.sleep(0.2)
         return flask_process

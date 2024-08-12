@@ -3,7 +3,7 @@ import subprocess
 import time
 from configurations.configuration import Configuration
 from communication.send_data import sendObject
-from exp.params import REP_PORT, PATH_TO_TASKS, PATH_TO_CONFIG_FILE
+from exp.params import REP_PORT, PATH_TO_TASKS, PATH_TO_CONFIG_FILE, SERVER_REPLICA_MANAGER_PORT
 
 def run_command(command):
     
@@ -32,26 +32,27 @@ def InfosToSend(id_peer:int,graphe_info,ip_address, rep_port, cache_size):
             data["infos"].append(peer)
     return data
 
-def SendInfoToManager(config,ips_address, rep_port):
+def SendInfoToManager(id_peer, config,ips_address, rep_port):
     data = {}
-    data['graphe_info'] = config
+    data["IP_ADDRESS"] = str(ips_address[id_peer])
+    data['graphe_infos'] = config
     data["IPs_ADDRESS"] = ips_address
-    data["infos"] = []
+    data["infos"] = {}
     
     for i in range(len(config)):
-        if config[0,i] > 0:
+        if config[id_peer,i] > 0:
             peer = {
-                'latency' : config[0,i],
+                'latency' : config[id_peer,i],
                 "id": i,
-                "ip" : ips_address[i], 
-                "rep_port" : rep_port+i,
+                "node_ip" : ips_address[i], 
+                "node_port" : rep_port+i,
             } 
-            data["infos"].append(peer)
+            data["infos"][i] = peer
     return data
 
 ###### Start a reservation
   
-port_rep = 8780
+port_rep = REP_PORT
 
 if True:
 
@@ -70,6 +71,7 @@ if True:
     NB_NODES = config.nb_sites
     CONFIG_GRAPHE = config.getGraphe()
     IPS_ADDRESS = config.getAllIPs()
+    print(CONFIG_GRAPHE)
     print(IPS_ADDRESS)
     #config.provider.destroy()
     
@@ -80,9 +82,9 @@ if True:
 
 
         for i, machine in enumerate(config.machines):
-            if i == 0:
+            if i == NB_NODES-1:
 
-                data = SendInfoToManager(CONFIG_GRAPHE,IPS_ADDRESS, REP_PORT)
+                data = SendInfoToManager(i, CONFIG_GRAPHE,IPS_ADDRESS, REP_PORT)
                 
                 thread = threading.Thread(
                     target=run_command, 
@@ -93,7 +95,7 @@ if True:
                 print(f"adresse IP du node {i} : {IPS_ADDRESS[i]}")
                 
                 sendObject(data, IPS_ADDRESS[i])
-                infos_nodes.append({"node_ip":IPS_ADDRESS[i], "node_port":port_rep})
+                infos_nodes.append({"node_ip":IPS_ADDRESS[i], "node_port":SERVER_REPLICA_MANAGER_PORT})
                 port_rep += 1
                 time.sleep(1)
 

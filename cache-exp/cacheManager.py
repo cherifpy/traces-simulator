@@ -4,6 +4,7 @@ from cache import Cache
 import sys
 import time
 import threading 
+from exp.params import SERVER_REPLICA_MANAGER_PORT
 """
     meme se fichier est n'est supprimer
 """
@@ -30,15 +31,13 @@ if __name__ == "__main__":
         })
 
     cm = CacheManager(
-        host=IP_ADDRESS,
         id=int(SITE_ID),
         storage_space = CACHE_SIZE,
         listner_port=REP_PORT,
         neighbors=neighbors,
-        cache=Cache(
-            cache_size=CACHE_SIZE,
-            node_id=int(SITE_ID)
-        )
+        data_manager_ip=neighbors[-1]['ip'],
+        data_manager_port=SERVER_REPLICA_MANAGER_PORT,
+        host=IP_ADDRESS,
         
     )
     cm.output.write(f"{SITE_ID} {REP_PORT} {DATAS_RECIEVED}")

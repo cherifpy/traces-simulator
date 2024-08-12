@@ -10,7 +10,7 @@ PORT_FOR_OPENING_SOCKET = 8888
 """
 
 def sendObject(obj:object, ip:str):
-    time.sleep(5)
+    time.sleep(2)
     #serialize the object
     data = pickle.dumps(obj)
     # Envoi via un socket
@@ -23,7 +23,7 @@ def recieveObject():
     print("opning socket")
     # Créer un socket
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.bind((socket.gethostname(), PORT_FOR_OPENING_SOCKET))
+        s.bind(("localhost", PORT_FOR_OPENING_SOCKET))
         s.listen()
         #attendre une connexion
         conn, addr = s.accept()

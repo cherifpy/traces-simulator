@@ -7,7 +7,8 @@ import multiprocessing
 import pandas as pd
 import time
 import requests
-import pylibmc
+from exp.params import SERVER_REPLICA_MANAGER_PORT
+#import pylibmc
 import os
 
 #path_to_tasks ="/Users/cherif/Documents/Traveaux/traces-simulator/cache-exp/exp/traces/traces_with_datasets.csv" ##"/exp/traces/traces_with_datasets.csv"
@@ -23,26 +24,26 @@ la données sera ensuite envoyer au noeud qui la demande directement
 
 class ReplicaManager:
     
-    def __init__(self,nb_nodes ,traces_path,graphe, ip, port) -> None:
+    def __init__(self,nb_nodes ,traces_path,graphe, ip) -> None:
         self.nb_nodes = nb_nodes
-        self.traces_path = traces_path
-        self.nodes_infos ={}
+        self.traces_path = "/Users/cherif/Documents/Traveaux/traces-simulator/cache-exp/exp/traces/random_subset.csv"
+        self.nodes_infos = dict()
         self.api_server = None
         self.graphe_infos = graphe
         self.location_table = {}
-        self.port = port
+        self.port = SERVER_REPLICA_MANAGER_PORT
         self.ip = ip
         self.nb_data_trasnfert = 0
-        self.output = open(f"/tmp/log_{self.id}.txt",'w')
+        self.output = open(f"/tmp/log_M.txt",'w')
         
     def start(self):
 
-        if not self.nodes_infos and not self.connection:
+        if not self.nodes_infos:
             return False
         
-        process = self.startThread()
+        #process = self.startThread()
         
-        self.connection.connect()
+
         traces = pd.read_csv(self.traces_path)
         i = 0
 
@@ -74,10 +75,11 @@ class ReplicaManager:
             response = self.send_task(task,node_port, node_ip)
             if response['sendData']:
                 #if with eviction change here add the condition to send the data somewhere
-                self.sendDataSet(node_ip, id_ds=task.id_dataset, ds_size=task.ds_size)
+                #self.sendDataSet(node_ip, id_ds=task.id_dataset, ds_size=task.ds_size)
                 self.nb_data_trasnfert +=1
                 self.addToLocationTable(id_dataset=task["dataset"],id_node=node_id)
                 self.output.write(f"task:{task.id_task},ds:{task.id_dataset},size:{task.ds_size},dist:{node_id}")
+                print(f"task:{task.id_task},ds:{task.id_dataset},size:{task.ds_size},dist:{node_id}")
             else:
                 pass
             i+=1
@@ -86,23 +88,23 @@ class ReplicaManager:
             if i >= NB_NODES:
                 i = 0
 
-            process.terminate()
-            process.join()
+            #process.terminate()
+            #process.join()
         self.output.close()
         return True
     
 
     def collecteData(self):
-        if len(self.nodes_infos) == 0:
+        if len(self.nodes_infos.keys()) == 0:
             return False, []
         
-        for i, infos in enumerate(self.nodes_infos):
-            url = f'http://{infos["node_ip"]}:{infos["node_port"]}/infos'
+        for key in self.nodes_infos.keys():
+            url = f'http://{self.nodes_infos[key]["node_ip"]}:{self.nodes_infos[key]["node_port"]}/infos'
             response = requests.post(url).json()
             
-            self.nodes_infos[i]["storage_space"] = response["storage_space"]
-            self.nodes_infos[i]["remaining_space"] = response["remaining_space"]
-            
+            self.nodes_infos[key]["storage_space"] = response["storage_space"]
+            self.nodes_infos[key]["remaining_space"] = response["remaining_space"]
+            print(f"received data from {key}, {self.nodes_infos[key]}")
         return True, self.nodes_infos
     
 
@@ -182,9 +184,9 @@ class ReplicaManager:
          # Données massives de 5 MB
         servers = [f"{ip_node}:11211"]  # Adresse du serveur Memcached
         
-        client = pylibmc.Client(servers, binary=True, behaviors={"tcp_nodelay": True})
+        #client = pylibmc.Client(servers, binary=True, behaviors={"tcp_nodelay": True})
 
-        return client.set(id_ds, content)
+        return True #client.set(id_ds, content)
     
     def startFlaskServer(self):
         self.api_server = CacheManagerServer(host=self.ip, port=self.port)
@@ -210,12 +212,13 @@ if __name__ == "__main__":
 
     data = recieveObject()
 
-
+    
     task_manager = ReplicaManager(
         nb_nodes = NB_NODES,
         traces_path=PATH_TO_TASKS,
-        graphes= data["graphe_infos"]
+        graphe= data["graphe_infos"],
+        ip=data["IP_ADDRESS"]
     )
-
+    task_manager.output.write(f"{data}")
     task_manager.nodes_infos = data["infos"]
     task_manager.start()

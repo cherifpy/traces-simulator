@@ -1,3 +1,4 @@
+
 import re
 import yaml
 import numpy as np
@@ -6,6 +7,7 @@ import json
 import time
 import enoslib as en
 import logging 
+import copy 
 
 class Configuration:
 
@@ -297,7 +299,7 @@ class Configuration:
 
         for i in range(self.nb_sites):
             node_i = self.machines[i]["roles"][0]
-            for j in range(i, self.nb_sites):
+            for j in range(self.nb_sites):
                 node_j = self.machines[j]["roles"][0]
                 if i == j: self.graphe[i,j] = -1
                 else:
@@ -312,7 +314,6 @@ class Configuration:
         for const in self.contraintes:
             if const['src'] == node1 and const['dst'] == node2:
                 return int(const['delay'][0:-2]), const['symmetric'] 
-        
         return -1, False
 
     def getStorageCapacities(self,):
