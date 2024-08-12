@@ -8,7 +8,7 @@ machines:
   - cluster: paravance
     nodes: 1
     roles: [A]
-    storage: 200
+    storage: 256
   - cluster: paravance
     nodes: 1
     roles: [B]
@@ -31,27 +31,27 @@ network_constraints:
   - default_delay: 20ms
     default_rate: 1gbit
     constraints: 
-      - src: A 
+      - src: E 
         dst: B
         delay: 2ms
         symmetric: True
-      - src: A 
+      - src: E 
         dst: C
         delay: 2ms
         symmetric: True
-      - src: A 
+      - src: E 
         dst: D
-        delay: 2ms
+        delay: 20ms
         symmetric: True
-      - src: A 
-        dst: E
-        delay: 2ms
+      - src: E 
+        dst: A
+        delay: 5ms
         symmetric: True
       - src: C 
         dst: B
         delay: 8ms
         symmetric: True
-      - src: E 
+      - src: A 
         dst: B
         delay: 1ms
         symmetric: True
@@ -64,11 +64,11 @@ network_constraints:
         delay: 15ms
         symmetric: True
       - src: C 
-        dst: E
+        dst: A
         delay: 10ms
         symmetric: True
       - src: D 
-        dst: E
+        dst: A
         delay: 20ms
         symmetric: True
 

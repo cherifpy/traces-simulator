@@ -138,8 +138,11 @@ if True:
                     cmd = "pip3 install pandas pylibmc numpy sockets PyYAML Flask"
                 )
 
-            if i==0:
+            if i==len(NB_NODES-1):
+
                 data = SendInfoToManager(CONFIG_GRAPHE,IPS_ADDRESS, REP_PORT)
+                print(f"======= node {i} ========")
+                print(data)
                 with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
                     p.command(
                         task_name = "Executing the code on a site",
@@ -151,7 +154,10 @@ if True:
                 
 
             else:
+                
                 data = InfosToSend(i,CONFIG_GRAPHE, IPS_ADDRESS,8780,machine["storage"])
+                print(f"======= node {i} ========")
+                print(data)
                 with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
                     p.command(
                         task_name = "Executing the code on a site",
@@ -160,9 +166,6 @@ if True:
                     )
                 sendObject(data, IPS_ADDRESS[i])
                 
-            
-                print(f"node {i} ========")
-                print(data)
             
             #config.enoslib.ensure_python3(True,roles=config.roles[machine["roles"][0]])
             
@@ -173,8 +176,10 @@ if True:
 
         print("Waiting for Outputs:")
         count = 0
-        time.sleep(30)
+        time.sleep(60)
+
         while True:
+            print(count)
             if count == config.nb_sites:
                 break
 
