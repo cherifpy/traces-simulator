@@ -27,6 +27,10 @@ if __name__ == "__main__":
             "rep_port": peer["rep_port"],
         })
     #TODO
+
+    f = open("/tmp/je.txt")
+    f.write("hello")
+    f.close()
     cm = CacheManager(
         id=int(SITE_ID),
         storage_space = CACHE_SIZE,
