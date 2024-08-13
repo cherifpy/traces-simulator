@@ -142,7 +142,7 @@ if True:
 
             if i==NB_NODES-1:
 
-                data = SendInfoToManager(CONFIG_GRAPHE,IPS_ADDRESS, REP_PORT)
+                data = SendInfoToManager(i, CONFIG_GRAPHE,IPS_ADDRESS, REP_PORT)
                 print(f"======= node {i} ========")
                 print(data)
                 with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
