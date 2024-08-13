@@ -174,9 +174,7 @@ if True:
             infos_nodes.append({"node_ip":IPS_ADDRESS[i], "node_port":port_rep})
             port_rep += 1
             
-            
-
-        print("Waiting for Outputs:")
+        """print("Waiting for Outputs:")
         count = 0
         time.sleep(60)
 
@@ -194,5 +192,5 @@ if True:
                     print("Output fetched")
                     count +=1                    
                 except Exception:
-                    continue
+                    continue"""
         

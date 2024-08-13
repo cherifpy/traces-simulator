@@ -285,5 +285,7 @@ if __name__ == "__main__":
         local_execution=False
     )
     task_manager.output.write(f"{data}")
+    task_manager.output.close()
+    task_manager.output = open(f"/tmp/log_M.txt",'w')
     task_manager.nodes_infos = data["infos"]
     task_manager.start()
