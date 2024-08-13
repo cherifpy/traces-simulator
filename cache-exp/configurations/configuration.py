@@ -11,7 +11,7 @@ import copy
 
 class Configuration:
 
-    def __init__(self, cluster = None, config_file_path="/", memcached_listening_port=3030):
+    def __init__(self, cluster = None, config_file_path="/", memcached_listening_port=11211):
         """
             classe constructor is used to create an instence of the class
             i dont know if i have to remove the param = cluster
