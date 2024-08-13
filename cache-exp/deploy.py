@@ -140,10 +140,11 @@ if True:
                     cmd = "pip3 install pandas pylibmc numpy sockets PyYAML Flask pymemcache"
                 )
             print(f"======= node {i} ========")
-            print(data)
+            
             if i==NB_NODES-1:
 
                 data = SendInfoToManager(i, CONFIG_GRAPHE,IPS_ADDRESS, REP_PORT)
+                print(data)
                 with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
                     p.command(
                         task_name = "Executing the code on a site",
@@ -156,7 +157,7 @@ if True:
 
             else: 
                 data = InfosToSend(i,CONFIG_GRAPHE, IPS_ADDRESS,8780,machine["storage"])
-                
+                print(data)
                 with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
                     p.command(
                         task_name = "Executing the code on a site",
