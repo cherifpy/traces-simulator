@@ -29,7 +29,7 @@ class ReplicaManager:
     def __init__(self,nb_nodes ,traces_path,graphe, ip, local_execution) -> None:
         self.nb_nodes = nb_nodes
         self.id = nb_nodes-1
-        self.traces_path = "/Users/cherif/Documents/Traveaux/traces-simulator/cache-exp/exp/traces/random_subset.csv"
+        self.traces_path = PATH_TO_TASKS#"/Users/cherif/Documents/Traveaux/traces-simulator/cache-exp/exp/traces/random_subset.csv"
         self.nodes_infos = dict()
         self.api_server = None
         self.graphe_infos = graphe
@@ -44,7 +44,7 @@ class ReplicaManager:
 
         if not self.nodes_infos:
             return False
-        #process = self.startThread()
+        process = self.startThread()
         traces = pd.read_csv(self.traces_path)
 
         b, self.nodes_infos = self.collecteData()
@@ -97,8 +97,8 @@ class ReplicaManager:
             self.accessData(task, node_ip)
             b, self.nodes_infos = self.collecteData()
 
-        #process.terminate()
-        #process.join(),
+        process.terminate()
+        process.join()
         self.output.write(f"{self.nb_data_trasnfert}")
         self.output.close()
         return True
@@ -184,7 +184,7 @@ class ReplicaManager:
         return response.json()
     
     def askForATransfert(self, src, dst, id_dataset,size_ds):
-        print(self.nodes_infos[src]["node_ip"], self.nodes_infos[src]["node_port"])
+        
         url = f'http://{self.nodes_infos[src]["node_ip"]}:{self.nodes_infos[src]["node_port"]}/transfert'
         
         data = {
@@ -195,7 +195,7 @@ class ReplicaManager:
         }
 
         response = requests.post(url, json=data)
-        print(response.json()["response"])
+        #print(response.json()["response"])
         return response.json()["response"]
 
     def getEmptyNode(self):

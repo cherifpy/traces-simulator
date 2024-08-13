@@ -49,8 +49,8 @@ class Cache:
         return True
     
     def getStats(self, verbos=False):
-        stats = self.client.stats()
-        if not verbos:
+        stats = self.client.get_stats()
+        if not verbos and stats:
             return stats
         # Print the statistics
         for key, value in stats.items():
