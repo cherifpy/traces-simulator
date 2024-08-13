@@ -137,7 +137,7 @@ if True:
 
                 p.command(
                     task_name = "installing python libs",
-                    cmd = "pip3 install pandas pylibmc numpy sockets PyYAML Flask pymemcache"
+                    cmd = "pip3 install pandas pylibmc numpy sockets PyYAML Flask"
                 )
             print(f"======= node {i} ========")
             
@@ -148,7 +148,7 @@ if True:
                 with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
                     p.command(
                         task_name = "Executing the code on a site",
-                        cmd = f"python3 /home/csimohammed/exp/cache-exp/replicaManager.py",
+                        cmd = f"python3 /home/csimohammed/exp/cache-exp/replicaManager.py > /tmp/output{i}_and_errors.txt 2>&1",
                         background=True
                     )
                 print(IPS_ADDRESS[i])
@@ -161,7 +161,7 @@ if True:
                 with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
                     p.command(
                         task_name = "Executing the code on a site",
-                        cmd = f"python3 /home/csimohammed/exp/cache-exp/cacheManager.py > /tmp/output_and_errors.txt 2>&1",
+                        cmd = f"python3 /home/csimohammed/exp/cache-exp/cacheManager.py > /tmp/output{i}_and_errors.txt 2>&1",
                         background=True
                     )
                 print(data)

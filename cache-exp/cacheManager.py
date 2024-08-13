@@ -28,7 +28,7 @@ if __name__ == "__main__":
         })
     #TODO
 
-    f = open("/tmp/je.txt")
+    f = open("/tmp/je.txt","w")
     f.write("hello")
     f.close()
     cm = CacheManager(
@@ -42,7 +42,7 @@ if __name__ == "__main__":
         
     )
 
-    f = open("/tmp/tu.txt")
+    f = open("/tmp/tu.txt","w")
     f.write("hello")
     f.close()
     cm.cache_server.output.write(f"{SITE_ID} {lister_port} {DATAS_RECIEVED}")
