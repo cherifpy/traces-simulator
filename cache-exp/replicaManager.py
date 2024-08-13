@@ -9,7 +9,7 @@ import pandas as pd
 import numpy as np
 import time
 import requests
-#import pylibmc
+import pylibmc
 import os
 
 
@@ -93,7 +93,7 @@ class ReplicaManager:
                     self.output.write(f"{task.id_task},{task.id_dataset},Manager,{task.ds_size},{task.id_node},\n")
             else:
                 pass
-            
+
             self.accessData(task, node_ip)
             b, self.nodes_infos = self.collecteData()
 
