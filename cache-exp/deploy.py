@@ -164,7 +164,7 @@ if True:
                     p.command(
                         task_name = "Executing the code on a site",
                         cmd = f"python3 /home/csimohammed/exp/cache-exp/cacheManager.py",
-                        background=True
+                        background=False
                     )
                 sendObject(data, IPS_ADDRESS[i])
                 
@@ -173,7 +173,7 @@ if True:
             
             infos_nodes.append({"node_ip":IPS_ADDRESS[i], "node_port":port_rep})
             port_rep += 1
-            
+
         """print("Waiting for Outputs:")
         count = 0
         time.sleep(60)
