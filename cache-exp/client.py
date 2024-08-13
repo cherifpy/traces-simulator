@@ -6,7 +6,7 @@ from communication.cacheManagerServer import CacheManagerServer
 import requests
 import multiprocessing 
 import time
-
+from exp.params import MEMCACHED_LISTENING_PORT
 class CacheManager(object):
 
     def __init__(self, id, storage_space,listner_port,neighbors, data_manager_ip,data_manager_port,host) -> None:
@@ -24,7 +24,7 @@ class CacheManager(object):
 
     def start(self):
         self.cache = Cache(self.storage_space, self.id_node)
-        self.cache.connectToMemcache('0.0.0.0',11211)
+        self.cache.connectToMemcache('0.0.0.0',MEMCACHED_LISTENING_PORT)
 
         self.cache_server = CacheManagerServer(
             cache=self.cache,

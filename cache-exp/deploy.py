@@ -3,7 +3,7 @@ import subprocess
 import time
 from configurations.configuration import Configuration
 from communication.send_data import sendObject
-from exp.params import REP_PORT, PATH_TO_TASKS, PATH_TO_CONFIG_FILE, SERVER_REPLICA_MANAGER_PORT
+from exp.params import REP_PORT, PATH_TO_TASKS, PATH_TO_CONFIG_FILE, SERVER_REPLICA_MANAGER_PORT,MEMCACHED_LISTENING_PORT
 
 def run_command(command):
     
@@ -58,6 +58,7 @@ if True:
 
     config = Configuration(
         config_file_path = PATH_TO_CONFIG_FILE,
+        memcached_listening_port=MEMCACHED_LISTENING_PORT
     )
     
     
@@ -66,7 +67,7 @@ if True:
     netem = config.setNetworkConstraintes()
 
     ## deplot memcached
-    config.deployMemcached()
+    config.deployMemcached(port=MEMCACHED_LISTENING_PORT)
 
     NB_NODES = config.nb_sites
     CONFIG_GRAPHE = config.getGraphe()

@@ -9,7 +9,6 @@ class Cache:
     def __init__(self, cache_size, node_id):
         self.id_node = node_id
         self.cache_size = cache_size
-        self.client = pylibmc.Client(['0.0.0.0:11211'], binary=True, behaviors={"tcp_nodelay": True})
         self.ids_data = []
         self.datas_sizes = {}
         self.slot_time = 1
@@ -19,7 +18,7 @@ class Cache:
         self.memory_used = 0
         self.is_memcached_installed = False
 
-        self.client =self.connectToMemcache('0.0.0.0', 11211)
+        self.client = self.connectToMemcache('0.0.0.0', MEMCACHED_LISTENING_PORT)
 
     def sendDataSetTo(self, ip_dst, id_dataset,size_ds):
         
@@ -65,9 +64,9 @@ class Cache:
         return self.ids_data.append(id_data)
     
     
-    def connectToMemcache(self,host='localhost', port=11211):
+    def connectToMemcache(self,host='localhost', port=MEMCACHED_LISTENING_PORT):
         try:
-            self.client = pylibmc.Client(['0.0.0.0:11211'], binary=True, behaviors={"tcp_nodelay": True})
+            self.client = pylibmc.Client([f'0.0.0.0:{MEMCACHED_LISTENING_PORT}'], binary=True, behaviors={"tcp_nodelay": True})
             return self.client
         except Exception as e:
             print(f"Error connecting to Memcached: {e}")
