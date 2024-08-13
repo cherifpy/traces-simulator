@@ -15,8 +15,9 @@ if __name__ == "__main__":
     DATAS_RECIEVED = recieveObject()
     #get the ID and IP of the actual site 
     SITE_ID = DATAS_RECIEVED["SITE_ID"] 
+    MANAGER_IP = DATAS_RECIEVED["recieved_data"]
     CACHE_SIZE = DATAS_RECIEVED["CACHE_SIZE"] 
-    REP_PORT = DATAS_RECIEVED["REP_PORT"]
+    lister_port = DATAS_RECIEVED["REP_PORT"]
     IP_ADDRESS = DATAS_RECIEVED["IP_ADDRESS"]
     
     costs = []
@@ -29,20 +30,20 @@ if __name__ == "__main__":
             "ip":peer["ip"],
             "rep_port": peer["rep_port"],
         })
-
+    #TODO
     cm = CacheManager(
         id=int(SITE_ID),
         storage_space = CACHE_SIZE,
-        listner_port=REP_PORT,
+        listner_port=lister_port,
         neighbors=neighbors,
-        data_manager_ip=neighbors[-1]['ip'],
+        data_manager_ip=MANAGER_IP,
         data_manager_port=SERVER_REPLICA_MANAGER_PORT,
         host=IP_ADDRESS,
         
     )
-    cm.cache_server.output.write(f"{SITE_ID} {REP_PORT} {DATAS_RECIEVED}")
+    cm.cache_server.output.write(f"{SITE_ID} {lister_port} {DATAS_RECIEVED}")
     cm.cache_server.output.close()
-    cm.cache_server.output = open(f"/tmp/log_{SITE_ID}.txt",'a')
+    cm.cache_server.output = open(f"/tmp/log_{int(SITE_ID)}.txt",'a')
     cm.start()
           
 

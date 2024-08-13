@@ -17,7 +17,7 @@ def InfosToSend(id_peer:int,graphe_info,ip_address, rep_port, cache_size):
     data["SITE_ID"] = id_peer
     data["REP_PORT"] = rep_port + id_peer
     data["IP_ADDRESS"] = str(ip_address[id_peer])
-
+    data["recieved_data"] = str(ip_address[-1])
     
     for i in range(len(graphe_info)):
         if graphe_info[id_peer,i] > 0:
@@ -26,7 +26,6 @@ def InfosToSend(id_peer:int,graphe_info,ip_address, rep_port, cache_size):
                 "id": i,
                 "ip" : ip_address[i], 
                 "rep_port" : rep_port+i,
-                
             } 
 
             data["infos"].append(peer)
@@ -157,7 +156,7 @@ if True:
                 
 
             else: 
-                data = InfosToSend(i,CONFIG_GRAPHE, IPS_ADDRESS,REP_PORT,machine["storage"])
+                data = InfosToSend(i,CONFIG_GRAPHE, IPS_ADDRESS,REP_PORT,config.storage_capacities[i])
                 print(data)
                 with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
                     p.command(
