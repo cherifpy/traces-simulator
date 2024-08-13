@@ -23,7 +23,7 @@ def recieveObject():
     print("opning socket")
     # Créer un socket
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.bind(("localhost", PORT_FOR_OPENING_SOCKET))
+        s.bind(('0.0.0.0', PORT_FOR_OPENING_SOCKET))
         s.listen()
         #attendre une connexion
         conn, addr = s.accept()
