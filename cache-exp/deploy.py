@@ -161,8 +161,8 @@ if True:
                 with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
                     p.command(
                         task_name = "Executing the code on a site",
-                        cmd = f"python3 /home/csimohammed/exp/cache-exp/cacheManager.py",
-                        background=False
+                        cmd = f"python3 /home/csimohammed/exp/cache-exp/cacheManager.py >> /tmp/test.err",
+                        background=True
                     )
                 print(data)
                 sendObject(data, IPS_ADDRESS[i])
