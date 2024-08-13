@@ -41,6 +41,10 @@ if __name__ == "__main__":
         host=IP_ADDRESS,
         
     )
+
+    f = open("/tmp/tu.txt")
+    f.write("hello")
+    f.close()
     cm.cache_server.output.write(f"{SITE_ID} {lister_port} {DATAS_RECIEVED}")
     cm.cache_server.output.close()
     cm.cache_server.output = open(f"/tmp/log_{int(SITE_ID)}.txt",'a')
