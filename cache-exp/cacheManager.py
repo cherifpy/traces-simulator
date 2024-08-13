@@ -1,9 +1,5 @@
 from client import CacheManager
 from communication.send_data import recieveObject
-from cache import Cache
-import sys
-import time
-import threading 
 from exp.params import SERVER_REPLICA_MANAGER_PORT
 """
     meme se fichier est n'est supprimer

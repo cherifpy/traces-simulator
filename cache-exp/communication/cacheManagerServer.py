@@ -17,7 +17,7 @@ class CacheManagerServer:
         self.setup_routes()
         self.cache = cache
         self.output = open(f"/tmp/log_{self.cache.id_node}.txt",'w')
-
+        self.output.write("test")
         
 
     def setup_routes(self):
