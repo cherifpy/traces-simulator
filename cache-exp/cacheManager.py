@@ -15,7 +15,7 @@ if __name__ == "__main__":
     DATAS_RECIEVED = recieveObject()
     #get the ID and IP of the actual site 
     SITE_ID = DATAS_RECIEVED["SITE_ID"] 
-    MANAGER_IP = DATAS_RECIEVED["recieved_data"]
+    MANAGER_IP = DATAS_RECIEVED["MANAGER_IP"]
     CACHE_SIZE = DATAS_RECIEVED["CACHE_SIZE"] 
     lister_port = DATAS_RECIEVED["REP_PORT"]
     IP_ADDRESS = DATAS_RECIEVED["IP_ADDRESS"]

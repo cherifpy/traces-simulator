@@ -17,7 +17,7 @@ def InfosToSend(id_peer:int,graphe_info,ip_address, rep_port, cache_size):
     data["SITE_ID"] = id_peer
     data["REP_PORT"] = rep_port + id_peer
     data["IP_ADDRESS"] = str(ip_address[id_peer])
-    data["recieved_data"] = str(ip_address[-1])
+    data["MANAGER_IP"] = str(ip_address[-1])
     
     for i in range(len(graphe_info)):
         if graphe_info[id_peer,i] > 0:

@@ -18,11 +18,9 @@ class Cache:
         self.memory_used = 0
         self.is_memcached_installed = False
 
-        self.client = self.connectToMemcache('0.0.0.0', MEMCACHED_LISTENING_PORT)
-
     def sendDataSetTo(self, ip_dst, id_dataset,size_ds):
         
-        file_name = '/exp/tmp/tmp.bin'
+        file_name = '/tmp/tmp.bin'
         file_size_octet = size_ds*1024*1024
         with open(file_name, "wb") as p:
             p.write(os.urandom(file_size_octet))
