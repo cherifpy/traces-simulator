@@ -142,7 +142,7 @@ if True:
                 )
             print(f"======= node {i} ========")
             
-            if i==NB_NODES-1:
+            if i==(NB_NODES-1):
 
                 data = SendInfoToManager(i, CONFIG_GRAPHE,IPS_ADDRESS, REP_PORT)
                 print(data)
@@ -157,7 +157,7 @@ if True:
                 
 
             else: 
-                data = InfosToSend(i,CONFIG_GRAPHE, IPS_ADDRESS,8780,machine["storage"])
+                data = InfosToSend(i,CONFIG_GRAPHE, IPS_ADDRESS,REP_PORT,machine["storage"])
                 print(data)
                 with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
                     p.command(

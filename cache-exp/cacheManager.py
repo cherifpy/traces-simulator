@@ -42,7 +42,7 @@ if __name__ == "__main__":
     )
     cm.cache_server.output.write(f"{SITE_ID} {REP_PORT} {DATAS_RECIEVED}")
     cm.cache_server.output.close()
-    cm.cache_server.output = open(f"/tmp/log_{SITE_ID}.txt",'w')
+    cm.cache_server.output = open(f"/tmp/log_{SITE_ID}.txt",'a')
     cm.start()
           
 

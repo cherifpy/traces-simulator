@@ -157,7 +157,7 @@ class ReplicaManager:
     def sendDataSet(self, ip_node, id_ds,ds_size):
         if self.local_execution:
             return True
-        file_name = '/exp/tmp/tmp.bin'
+        file_name = '/tmp/tmp.bin'
         file_size_octet = ds_size*1024*1024
         with open(file_name, "wb") as p:
             p.write(os.urandom(file_size_octet))
@@ -286,6 +286,6 @@ if __name__ == "__main__":
     )
     task_manager.output.write(f"{data}")
     task_manager.output.close()
-    task_manager.output = open(f"/tmp/log_M.txt",'w+')
+    task_manager.output = open(f"/tmp/log_M.txt",'a')
     task_manager.nodes_infos = data["infos"]
     task_manager.start()
