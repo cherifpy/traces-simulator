@@ -9,7 +9,7 @@ import time
 from exp.params import MEMCACHED_LISTENING_PORT
 class CacheManager(object):
 
-    def __init__(self, id, storage_space,listner_port,neighbors, data_manager_ip,data_manager_port,host) -> None:
+    def __init__(self, id, storage_space,listner_port,neighbors, data_manager_ip,data_manager_port,host):
         self.id_node = id
         self.host = host
         self.storage_space = storage_space
@@ -20,6 +20,7 @@ class CacheManager(object):
         self.server_is_running = False
         self.data_manager_ip = data_manager_ip
         self.data_manager_port = data_manager_port
+        self.cache = Cache(self.storage_space, self.id_node)
         self.cache_server = CacheManagerServer(
             cache=self.cache,
             host=self.host,
@@ -27,10 +28,9 @@ class CacheManager(object):
         )
 
     def start(self):
-        self.cache = Cache(self.storage_space, self.id_node)
+        
         self.cache.connectToMemcache('0.0.0.0',MEMCACHED_LISTENING_PORT)
 
-        
         self.server_is_running = self.cache_server.run()
         return True    
         process = self.startThread()
