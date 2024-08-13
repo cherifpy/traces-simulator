@@ -67,7 +67,7 @@ class Cache:
     
     def connectToMemcache(self,host='localhost', port=11211):
         try:
-            self.client = None #pylibmc.Client(['0.0.0.0:11211'], binary=True, behaviors={"tcp_nodelay": True})
+            self.client = pylibmc.Client(['0.0.0.0:11211'], binary=True, behaviors={"tcp_nodelay": True})
             return self.client
         except Exception as e:
             print(f"Error connecting to Memcached: {e}")
