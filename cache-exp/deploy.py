@@ -157,13 +157,14 @@ if True:
 
             else: 
                 data = InfosToSend(i,CONFIG_GRAPHE, IPS_ADDRESS,REP_PORT,config.storage_capacities[i])
-                print(data)
+                
                 with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
                     p.command(
                         task_name = "Executing the code on a site",
                         cmd = f"python3 /home/csimohammed/exp/cache-exp/cacheManager.py",
-                        background=True
+                        background=False
                     )
+                print(data)
                 sendObject(data, IPS_ADDRESS[i])
                 
             

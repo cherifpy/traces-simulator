@@ -32,15 +32,15 @@ class CacheManager(object):
 
         
         self.server_is_running = self.cache_server.run()
-        return True
+        return True    
         process = self.startThread()
         time.sleep(30)
         process.terminate()
         process.join()
 
         
-    def startManagerFlaskServer(self):
-        self.cache_server = CacheManagerServer(host=self.host,port=self.listner_port)
+    def startManagerFlaskServer(self, cache):
+        self.cache_server = CacheManagerServer(cache,host=self.host,port=self.listner_port)
         self.server_is_running = self.cache_server.run()
     
 
@@ -52,6 +52,7 @@ class CacheManager(object):
         return flask_process
     
     def processMessage(self, message):
+        return None
         if isinstance(message,Task):
             it_exist = True #self.cache.checkExistence(message.id_dataset)
             if it_exist:
@@ -84,11 +85,13 @@ class CacheManager(object):
 
 
     def sendObject(self,dist, key, message):
+        return None
         sendingrequest = SendObject(dist, key, message)
         infos = self.neighbors[id]
         return self.communication.send(infos["ip"], infos["port"] ,sendingrequest)
         
     def deleteData(self, ip_address, node_port, id_dataset, dataset_size):
+        return None
         url = f'http://{ip_address}:{node_port}/add-data'
         data = {
             "id_node": self.id_node, 
