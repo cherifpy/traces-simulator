@@ -2,11 +2,9 @@ from flask import Flask, request, jsonify
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from replicaManager import ReplicaManager
 
-
-class TaskManagerAPI:
-    def __init__(self, host='localhost', port=5000, replica_manager : ReplicaManager = None):
+class ReplicaManagerAPI:
+    def __init__(self, replica_manager, host='localhost', port=5000):
         self.app = Flask(__name__)
         self.host = host
         self.port = port
@@ -46,7 +44,7 @@ class TaskManagerAPI:
         self.app.run(host=self.host, port=self.port)
 
 
-    def run(self):
+    def runLocal(self):
         self.app.run(port=5000)
 
 if __name__ == '__main__':

@@ -1,60 +1,73 @@
 import time
 import numpy as np
-from pymemcache.client import base
+import pylibmc
+from exp.params import MEMCACHED_LISTENING_PORT
+import os
 
 
 class Cache:
     def __init__(self, cache_size, node_id):
         self.id_node = node_id
         self.cache_size = cache_size
-        self.client = None
+        self.client = pylibmc.Client(['0.0.0.0:11211'], binary=True, behaviors={"tcp_nodelay": True})
         self.ids_data = []
         self.datas_sizes = {}
         self.slot_time = 1
         self.time_to_live = np.zeros((len(self.ids_data,)))
         self.data_requested_hostoric = []
         self.data_access_frequency = {}
-        self.client = {}
         self.memory_used = 0
         self.is_memcached_installed = False
 
+        self.client =self.connectToMemcache('0.0.0.0', 11211)
 
-    def addDataOnCache(self, id_data,data_size):
+    def sendDataSetTo(self, ip_dst, id_dataset,size_ds):
         
-        if id_data in self.ids_data:
-            return 0
-        else:
-            if self.memory_used + data_size < self.cache_size:  
-                self.memory_used = self.memory_used + data_size
-                self.ids_data.append(id_data)
-                self.datas_sizes[id_data] = data_size
-                return 1
-            else: return -1
+        file_name = '/exp/tmp/tmp.bin'
+        file_size_octet = size_ds*1024*1024
+        with open(file_name, "wb") as p:
+            p.write(os.urandom(file_size_octet))
+        
+        with open(file_name, "rb") as p:
+            content = p.read()
+         # Données massives de 5 MB
+        servers = [f"{ip_dst}:{MEMCACHED_LISTENING_PORT}"]  # Adresse du serveur Memcached
+        
+        #TODO Check if the data is sended and ask the client to access id to set the LRU
+        client_tmp = pylibmc.Client(servers, binary=True, behaviors={"tcp_nodelay": True})
+        r = client_tmp.set(id_dataset, content)
 
-
-    def acceddData(self, id_dataset):
-        value = self.client.get(id_dataset)
-        return False if value is None else True
+        return r 
     
-    def getStats(self, verbos):
+    #TODO
+    def accessData(self, id_dataset):
+        value = self.client.get(id_dataset)
+        if not value and value in self.ids_data:
+            self.ids_data.remove(id_dataset)
+            return False
+        
+        return True
+    
+    def getStats(self, verbos=False):
         stats = self.client.stats()
-
         if not verbos:
             return stats
         # Print the statistics
         for key, value in stats.items():
             print(f"{key.decode()}: {value}")
-
+        return stats
+    
     def checkOnCacheMemorie(self, id_data):
         return True if id_data in self.ids_data else False
     
-    def addData(self, id_data):
+    def addData(self, id_data, ds_size):
+        self.datas_sizes[id_data] = ds_size
         return self.ids_data.append(id_data)
     
+    
     def connectToMemcache(self,host='localhost', port=11211):
-        
         try:
-            self.client = base.Client((host, port))
+            self.client = None #pylibmc.Client(['0.0.0.0:11211'], binary=True, behaviors={"tcp_nodelay": True})
             return self.client
         except Exception as e:
             print(f"Error connecting to Memcached: {e}")
@@ -62,7 +75,6 @@ class Cache:
 
 
     def getFromCache(self, key):
-       
         try:
             value = self.client.get(key)
             return value
@@ -115,6 +127,18 @@ class Cache:
         pass
 
 
+"""def addDataOnCache(self, id_data,data_size):
+    
+    if id_data in self.ids_data:
+        return 0
+    else:
+        if self.memory_used + data_size < self.cache_size:  
+            self.memory_used = self.memory_used + data_size
+            self.ids_data.append(id_data)
+            self.datas_sizes[id_data] = data_size
+            return 1
+        else: return -1
+"""
 #from pymemcache.client import base
 #
 ## Don't forget to run `memcached' before running this next line:

@@ -18,8 +18,10 @@ class CacheManagerServer:
         self.cache = cache
         self.output = open(f"/tmp/log_{self.cache.id_node}.txt",'w')
 
-    def setup_routes(self):
+        
 
+    def setup_routes(self):
+        #used
         @self.app.route('/execut', methods=['POST'])    
         def process_data():
             data = request.json
@@ -35,40 +37,53 @@ class CacheManagerServer:
             else:
                 #TODO:need to know wich data will be evicted
                 processed_data = {"sendData":True, "eviction":b2}
-                self.cache.addData(task.id_dataset)
+                self.cache.addData(task.id_dataset, task.ds_size)
             self.output.write(f"task recieved {str(task)} asking th controller to send the data:{not b1}\n")
             return jsonify(processed_data)
         
+        #used
         @self.app.route('/infos', methods=['GET'])
         def get_info():
             self.output.write("info sended\n")
-            data = {
-                "id_node": self.cache.id_node,
-                "storage_space": self.cache.cache_size,
-                "remaining_space":self.cache.cache_size - self.cache.memory_used,
-            }
+            stats = self.cache.getStats()
+            if stats:
+                data = {
+                    "id_node": self.cache.id_node,
+                    "storage_space": stats["limit_maxbytes"],
+                    "remaining_space":stats["limit_maxbytes"] - stats["bytes"],
+                }
+                self.cache.memory_used  = stats["bytes"]
+            else:
+                data = {
+                    "id_node": self.cache.id_node,
+                    "storage_space": self.cache.cache_size,
+                    "remaining_space":self.cache.cache_size - self.cache.memory_used,
+                }
             return jsonify(data)
-
-        @self.app.route("/check-data", methods=['GET'])
+        
+        #used
+        @self.app.route("/access-data", methods=['GET'])
         def ckeckData():
-            
             id_ds = request.args.get("id_dataset")
             b = self.cache.accessData(id_ds)
-            
+
             return jsonify({"reponse":b})
         
-
-        @self.app.route('/send-data', methods=['GET'])
-        def send_data():
-            param1 = request.args.get('id-ds')
-            param2 = request.args.get('id-node')
+        
+        @self.app.route('/transfert', methods=['POST'])
+        def transfert():
+            data = request.json
             
-            self.cache.sendDataSetTo(param1, param2)
-
-            processed_data = {"response":"good"}
+            r = self.cache.sendDataSetTo(
+                ip_dst=data["dst_ip"],
+                id_dataset=data["id_dataset"],
+                size_ds=data["size_ds"]
+            ) 
+            processed_data = {"response":r}
             
             return jsonify(processed_data)
         
+
         @self.app.route('/add-data', methods=['POST'])
         def add_data():
             data = request.json

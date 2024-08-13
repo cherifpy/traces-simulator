@@ -1,15 +1,17 @@
 #here i have to manage tasks
-from exp.params import NB_NODES, SERVER_REPLICA_MANAGER_PORT, PATH_TO_TASKS
+from exp.params import NB_NODES, SERVER_REPLICA_MANAGER_PORT, PATH_TO_TASKS, SERVER_REPLICA_MANAGER_PORT, MEMCACHED_LISTENING_PORT
 from communication.send_data import recieveObject
 from communication.messages import Task
 from communication.cacheManagerServer import CacheManagerServer
+from communication.replicaManagerAPI import ReplicaManagerAPI
 import multiprocessing 
 import pandas as pd
+import numpy as np
 import time
 import requests
-from exp.params import SERVER_REPLICA_MANAGER_PORT, MEMCACHED_LISTENING_PORT
 #import pylibmc
 import os
+
 
 #path_to_tasks ="/Users/cherif/Documents/Traveaux/traces-simulator/cache-exp/exp/traces/traces_with_datasets.csv" ##"/exp/traces/traces_with_datasets.csv"
 
@@ -24,8 +26,9 @@ la données sera ensuite envoyer au noeud qui la demande directement
 
 class ReplicaManager:
     
-    def __init__(self,nb_nodes ,traces_path,graphe, ip) -> None:
+    def __init__(self,nb_nodes ,traces_path,graphe, ip, local_execution) -> None:
         self.nb_nodes = nb_nodes
+        self.id = nb_nodes-1
         self.traces_path = "/Users/cherif/Documents/Traveaux/traces-simulator/cache-exp/exp/traces/random_subset.csv"
         self.nodes_infos = dict()
         self.api_server = None
@@ -35,18 +38,14 @@ class ReplicaManager:
         self.ip = ip
         self.nb_data_trasnfert = 0
         self.output = open(f"/tmp/log_M.txt",'w')
-        self.local_execution = True
+        self.local_execution = local_execution
         
     def start(self):
 
         if not self.nodes_infos:
             return False
-        
         #process = self.startThread()
-        
-
         traces = pd.read_csv(self.traces_path)
-        i = 0
 
         b, self.nodes_infos = self.collecteData()
         self.output.write(str(self.nodes_infos))
@@ -54,8 +53,6 @@ class ReplicaManager:
             return False
         
         for index, row in traces.iterrows():
-            #send the task to the clients
-            #print(row)
 
             task_infos = {
                 'time' : row["time_compute (s)"],
@@ -63,38 +60,53 @@ class ReplicaManager:
             }
             task = Task(
                 id_task=row["id_task"],
-                id_node= i,
+                id_node= row["node_id"],
                 infos= task_infos,
                 id_dataset= row["dataset"],
                 ds_size=row["dataset_size"]
             )
-            
-            node_id = row["node_id"]
-            print(node_id)
             #print(self.nodes_infos[int(node_id)])
-            node_ip = self.nodes_infos[int(node_id)]["node_ip"]
-            node_port = self.nodes_infos[node_id]["node_port"]
+            node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
+            node_port = self.nodes_infos[task.id_node]["node_port"]
             
             response = self.sendTask(task,node_port, node_ip)
+
             if response['sendData']:
-                #if with eviction change here add the condition to send the data somewhere
-                self.sendDataSet(node_ip, id_ds=task.id_dataset, ds_size=task.ds_size)
-                self.nb_data_trasnfert +=1
-                self.addToLocationTable(id_dataset=task.id_dataset,id_node=node_id)
-                self.output.write(f"{task.id_task},{task.id_dataset},{task.ds_size},{node_id},\n")
-                print(f"{task.id_task},{task.id_dataset},{task.ds_size},{node_id}\n")
+
+                _,l = self.searchForDataOnNeighbors(id_node=task.id_node, dataset=task.id_dataset)
+                if l:
+                    
+                    t = self.askForATransfert(
+                        src= l,
+                        dst=task.id_node,
+                        id_dataset=task.id_dataset,
+                        size_ds=task.ds_size
+                    )
+                    if t: self.output.write(f"{task.id_task},{task.id_dataset},{task.ds_size},{l},{task.id_node},\n")
+                
+                if not l or not t:
+                    #if with eviction change here add the condition to send the data somewhere
+                    self.sendDataSet(node_ip, id_ds=task.id_dataset, ds_size=task.ds_size)
+                    self.nb_data_trasnfert +=1
+                    self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
+
+                    self.output.write(f"{task.id_task},{task.id_dataset},Manager,{task.ds_size},{task.id_node},\n")
             else:
                 pass
+            
+            self.accessData(task, node_ip)
+            b, self.nodes_infos = self.collecteData()
 
-            #process.terminate()
-            #process.join()
+        #process.terminate()
+        #process.join(),
+        self.output.write(f"{self.nb_data_trasnfert}")
         self.output.close()
         return True
     
-
+    #used
     def collecteData(self):
         if len(self.nodes_infos.keys()) == 0:
-            return False, []
+            return False, {}
         
         for key in self.nodes_infos.keys():
             url = f'http://{self.nodes_infos[key]["node_ip"]}:{self.nodes_infos[key]["node_port"]}/infos'
@@ -105,52 +117,25 @@ class ReplicaManager:
             #print(f"received data from {key}, {self.nodes_infos[key]}")
         return True, self.nodes_infos
     
-
-    def getEmptyNode(self):
-        nodes = []
-        for i, node in enumerate(self.nodes_infos):
-            if node["remaining_space"] == node["storage_space"]:
-                nodes.append(i)
-        return nodes        
-
-    def selectNodeBySpace(self, task):
-        nodes = []
-        if self.datasetOnNeigbors():
-            return 
-        for i, node in enumerate(self.nodes_infos):
-            if not node["remaining_space"] == 0:
-                if node["remaining_space"] < task.ds_size:
-                    continue
-                else:
-                    nodes.append(i)
-            else:
-                nodes.append(i)
-        return nodes
-
-    def choseNode(self, task:Task):
-        if self.datasetOnNeigbors():
-            return 
-        for i, node in enumerate(self.nodes_infos):
-            if node["remaining_space"] == 0 or node["remaining_space"] < task.ds_size:
-                continue
-            else:
-                return i
-        return False
-
-    def datasetOnNeigbors(self, node_i, id_dataset):
-        node_neighbors = self.graphe_infos[node_i]
-
-        for i, val in enumerate(node_neighbors):
-            if val > 0:
-                if i in self.location_table[id_dataset]:
-                    return True, {"sendData":"good"}
+    #used
+    def searchForDataOnNeighbors(self, id_node, dataset):
+        locations = []
+        latency = []
         
-        return False, None
+        for node, c in enumerate(self.graphe_infos[id_node]):
+            if c > 0 and c < self.graphe_infos[self.id][node] and c in self.getDataSetLocation(id_ds=dataset):
+                locations.append(node)                
+                latency.append(c)
+            
+        if len(locations) == 0:
+            return None, None
+        min_latency = np.min(latency)
+
+        return min_latency, locations[np.argmin(latency)]
     
-    def getDataSetLocation(self,id_ds):
-        return self.location_table[id_ds]
 
 
+    #used
     def sendTask(self, task:Task, port, ip="localhost"):
 
         url = f'http://{ip}:{port}/execut'
@@ -180,14 +165,91 @@ class ReplicaManager:
         with open(file_name, "rb") as p:
             content = p.read()
          # Données massives de 5 MB
-        servers = [f"{ip_node}:MEMCACHED_LISTENING_PORT"]  # Adresse du serveur Memcached
+        servers = [f"{ip_node}:{MEMCACHED_LISTENING_PORT}"]  # Adresse du serveur Memcached
         
-        #client = pylibmc.Client(servers, binary=True, behaviors={"tcp_nodelay": True})
-        #TODO Check if the data is sended and ask the client to access id to set the LRu
-        return True #client.set(id_ds, content)
+        client = pylibmc.Client(servers, binary=True, behaviors={"tcp_nodelay": True})
+        #TODO Check if the data is sended and ask the client to access id to set the LRU
+        r = client.set(id_ds, content)
+
+        return r 
+    
+    def accessData(self, task:Task, ip="localhost"):
+
+        url = f'http://{self.nodes_infos[task.id_node]["node_ip"]}:{self.nodes_infos[task.id_node]["node_port"]}/access-data'
+
+        response = requests.get(url,params={
+            'id_dataset':task.id_dataset
+        })
+        print(response.text)
+        return response.json()
+    
+    def askForATransfert(self, src, dst, id_dataset,size_ds):
+        print(self.nodes_infos[src]["node_ip"], self.nodes_infos[src]["node_port"])
+        url = f'http://{self.nodes_infos[src]["node_ip"]}:{self.nodes_infos[src]["node_port"]}/transfert'
+        
+        data = {
+            "dst_id": dst,
+            "dst_ip": self.nodes_infos[dst]["node_ip"], 
+            "id_dataset": id_dataset,
+            "size_ds": size_ds
+        }
+
+        response = requests.post(url, json=data)
+        print(response.json()["response"])
+        return response.json()["response"]
+
+    def getEmptyNode(self):
+        nodes = []
+        for i, node in enumerate(self.nodes_infos):
+            if node["remaining_space"] == node["storage_space"]:
+                nodes.append(i)
+        return nodes        
+
+    def selectNodeBySpace(self, task:Task):
+        nodes = []
+        if self.datasetOnNeigbors(task.id_node, task.id_dataset):
+            return 
+        for i, node in enumerate(self.nodes_infos):
+            if not node["remaining_space"] == 0:
+                if node["remaining_space"] < task.ds_size:
+                    continue
+                else:
+                    nodes.append(i)
+            else:
+                nodes.append(i)
+        return nodes
+
+    def choseNode(self, task:Task):
+        if self.datasetOnNeigbors(task.id_node, task.id_dataset):
+            return 
+        for i, node in enumerate(self.nodes_infos):
+            if node["remaining_space"] == 0 or node["remaining_space"] < task.ds_size:
+                continue
+            else:
+                return i
+        return False
+
+    def datasetOnNeigbors(self, node_i, id_dataset):
+        node_neighbors = self.graphe_infos[node_i]
+
+        for i, val in enumerate(node_neighbors):
+            if val > 0:
+                if i in self.location_table[id_dataset]:
+                    return True, {"sendData":"good"}
+        
+        return False, None
+    
+    def getDataSetLocation(self,id_ds):
+        
+        return self.location_table[id_ds] if id_ds in self.location_table.keys() else []
     
     def startFlaskServer(self):
-        self.api_server = CacheManagerServer(host=self.ip, port=self.port)
+        pass
+        self.api_server = ReplicaManagerAPI( 
+            host=self.ip,
+            port=self.port,
+            replica_manager=self
+            )
         server_is_running = self.api_server.run()
 
 
@@ -202,6 +264,8 @@ class ReplicaManager:
         flask_process.start()
         time.sleep(0.2)
         return flask_process
+    
+    
 
     def transfertCost(self, latency, data_size, ):
         pass
@@ -217,7 +281,8 @@ if __name__ == "__main__":
         nb_nodes = NB_NODES,
         traces_path=PATH_TO_TASKS,
         graphe= data["graphe_infos"],
-        ip=data["IP_ADDRESS"]
+        ip=data["IP_ADDRESS"],
+        local_execution=False
     )
     task_manager.output.write(f"{data}")
     task_manager.nodes_infos = data["infos"]

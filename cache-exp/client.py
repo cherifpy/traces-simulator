@@ -7,7 +7,6 @@ import requests
 import multiprocessing 
 import time
 
-#TODO
 class CacheManager(object):
 
     def __init__(self, id, storage_space,listner_port,neighbors, data_manager_ip,data_manager_port,host) -> None:
@@ -16,21 +15,22 @@ class CacheManager(object):
         self.storage_space = storage_space
         self.time_limite = 0
         self.neighbors = neighbors
-        self.listner_port = listner_port
-        self.cache = Cache(self.storage_space, self.id_node)
-        
+        self.listner_port = listner_port   
         self.future_task = queue.Queue()
-        self.cache_server = CacheManagerServer(
-            cache=self.cache,
-            host=self.host,
-            port=self.listner_port
-        )
         self.server_is_running = False
         self.data_manager_ip = data_manager_ip
         self.data_manager_port = data_manager_port
         
 
     def start(self):
+        self.cache = Cache(self.storage_space, self.id_node)
+        self.cache.connectToMemcache('0.0.0.0',11211)
+
+        self.cache_server = CacheManagerServer(
+            cache=self.cache,
+            host=self.host,
+            port=self.listner_port
+        )
         
         self.server_is_running = self.cache_server.run()
         return True
@@ -44,6 +44,8 @@ class CacheManager(object):
         self.cache_server = CacheManagerServer(host=self.host,port=self.listner_port)
         self.server_is_running = self.cache_server.run()
     
+
+
     def startThread(self):
         flask_process = multiprocessing.Process(target=self.startManagerFlaskServer)
         flask_process.start()
