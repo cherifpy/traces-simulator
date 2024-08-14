@@ -16,7 +16,7 @@ class CacheManagerServer:
         self.recieved_task = Queue()
         self.setup_routes()
         self.cache = cache
-        self.output = open(f"/tmp/log_{self.cache.id_node}.txt",'w')
+        self.output = open(f"/tmp/log_{self.cache.id_node}.txt",'a')
         self.output.write("test")
         
 
@@ -24,6 +24,8 @@ class CacheManagerServer:
         #used
         @self.app.route('/execut', methods=['POST'])    
         def process_data():
+            print("recieved task")
+            self.output.write("recieved task")
             data = request.json
 
             task = Task.from_json(data["task"])

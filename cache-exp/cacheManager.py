@@ -28,9 +28,8 @@ if __name__ == "__main__":
         })
     #TODO
 
-    f = open("/tmp/je.txt","w")
-    f.write("hello")
-    f.close()
+
+
     cm = CacheManager(
         id=int(SITE_ID),
         storage_space = CACHE_SIZE,
@@ -42,9 +41,6 @@ if __name__ == "__main__":
         
     )
 
-    f = open("/tmp/tu.txt","w")
-    f.write("hello")
-    f.close()
     cm.cache_server.output.write(f"{SITE_ID} {lister_port} {DATAS_RECIEVED}")
     cm.cache_server.output.close()
     cm.cache_server.output = open(f"/tmp/log_{int(SITE_ID)}.txt",'a')

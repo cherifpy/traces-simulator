@@ -53,7 +53,7 @@ class ReplicaManager:
             return False
         
         for index, row in traces.iterrows():
-
+            print("hello ", index)
             task_infos = {
                 'time' : row["time_compute (s)"],
                 'application_type': row["application_type"]
@@ -67,13 +67,14 @@ class ReplicaManager:
             )
             #print(self.nodes_infos[int(node_id)])
             node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
-            node_port = self.nodes_infos[task.id_node]["node_port"]
+            node_port = self.nodes_infos[int(task.id_node)]["node_port"]
             
             response = self.sendTask(task,node_port, node_ip)
 
             if response['sendData']:
 
                 _,l = self.searchForDataOnNeighbors(id_node=task.id_node, dataset=task.id_dataset)
+                t = False
                 if l:
                     
                     t = self.askForATransfert(

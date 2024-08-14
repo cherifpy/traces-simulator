@@ -5,23 +5,23 @@ exp_env: debian11-min
 exp_walltime: 0:30:00
 execution_local: False
 machines:
-  - cluster: nova
+  - cluster: paravance
     nodes: 1
     roles: [A]
     storage: 256
-  - cluster: nova
+  - cluster: paravance
     nodes: 1
     roles: [B]
     storage: 256
-  - cluster: nova
+  - cluster: paravance
     nodes: 1
     roles: [C]
     storage: 256
-  - cluster: nova
+  - cluster: paravance
     nodes: 1
     roles: [D]
     storage: 256
-  - cluster: nova
+  - cluster: paravance
     nodes: 1
     roles: [E]
     storage: 256
