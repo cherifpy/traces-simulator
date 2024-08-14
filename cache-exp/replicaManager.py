@@ -37,12 +37,13 @@ class ReplicaManager:
         self.port = SERVER_REPLICA_MANAGER_PORT
         self.ip = ip
         self.nb_data_trasnfert = 0
-        self.output = open(f"/tmp/log_M.txt",'w')
+        self.output = open(f"/tmp/log_M.txt",'a')
         self.local_execution = local_execution
         
     def start(self):
 
         if not self.nodes_infos:
+            self.writeOutput("no infos \n")
             return False
         #process = self.startThread()
         traces = pd.read_csv(self.traces_path)
@@ -289,8 +290,8 @@ if __name__ == "__main__":
         ip=data["IP_ADDRESS"],
         local_execution=False
     )
-    task_manager.output.write(f"{data}")
-    task_manager.output.close()
+    task_manager.writeOutput(f"{data}")
+    
     
     task_manager.nodes_infos = data["infos"]
     task_manager.start()

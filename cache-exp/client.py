@@ -26,10 +26,10 @@ class CacheManager(object):
             host=self.host,
             port=self.listner_port
         )
-
+        
     def start(self):
         
-        self.cache.connectToMemcache('0.0.0.0',MEMCACHED_LISTENING_PORT)
+        self.cache.connectToMemcache()
 
         self.server_is_running = self.cache_server.run()
         return True    

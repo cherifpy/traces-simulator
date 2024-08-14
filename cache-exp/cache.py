@@ -62,7 +62,7 @@ class Cache:
         return self.ids_data.append(id_data)
     
     
-    def connectToMemcache(self,host='localhost', port=MEMCACHED_LISTENING_PORT):
+    def connectToMemcache(self):
         try:
             self.client = pylibmc.Client([f'0.0.0.0:{MEMCACHED_LISTENING_PORT}'], binary=True, behaviors={"tcp_nodelay": True})
             return self.client
