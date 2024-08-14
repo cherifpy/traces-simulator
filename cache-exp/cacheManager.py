@@ -41,9 +41,8 @@ if __name__ == "__main__":
         
     )
 
-    cm.cache_server.output.write(f"{SITE_ID} {lister_port} {DATAS_RECIEVED}")
-    cm.cache_server.output.close()
-    cm.cache_server.output = open(f"/tmp/log_{int(SITE_ID)}.txt",'a')
+    cm.cache_server.writeOutput(f"{SITE_ID} {lister_port} {DATAS_RECIEVED}")
+
     cm.start()
           
 

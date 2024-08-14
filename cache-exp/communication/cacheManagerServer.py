@@ -18,8 +18,11 @@ class CacheManagerServer:
         self.cache = Cache(storage_space, id_node)
         
         
-        self.cache.connectToMemcache()
-        self.writeOutput("connected to memecached")
+        self.client = self.cache.connectToMemcache()
+        if self.client != None:
+            self.writeOutput("connected to memecached\n")
+        else:
+            elf.writeOutput("not connected to memecached\n")
 
     def setup_routes(self):
         #used
