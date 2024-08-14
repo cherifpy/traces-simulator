@@ -112,7 +112,9 @@ class ReplicaManager:
         
         for key in self.nodes_infos.keys():
             url = f'http://{self.nodes_infos[key]["node_ip"]}:{self.nodes_infos[key]["node_port"]}/infos'
+            
             response = requests.get(url).json()
+            self.writeOutput(url)
             
             self.nodes_infos[key]["storage_space"] = response["storage_space"]
             self.nodes_infos[key]["remaining_space"] = response["remaining_space"]

@@ -66,7 +66,7 @@ class CacheManagerServer:
                     "remaining_space":self.cache.cache_size - self.cache.memory_used,
                 }
             self.writeOutput("info sended\n")
-            return jsonify(data)
+            return jsonify(stats)
         
         #used
         @self.app.route("/access-data", methods=['GET'])
