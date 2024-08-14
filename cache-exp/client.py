@@ -23,7 +23,7 @@ class CacheManager(object):
         
         self.cache_server = CacheManagerServer(
             storage_space=self.storage_space,
-            port=self.listner_port,
+            id_node=self.id_node,
             host=self.host,
             port=self.listner_port
         )
