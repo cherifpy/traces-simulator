@@ -46,14 +46,15 @@ class Cache:
         return True
     
     def getStats(self, verbos=False):
-        stats = self.client.get_stats()
-        
+
+        stats = pylibmc.Client([f'0.0.0.0:{MEMCACHED_LISTENING_PORT}'], binary=True, behaviors={"tcp_nodelay": True}).get_stats()
+        return stats
         if not verbos and stats:
             return stats
         elif not stats:
             return {}
         # Print the statistics
-        for key, value in stats.items():
+        for key, value in stats[0][1].items():
             print(f"{key.decode()}: {value}")
         return stats
     
