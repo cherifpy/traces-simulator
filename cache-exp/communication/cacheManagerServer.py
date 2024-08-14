@@ -55,10 +55,10 @@ class CacheManagerServer:
             if stats:
                 data = {
                     "id_node": self.cache.id_node,
-                    "storage_space": stats["limit_maxbytes"],
-                    "remaining_space":stats["limit_maxbytes"] - stats["bytes"],
+                    "storage_space": int(stats["limit_maxbytes"].decode()),
+                    "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())
                 }
-                self.cache.memory_used  = stats["bytes"]
+                self.cache.memory_used  = int(stats["bytes"].decode())
             else:
                 data = {
                     "id_node": self.cache.id_node,
@@ -66,7 +66,7 @@ class CacheManagerServer:
                     "remaining_space":self.cache.cache_size - self.cache.memory_used,
                 }
             self.writeOutput("info sended\n")
-            return jsonify(stats)
+            return jsonify(data)
         
         #used
         @self.app.route("/access-data", methods=['GET'])
