@@ -20,16 +20,17 @@ class CacheManager(object):
         self.server_is_running = False
         self.data_manager_ip = data_manager_ip
         self.data_manager_port = data_manager_port
-        self.cache = Cache(self.storage_space, self.id_node)
+        
         self.cache_server = CacheManagerServer(
-            cache=self.cache,
+            storage_space=self.storage_space,
+            port=self.listner_port,
             host=self.host,
             port=self.listner_port
         )
-        
+
     def start(self):
         
-        self.cache.connectToMemcache()
+        
 
         self.server_is_running = self.cache_server.run()
         return True    

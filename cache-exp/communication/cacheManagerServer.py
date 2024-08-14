@@ -9,23 +9,24 @@ import importlib.util
 from cache import Cache
 
 class CacheManagerServer:
-    def __init__(self, cache:Cache,host='localhost', port=8888):
+    def __init__(self,storage_space, id_node, host='localhost', port=8888):
         self.app = Flask(__name__)
         self.host = host
         self.port = port
         self.recieved_task = Queue()
         self.setup_routes()
-        self.cache = cache
-        self.output = open(f"/tmp/log_{self.cache.id_node}.txt",'a')
-        self.output.write("test")
+        self.cache = Cache(storage_space, id_node)
         
+        
+        self.cache.connectToMemcache()
+        self.writeOutput("connected to memecached")
 
     def setup_routes(self):
         #used
         @self.app.route('/execut', methods=['POST'])    
         def process_data():
             print("recieved task")
-            self.output.write("recieved task")
+            self.writeOutput("recieved task")
             data = request.json
 
             task = Task.from_json(data["task"])
@@ -40,13 +41,13 @@ class CacheManagerServer:
                 #TODO:need to know wich data will be evicted
                 processed_data = {"sendData":True, "eviction":b2}
                 self.cache.addData(task.id_dataset, task.ds_size)
-            self.output.write(f"task recieved {str(task)} asking th controller to send the data:{not b1}\n")
+            self.writeOutput(f"task recieved {str(task)} asking th controller to send the data:{not b1}\n")
             return jsonify(processed_data)
         
         #used
         @self.app.route('/infos', methods=['GET'])
         def get_info():
-            self.output.write("info sended\n")
+            self.writeOutput("info sended\n")
             stats = self.cache.getStats()
             if stats:
                 data = {
@@ -135,6 +136,11 @@ class CacheManagerServer:
             return True
         except :
             return False  
+        
+    def writeOutput(self, str):
+        out = open(f"/tmp/log_{self.cache.id_node}.txt",'a')
+        out.write(str)
+        out.close()
           
         
     

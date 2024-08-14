@@ -49,6 +49,8 @@ class Cache:
         stats = self.client.get_stats()
         if not verbos and stats:
             return stats
+        elif not stats:
+            return {}
         # Print the statistics
         for key, value in stats.items():
             print(f"{key.decode()}: {value}")
