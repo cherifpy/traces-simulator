@@ -124,7 +124,7 @@ class CacheManagerServer:
         
     def run(self):
         try:
-            self.app.run(host=self.host, port=self.port)
+            self.app.run(host="0.0.0.0", port=self.port)
             return True
         except :
             return False  

@@ -44,7 +44,7 @@ class ReplicaManager:
 
         if not self.nodes_infos:
             return False
-        process = self.startThread()
+        #process = self.startThread()
         traces = pd.read_csv(self.traces_path)
 
         b, self.nodes_infos = self.collecteData()
@@ -98,8 +98,8 @@ class ReplicaManager:
             self.accessData(task, node_ip)
             b, self.nodes_infos = self.collecteData()
 
-        process.terminate()
-        process.join()
+        #process.terminate()
+        #process.join()
         self.writeOutput(f"{self.nb_data_trasnfert}")
         
         return True
@@ -272,8 +272,8 @@ class ReplicaManager:
         pass
 
     def writeOutput(self, str):
-        self.output = open(f"/tmp/log_M.txt",'w')
-        self.output.writ(str)
+        self.output = open(f"/tmp/log_M.txt",'a')
+        self.output.write(str)
         self.output.close()
     
 
@@ -291,6 +291,6 @@ if __name__ == "__main__":
     )
     task_manager.output.write(f"{data}")
     task_manager.output.close()
-    task_manager.output = open(f"/tmp/log_M.txt",'a')
+    
     task_manager.nodes_infos = data["infos"]
     task_manager.start()
