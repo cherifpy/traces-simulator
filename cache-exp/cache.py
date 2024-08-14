@@ -47,6 +47,7 @@ class Cache:
     
     def getStats(self, verbos=False):
         stats = self.client.get_stats()
+        
         if not verbos and stats:
             return stats
         elif not stats:

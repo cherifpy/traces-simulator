@@ -22,7 +22,7 @@ class CacheManagerServer:
         if self.client != None:
             self.writeOutput("connected to memecached\n")
         else:
-            elf.writeOutput("not connected to memecached\n")
+            self.writeOutput("not connected to memecached\n")
 
     def setup_routes(self):
         #used
@@ -50,8 +50,8 @@ class CacheManagerServer:
         #used
         @self.app.route('/infos', methods=['GET'])
         def get_info():
-            self.writeOutput("info sended\n")
-            stats = self.cache.getStats()
+            
+            stats = self.cache.getStats()[0][1]
             if stats:
                 data = {
                     "id_node": self.cache.id_node,
@@ -65,6 +65,7 @@ class CacheManagerServer:
                     "storage_space": self.cache.cache_size,
                     "remaining_space":self.cache.cache_size - self.cache.memory_used,
                 }
+            self.writeOutput("info sended\n")
             return jsonify(data)
         
         #used
