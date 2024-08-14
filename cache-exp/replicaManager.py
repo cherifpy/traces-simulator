@@ -48,12 +48,12 @@ class ReplicaManager:
         traces = pd.read_csv(self.traces_path)
 
         b, self.nodes_infos = self.collecteData()
-        self.output.write(str(self.nodes_infos))
+        self.writeOutput(f"{str(self.nodes_infos)}\n")
         if not b:
             return False
         
         for index, row in traces.iterrows():
-            print("hello ", index)
+            self.writeOutput(f"hello {index}\n")
             task_infos = {
                 'time' : row["time_compute (s)"],
                 'application_type': row["application_type"]
@@ -83,7 +83,7 @@ class ReplicaManager:
                         id_dataset=task.id_dataset,
                         size_ds=task.ds_size
                     )
-                    if t: self.output.write(f"{task.id_task},{task.id_dataset},{task.ds_size},{l},{task.id_node},\n")
+                    if t: self.writeOutput(f"{task.id_task},{task.id_dataset},{task.ds_size},{l},{task.id_node},\n")
                 
                 if not l or not t:
                     #if with eviction change here add the condition to send the data somewhere
@@ -91,7 +91,7 @@ class ReplicaManager:
                     self.nb_data_trasnfert +=1
                     self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
 
-                    self.output.write(f"{task.id_task},{task.id_dataset},Manager,{task.ds_size},{task.id_node},\n")
+                    self.writeOutput(f"{task.id_task},{task.id_dataset},Manager,{task.ds_size},{task.id_node},\n")
             else:
                 pass
 
@@ -100,8 +100,8 @@ class ReplicaManager:
 
         process.terminate()
         process.join()
-        self.output.write(f"{self.nb_data_trasnfert}")
-        self.output.close()
+        self.writeOutput(f"{self.nb_data_trasnfert}")
+        
         return True
     
     #used
@@ -271,6 +271,10 @@ class ReplicaManager:
     def transfertCost(self, latency, data_size, ):
         pass
 
+    def writeOutput(self, str):
+        self.output = open(f"/tmp/log_M.txt",'w')
+        self.output.writ(str)
+        self.output.close()
     
 
 if __name__ == "__main__":
