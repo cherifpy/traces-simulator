@@ -46,7 +46,7 @@ class ReplicaManager:
             return False
         #process = self.startThread()
         traces = pd.read_csv(self.traces_path)
-
+        self.writeOutput("start collection data \n")
         b, self.nodes_infos = self.collecteData()
         self.writeOutput(f"{str(self.nodes_infos)}\n")
         if not b:
