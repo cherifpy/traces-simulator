@@ -57,7 +57,7 @@ class ReplicaManager:
             return False
         
         for index, row in traces.iterrows():
-            self.writeOutput(f"hello {index}\n")
+            
             task_infos = {
                 'time' : row["time_compute (s)"],
                 'application_type': row["application_type"]
@@ -105,7 +105,7 @@ class ReplicaManager:
 
         #process.terminate()
         #process.join()
-        self.writeOutput(f"{self.nb_data_trasnfert}")
+        self.writeOutput(f"{self.nb_data_trasnfert}\n")
         
         return True
     
@@ -122,7 +122,7 @@ class ReplicaManager:
             self.nodes_infos[key]["storage_space"] = response["storage_space"]
             self.nodes_infos[key]["remaining_space"] = response["remaining_space"]
             #print(f"received data from {key}, {self.nodes_infos[key]}")
-        self.writeOutput("finishing collecting data from actors")
+        self.writeOutput("finishing collecting data from actors\n")
         
         return True, self.nodes_infos
     
@@ -149,7 +149,7 @@ class ReplicaManager:
         data = {"task": task.to_json(), "type":"task"}
 
         response = requests.post(url, json=data)
-        self.writeOutput(f"task {task.id_task} sended server requeste by a ")
+        self.writeOutput(f"task {task.id_task} sended to {task.id_node}\n")
         return response.json()
     
 
@@ -193,7 +193,7 @@ class ReplicaManager:
         response = requests.get(url,params={
             'id_dataset':task.id_dataset
         })
-        print(response.text)
+        
         return response.json()
     
     def askForATransfert(self, src, dst, id_dataset,size_ds):
