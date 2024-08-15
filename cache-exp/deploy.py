@@ -12,7 +12,7 @@ def run_command(command):
 
 def InfosToSend(id_peer:int,graphe_info,ip_address, rep_port, cache_size):
     data = {}
-    data["CACHE_SIZE"] = cache_size
+    data["CACHE_SIZE"] = cache_size*1024*1024
     data["infos"] = []
     data["SITE_ID"] = id_peer
     data["REP_PORT"] = rep_port + id_peer
@@ -60,8 +60,6 @@ if True:
         memcached_listening_port=MEMCACHED_LISTENING_PORT
     )
     
-    
-
     provider = config.setReservation()
     netem = config.setNetworkConstraintes()
 
@@ -71,7 +69,7 @@ if True:
     NB_NODES = config.nb_sites
     CONFIG_GRAPHE = config.getGraphe()
     IPS_ADDRESS = config.getAllIPs()
-    print(CONFIG_GRAPHE)
+
     print(IPS_ADDRESS)
     #config.provider.destroy()
     
@@ -79,8 +77,6 @@ if True:
     
     if config.execution_local:
         import threading
-
-
         for i, machine in enumerate(config.machines):
             if i == NB_NODES-1:
 
@@ -98,10 +94,7 @@ if True:
                 infos_nodes.append({"node_ip":IPS_ADDRESS[i], "node_port":SERVER_REPLICA_MANAGER_PORT})
                 port_rep += 1
                 time.sleep(1)
-
             else:
-            
-
                 data = InfosToSend(i,CONFIG_GRAPHE, IPS_ADDRESS,REP_PORT,config.storage_capacities[i])
                 
                 thread = threading.Thread(
@@ -120,7 +113,6 @@ if True:
         
  
     else:
-        
         for i, machine in enumerate(config.machines):
 
             with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
@@ -157,7 +149,6 @@ if True:
 
             else: 
                 data = InfosToSend(i,CONFIG_GRAPHE, IPS_ADDRESS,REP_PORT,config.storage_capacities[i])
-                
                 with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
                     p.command(
                         task_name = "Executing the code on a site",

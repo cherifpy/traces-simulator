@@ -27,7 +27,7 @@ la données sera ensuite envoyer au noeud qui la demande directement
 class ReplicaManager:
     
     def __init__(self,nb_nodes ,traces_path,graphe, ip, local_execution) -> None:
-        self.nb_nodes = nb_nodes
+        self.nb_nodes = nb_nodes-1
         self.id = nb_nodes-1
         self.traces_path = PATH_TO_TASKS#"/Users/cherif/Documents/Traveaux/traces-simulator/cache-exp/exp/traces/random_subset.csv"
         self.nodes_infos = dict()
@@ -38,13 +38,16 @@ class ReplicaManager:
         self.ip = ip
         self.nb_data_trasnfert = 0
         self.output = open(f"/tmp/log_M.txt",'a')
+        self.transfert = open(f"/tmp/transfert.txt",'w')
         self.local_execution = local_execution
+        self.num_evection = 0
         
     def start(self):
 
         if not self.nodes_infos:
             self.writeOutput("no infos \n")
             return False
+        
         #process = self.startThread()
         traces = pd.read_csv(self.traces_path)
         self.writeOutput("start collection data \n")
@@ -77,22 +80,23 @@ class ReplicaManager:
                 _,l = self.searchForDataOnNeighbors(id_node=task.id_node, dataset=task.id_dataset)
                 t = False
                 if l:
-                    
                     t = self.askForATransfert(
                         src= l,
                         dst=task.id_node,
                         id_dataset=task.id_dataset,
                         size_ds=task.ds_size
                     )
-                    if t: self.writeOutput(f"{task.id_task},{task.id_dataset},{task.ds_size},{l},{task.id_node},\n")
+                    if t: 
+                        self.transfert.write(f"{task.id_task},{task.id_dataset},{task.ds_size},{l},{task.id_node}\n")
                 
                 if not l or not t:
                     #if with eviction change here add the condition to send the data somewhere
                     self.sendDataSet(node_ip, id_ds=task.id_dataset, ds_size=task.ds_size)
                     self.nb_data_trasnfert +=1
+                    
                     self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
 
-                    self.writeOutput(f"{task.id_task},{task.id_dataset},Manager,{task.ds_size},{task.id_node},\n")
+                    self.transfert.write(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node}\n")
             else:
                 pass
 
@@ -113,11 +117,13 @@ class ReplicaManager:
         for key in self.nodes_infos.keys():
             url = f'http://{self.nodes_infos[key]["node_ip"]}:{self.nodes_infos[key]["node_port"]}/infos'
             response = requests.get(url).json()
-            self.writeOutput(url)
+            
             
             self.nodes_infos[key]["storage_space"] = response["storage_space"]
             self.nodes_infos[key]["remaining_space"] = response["remaining_space"]
             #print(f"received data from {key}, {self.nodes_infos[key]}")
+        self.writeOutput("finishing collecting data from actors")
+        
         return True, self.nodes_infos
     
     #used
@@ -136,8 +142,6 @@ class ReplicaManager:
 
         return min_latency, locations[np.argmin(latency)]
     
-
-
     #used
     def sendTask(self, task:Task, port, ip="localhost"):
 
@@ -145,7 +149,9 @@ class ReplicaManager:
         data = {"task": task.to_json(), "type":"task"}
 
         response = requests.post(url, json=data)
+        self.writeOutput(f"task {task.id_task} sended server requeste by a ")
         return response.json()
+    
 
     def evectData(self,id_node,id_dataset, dataset_size, with_migration=False):
 
@@ -156,6 +162,10 @@ class ReplicaManager:
             return "delete"
         else:
             return "migrate"
+        
+    def manageEvection(self, id_node):
+        
+        pass
         
     def sendDataSet(self, ip_node, id_ds,ds_size):
         if self.local_execution:
@@ -201,13 +211,14 @@ class ReplicaManager:
         #print(response.json()["response"])
         return response.json()["response"]
 
+    #Note used
     def getEmptyNode(self):
         nodes = []
         for i, node in enumerate(self.nodes_infos):
             if node["remaining_space"] == node["storage_space"]:
                 nodes.append(i)
         return nodes        
-
+    #Note used
     def selectNodeBySpace(self, task:Task):
         nodes = []
         if self.datasetOnNeigbors(task.id_node, task.id_dataset):
@@ -221,7 +232,7 @@ class ReplicaManager:
             else:
                 nodes.append(i)
         return nodes
-
+    #Note used
     def choseNode(self, task:Task):
         if self.datasetOnNeigbors(task.id_node, task.id_dataset):
             return 
@@ -231,7 +242,7 @@ class ReplicaManager:
             else:
                 return i
         return False
-
+    #Note used
     def datasetOnNeigbors(self, node_i, id_dataset):
         node_neighbors = self.graphe_infos[node_i]
 

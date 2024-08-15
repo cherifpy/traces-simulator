@@ -17,6 +17,7 @@ class Cache:
         self.data_access_frequency = {}
         self.memory_used = 0
         self.is_memcached_installed = False
+        self.last_recently_used_item = None
 
     def sendDataSetTo(self, ip_dst, id_dataset,size_ds):
         
@@ -85,10 +86,9 @@ class Cache:
 
     def deleteFromCache(self, key):
         """Deletes a value from Memcached."""
-        if not self.is_memcached_installed:
-            return False
         try:
-            self.client.delete(key)
+            client = pylibmc.Client([f'0.0.0.0:{MEMCACHED_LISTENING_PORT}'], binary=True, behaviors={"tcp_nodelay": True})
+            client.delete(key)
             return True
         except Exception as e:
             print(f"Error deleting from Memcached: {e}")

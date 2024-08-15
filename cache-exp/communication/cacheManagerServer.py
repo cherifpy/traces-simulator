@@ -1,5 +1,7 @@
+from crypt import methods
 import sys
 import os
+from urllib import response
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from flask import Flask, request, jsonify
 from communication.messages import Task
@@ -44,7 +46,9 @@ class CacheManagerServer:
                 #TODO:need to know wich data will be evicted
                 processed_data = {"sendData":True, "eviction":b2}
                 self.cache.addData(task.id_dataset, task.ds_size)
+
             self.writeOutput(f"task recieved {str(task)} asking th controller to send the data:{not b1}\n")
+
             return jsonify(processed_data)
         
         #used
@@ -76,7 +80,16 @@ class CacheManagerServer:
 
             return jsonify({"reponse":b})
         
-        
+        @self.app.route("/get-infos-for-evection", methods=["GET"])
+        def infoForEvection():
+
+            stats = self.cache.getStats()[0][1]
+            return jsonify({
+                "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode()),
+                'last_recently_used': self.cache.last_recently_used_item
+            })
+
+        #used
         @self.app.route('/transfert', methods=['POST'])
         def transfert():
             data = request.json
@@ -90,6 +103,24 @@ class CacheManagerServer:
             
             return jsonify(processed_data)
         
+        #TODO
+        @self.app.route('/send-and-delete', methods=["GET"])
+        def sendAndDelete():
+            id_ds = request.args.get("id_dataset")
+            ip__node = request.args.get("ip_node")
+            ds_size = request.args.get("ds_size")
+            b = self.cache.deleteFromCache(id)
+            if b:
+                t = self.cache.sendDataSetTo(
+                    ip_dst=ip__node,
+                    id_dataset=id_ds,
+                    size_ds=ds_size
+                    )
+                response = {"sending":t}
+            else:
+                response = {"sending":b}
+
+            return jsonify(response)
 
         @self.app.route('/add-data', methods=['POST'])
         def add_data():
@@ -105,12 +136,12 @@ class CacheManagerServer:
         @self.app.route('/delete-data', methods=['PULL'])
         def delete_data():
             data = request.json
-            self.cache.deleteFromCache(data["key"])
-            
+            self.cache.deleteFromCache(data["id_dataset"])
             processed_data = {"response":"good"}
-            
             return jsonify(processed_data) 
         
+
+
         @self.app.route('/say', methods=['GET'])
         def say():
             param1 = request.args.get('num', 'Guest')
@@ -118,6 +149,7 @@ class CacheManagerServer:
             processed_data = {"response":"good"}
             
             return jsonify(processed_data) 
+        
         
         @self.app.route('/shutdown', methods=['POST'])
         def shutdown():
