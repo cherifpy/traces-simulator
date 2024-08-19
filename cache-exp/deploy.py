@@ -135,7 +135,7 @@ if True:
 
                 p.command(
                     task_name = "installing python libs",
-                    cmd = "pip3 install pandas pylibmc numpy sockets PyYAML Flask"
+                    cmd = "pip3 install pandas pylibmc numpy sockets PyYAML Flask pymemcache"
                 )
             print(f"======= node {i} ========")
             
