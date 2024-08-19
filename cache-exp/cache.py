@@ -3,7 +3,9 @@ import numpy as np
 import pylibmc
 from exp.params import MEMCACHED_LISTENING_PORT
 import os
-
+import copy 
+from pymemcache.client.base import Client
+import re
 
 class Cache:
     def __init__(self, cache_size, node_id):
@@ -36,7 +38,7 @@ class Cache:
         r = client_tmp.set(id_dataset, content)
 
         return r 
-    
+
     #TODO
     def accessData(self, id_dataset):
         value = self.client.get(id_dataset)
@@ -46,6 +48,27 @@ class Cache:
         
         return True
     
+    def getKeys(self):
+        client = Client(("127.0.0.1", MEMCACHED_LISTENING_PORT)) 
+        stats_items = client.stats('items')
+        keys = []
+        self.memory_used = 0
+        # Parse slab IDs from the 'stats items' command
+        for stat_key, stat_value in stats_items.items():
+            if stat_key.decode().startswith('items:'):
+                parts = stat_key.decode().split(':')
+                if len(parts) == 3 and parts[2] == 'number':
+                    slab_id = parts[1]
+                    cachedump = client.stats(f'cachedump',f'{slab_id}','100')
+                
+                    for key, infos in cachedump.items():
+                        numbers = re.findall(r'\d+', infos.decode())
+                        self.memory_used += int(numbers[0])
+                        keys.append(key.decode())
+                
+        self.ids_data = copy.deepcopy(keys)
+        return self.ids_data
+
     def getStats(self, verbos=False):
 
         stats = pylibmc.Client([f'0.0.0.0:{MEMCACHED_LISTENING_PORT}'], binary=True, behaviors={"tcp_nodelay": True}).get_stats()
@@ -59,6 +82,15 @@ class Cache:
             print(f"{key.decode()}: {value}")
         return stats
     
+    def predictEviction(self,ds_size):
+        ds_size_bytes = ds_size*1024*1024
+        cache_size_bytes = self.cache_size*1024*1024
+
+        if self.memory_used+ds_size_bytes >= cache_size_bytes:
+            return True, self.last_recently_used_item
+        
+        return False, None
+
     def checkOnCacheMemorie(self, id_data):
         return True if id_data in self.ids_data else False
     

@@ -39,12 +39,13 @@ class CacheManagerServer:
             self.recieved_task.put(task)
             
             b1 = self.cache.checkOnCacheMemorie(task.id_dataset)
-            b2 = True if (self.cache.memory_used + int(task.ds_size) > self.cache.cache_size) else False
+            b2, condidate = self.cache.predictEviction(task.ds_size)
+
             if b1:
                 processed_data = {"sendData":False, "eviction":False}
             else:
                 #TODO:need to know wich data will be evicted
-                processed_data = {"sendData":True, "eviction":b2}
+                processed_data = {"sendData":True, "eviction":b2, "condidate":condidate}
                 self.cache.addData(task.id_dataset, task.ds_size)
 
             self.writeOutput(f"task recieved {str(task)} asking th controller to send the data:{not b1}\n")
@@ -60,7 +61,8 @@ class CacheManagerServer:
                 data = {
                     "id_node": self.cache.id_node,
                     "storage_space": int(stats["limit_maxbytes"].decode()),
-                    "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())
+                    "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode()),
+                    'keys': self.cache.getKeys()
                 }
                 self.cache.memory_used  = int(stats["bytes"].decode())
             else:
@@ -68,6 +70,7 @@ class CacheManagerServer:
                     "id_node": self.cache.id_node,
                     "storage_space": self.cache.cache_size,
                     "remaining_space":self.cache.cache_size - self.cache.memory_used,
+                    'keys': self.cache.getKeys()
                 }
             self.writeOutput("info sended\n")
             return jsonify(data)

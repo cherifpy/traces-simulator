@@ -1,5 +1,13 @@
-#here i have to manage tasks
-from exp.params import NB_NODES, SERVER_REPLICA_MANAGER_PORT, PATH_TO_TASKS, SERVER_REPLICA_MANAGER_PORT, MEMCACHED_LISTENING_PORT
+#here i have to manage replica
+from math import cos
+from exp.params import  (
+    NB_NODES, 
+    SERVER_REPLICA_MANAGER_PORT, 
+    PATH_TO_TASKS, 
+    SERVER_REPLICA_MANAGER_PORT, 
+    MEMCACHED_LISTENING_PORT,
+    BANDWIDTH
+)
 from communication.send_data import recieveObject
 from communication.messages import Task
 from communication.cacheManagerServer import CacheManagerServer
@@ -87,8 +95,9 @@ class ReplicaManager:
                         size_ds=task.ds_size
                     )
                     if t: 
-                        self.transfert.write(f"{task.id_task},{task.id_dataset},{task.ds_size},{l},{task.id_node}\n")
-                
+                        cost = self.transfertCost(self.graphe_infos[l, task.id_node], task.ds_size)
+                        self.transfert.write(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost}\n")
+                        print(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node}\n")
                 if not l or not t:
                     #if with eviction change here add the condition to send the data somewhere
                     self.sendDataSet(node_ip, id_ds=task.id_dataset, ds_size=task.ds_size)
@@ -96,7 +105,9 @@ class ReplicaManager:
                     
                     self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
 
-                    self.transfert.write(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node}\n")
+                    cost = self.transfertCost(self.graphe_infos[self.id, task.id_node], task.ds_size)
+                    self.transfert.write(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost}\n")
+                    print(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost}\n")
             else:
                 pass
 
@@ -121,6 +132,10 @@ class ReplicaManager:
             
             self.nodes_infos[key]["storage_space"] = response["storage_space"]
             self.nodes_infos[key]["remaining_space"] = response["remaining_space"]
+            self.nodes_infos[key]["keys"] = response['keys']
+
+            for id_ds in self.nodes_infos[key]["keys"]:
+                self.addToLocationTable(key, id_ds)
             #print(f"received data from {key}, {self.nodes_infos[key]}")
         self.writeOutput("finishing collecting data from actors\n")
         
@@ -163,9 +178,25 @@ class ReplicaManager:
         else:
             return "migrate"
         
-    def manageEvection(self, id_node):
-        
-        pass
+    def manageEviction(self, id_node, id_ds, ds_size):
+        n = self.isOnNeighbords(id_node, id_ds)
+        if len(n) != 0:
+            return {"delete":True, "send":False} #demander au noeud de juste supprimer la données
+
+        else:
+            min_access_and_transfet_time = float('inf')
+            node = None
+
+            for id_neighbors in range(self.nb_nodes):
+                if  self.graphe_infos[int(id_node), id_neighbors] > 0 and self.nodes_infos[id_neighbors]["remaining_space"] > ds_size*1024*1024:
+                    cost = self.transfertCost(self.graphe_infos[int(id_node), id_neighbors], ds_size) 
+                    if cost < min_access_and_transfet_time:
+                            min_access_and_transfet_time = cost
+                            node = id_neighbors
+
+            return {"delete":True, "send": True if not node is None else False, "id_node":node}
+
+
         
     def sendDataSet(self, ip_node, id_ds,ds_size):
         if self.local_execution:
@@ -210,6 +241,15 @@ class ReplicaManager:
         response = requests.post(url, json=data)
         #print(response.json()["response"])
         return response.json()["response"]
+    
+    def isOnNeighbords(self,node,id_ds):
+        n = []
+        for id_node, infos in self.nodes_infos.items():
+
+            if self.graphe_infos[int(id_node), int(node)] > 0 and id_ds in infos["keys"]:
+                n.append(id_node)
+        
+        return n
 
     #Note used
     def getEmptyNode(self):
@@ -269,9 +309,14 @@ class ReplicaManager:
 
     def addToLocationTable(self, id_node, id_dataset):
         if id_dataset in self.location_table.keys():
-            self.location_table[id_dataset].append(id_node)
+            if id_node not in self.location_table[id_dataset]:
+                self.location_table[id_dataset].append(id_node)
+                return True
         else:
             self.location_table[id_dataset] = [id_node]
+            return True
+        
+        return False
 
     def startThread(self):
         flask_process = multiprocessing.Process(target=self.startFlaskServer)
@@ -281,8 +326,13 @@ class ReplicaManager:
     
     
 
-    def transfertCost(self, latency, data_size, ):
-        pass
+    def transfertCost(self, latency, data_size):
+        bandwith_in_bits = BANDWIDTH*1024*1024*8
+        size_in_bits = data_size*1024*1024*8
+        latency_in_s = latency/1000
+
+        return latency_in_s + (size_in_bits/bandwith_in_bits)
+        
 
     def writeOutput(self, str):
         self.output = open(f"/tmp/log_M.txt",'a')
