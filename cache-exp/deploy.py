@@ -10,7 +10,6 @@ from exp.params import (
     PATH_TO_CONFIG_FILE, 
     SERVER_REPLICA_MANAGER_PORT,
     MEMCACHED_LISTENING_PORT,
-    ENABEL_MIGRATION
 )
 
 def run_command(command):
