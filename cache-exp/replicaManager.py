@@ -6,7 +6,8 @@ from exp.params import  (
     PATH_TO_TASKS, 
     SERVER_REPLICA_MANAGER_PORT, 
     MEMCACHED_LISTENING_PORT,
-    BANDWIDTH
+    BANDWIDTH,
+    ENABEL_MIGRATION
 )
 from communication.send_data import recieveObject
 from communication.messages import Task
@@ -83,8 +84,12 @@ class ReplicaManager:
             
             response = self.sendTask(task,node_port, node_ip)
 
-            if response['sendData']:
 
+            if response['sendData']:
+                if ENABEL_MIGRATION and response["eviction"]:
+                    r_eviction = self.manageEviction(task.id_node, task.id_dataset, task.ds_size)
+                    r2 = self.deleteAndSend(id_src_node=task.id_node,id_dst_node=r_eviction["id_dst_node"], id_dataset=task.id_dataset, ds_size=task.ds_size)
+                     
                 _,l = self.searchForDataOnNeighbors(id_node=task.id_node, dataset=task.id_dataset)
                 t = False
                 if l:
@@ -98,6 +103,8 @@ class ReplicaManager:
                         cost = self.transfertCost(self.graphe_infos[l, task.id_node], task.ds_size)
                         self.transfert.write(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost}\n")
                         print(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node}\n")
+
+
                 if not l or not t:
                     #if with eviction change here add the condition to send the data somewhere
                     self.sendDataSet(node_ip, id_ds=task.id_dataset, ds_size=task.ds_size)
@@ -108,6 +115,9 @@ class ReplicaManager:
                     cost = self.transfertCost(self.graphe_infos[self.id, task.id_node], task.ds_size)
                     self.transfert.write(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost}\n")
                     print(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost}\n")
+
+
+                
             else:
                 pass
 
@@ -194,7 +204,7 @@ class ReplicaManager:
                             min_access_and_transfet_time = cost
                             node = id_neighbors
 
-            return {"delete":True, "send": True if not node is None else False, "id_node":node}
+            return {"delete":True, "send": True if not node is None else False, "id_dst_node":node}
 
 
         
@@ -242,6 +252,17 @@ class ReplicaManager:
         #print(response.json()["response"])
         return response.json()["response"]
     
+    def deleteAndSend(self, id_src_node, id_dst_node, id_dataset, ds_size):
+        url = f'http://{self.nodes_infos[id_src_node]["node_ip"]}:{self.nodes_infos[id_src_node]["node_port"]}/send-and-delete'
+
+        response = requests.get(url,params={
+            'id_dataset':id_dataset,
+            'ds_size': ds_size,
+            'ip_dst_node': self.nodes_infos[id_dst_node]["node_ip"],
+        })
+        
+        return response.json()
+
     def isOnNeighbords(self,node,id_ds):
         n = []
         for id_node, infos in self.nodes_infos.items():

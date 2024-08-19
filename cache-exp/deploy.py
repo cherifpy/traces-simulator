@@ -132,7 +132,6 @@ if True:
                     task_name="clone repo",
                     cmd="git clone --single-branch --branch new_main https://github.com/cherifpy/traces-simulator.git /home/csimohammed/exp"
                 )
-
                 p.command(
                     task_name = "installing python libs",
                     cmd = "pip3 install pandas pylibmc numpy sockets PyYAML Flask pymemcache"

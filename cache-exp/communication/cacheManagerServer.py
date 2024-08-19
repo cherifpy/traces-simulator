@@ -110,18 +110,19 @@ class CacheManagerServer:
         @self.app.route('/send-and-delete', methods=["GET"])
         def sendAndDelete():
             id_ds = request.args.get("id_dataset")
-            ip__node = request.args.get("ip_node")
+            ip_dst_node = request.args.get("ip_dst_node")
             ds_size = request.args.get("ds_size")
-            b = self.cache.deleteFromCache(id)
+
+            b = self.cache.deleteFromCache(id_ds)
             if b:
                 t = self.cache.sendDataSetTo(
-                    ip_dst=ip__node,
+                    ip_dst=ip_dst_node,
                     id_dataset=id_ds,
                     size_ds=ds_size
                     )
-                response = {"sending":t}
+                response = {"sended":t}
             else:
-                response = {"sending":b}
+                response = {"sended":b}
 
             return jsonify(response)
 
