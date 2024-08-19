@@ -4,7 +4,6 @@ import time
 from configurations.configuration import Configuration
 from communication.send_data import sendObject
 from exp.params import (
-    ENABEL_MIGRATION,
     REP_PORT,
     PATH_TO_TASKS, 
     PATH_TO_CONFIG_FILE, 
