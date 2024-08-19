@@ -3,7 +3,15 @@ import subprocess
 import time
 from configurations.configuration import Configuration
 from communication.send_data import sendObject
-from exp.params import REP_PORT, PATH_TO_TASKS, PATH_TO_CONFIG_FILE, SERVER_REPLICA_MANAGER_PORT,MEMCACHED_LISTENING_PORT
+from exp.params import (
+    ENABEL_MIGRATION,
+    REP_PORT,
+    PATH_TO_TASKS, 
+    PATH_TO_CONFIG_FILE, 
+    SERVER_REPLICA_MANAGER_PORT,
+    MEMCACHED_LISTENING_PORT,
+    ENABEL_MIGRATION
+)
 
 def run_command(command):
     
@@ -153,7 +161,7 @@ if True:
                     p.command(
                         task_name = "Executing the code on a site",
                         cmd = f"python3 /home/csimohammed/exp/cache-exp/cacheManager.py > /tmp/output{i}_and_errors.log 2>&1",
-                        background=True
+                        background=False
                     )
                 print(data)
                 sendObject(data, IPS_ADDRESS[i])
