@@ -37,7 +37,7 @@ network_constraints:
     constraints: 
       - src: F 
         dst: B
-        delay: 120ms
+        delay: 60ms
         symmetric: True
       - src: F 
         dst: C
