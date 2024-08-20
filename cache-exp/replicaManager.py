@@ -47,7 +47,8 @@ class ReplicaManager:
         self.ip = ip
         self.nb_data_trasnfert = 0
         self.output = open(f"/tmp/log_M.txt",'a')
-        self.transfert = open(f"/tmp/transfert.txt",'w')
+        str = "/tmp/transfert_M.txt" if ENABEL_MIGRATION else "/tmp/transfert.txt"
+        self.transfert = open(str,'w')
         self.local_execution = local_execution
         self.num_evection = 0
         
@@ -100,7 +101,7 @@ class ReplicaManager:
                         size_ds=task.ds_size
                     )
                     if t: 
-                        cost = self.transfertCost(self.graphe_infos[l, task.id_node], task.ds_size)
+                        cost = self.transfertCost(self.graphe_infos[l][task.id_node], task.ds_size)
                         self.transfert.write(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost}\n")
                         print(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node}\n")
 
@@ -112,7 +113,7 @@ class ReplicaManager:
                     
                     self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
 
-                    cost = self.transfertCost(self.graphe_infos[self.id, task.id_node], task.ds_size)
+                    cost = self.transfertCost(self.graphe_infos[self.id][task.id_node], task.ds_size)
                     self.transfert.write(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost}\n")
                     print(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost}\n")
 
@@ -198,8 +199,8 @@ class ReplicaManager:
             node = None
 
             for id_neighbors in range(self.nb_nodes):
-                if  self.graphe_infos[int(id_node), id_neighbors] > 0 and self.nodes_infos[id_neighbors]["remaining_space"] > ds_size*1024*1024:
-                    cost = self.transfertCost(self.graphe_infos[int(id_node), id_neighbors], ds_size) 
+                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and self.nodes_infos[id_neighbors]["remaining_space"] > ds_size*1024*1024:
+                    cost = self.transfertCost(self.graphe_infos[int(id_node)][id_neighbors], ds_size) 
                     if cost < min_access_and_transfet_time:
                             min_access_and_transfet_time = cost
                             node = id_neighbors
@@ -267,7 +268,7 @@ class ReplicaManager:
         n = []
         for id_node, infos in self.nodes_infos.items():
 
-            if self.graphe_infos[int(id_node), int(node)] > 0 and id_ds in infos["keys"]:
+            if self.graphe_infos[int(id_node)][int(node)] > 0 and id_ds in infos["keys"]:
                 n.append(id_node)
         
         return n
