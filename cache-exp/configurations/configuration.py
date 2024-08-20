@@ -96,7 +96,7 @@ class Configuration:
                 p.command(task_name="change max value size memcached",cmd="memcached -I 120m", background=True)"""
                 p.command(
                     task_name="Start memcached with a pecifique config",
-                    cmd=f"memcached -m {machine['storage']} -I {int(machine['storage'])//2}m -l 0.0.0.0 -p {self.memcached_listening_port} -u nobody", 
+                    cmd=f"memcached -m {1024} -I {int(machine['storage'])//2}m -l 0.0.0.0 -p {self.memcached_listening_port} -u nobody", 
                     background=True
                 )
                 

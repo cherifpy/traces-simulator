@@ -25,26 +25,34 @@ machines:
     nodes: 1
     roles: [E]
     storage: 512
+  - cluster: paravance
+    nodes: 1
+    roles: [F]
+    storage: 512
 
 
 network_constraints:
   - default_delay: 20ms
     default_rate: 1gbit
     constraints: 
-      - src: E 
+      - src: F 
         dst: B
         delay: 120ms
         symmetric: True
-      - src: E 
+      - src: F 
         dst: C
         delay: 50ms
         symmetric: True
-      - src: E 
+      - src: F 
         dst: D
         delay: 31ms
         symmetric: True
-      - src: E 
+      - src: F 
         dst: A
+        delay: 60ms
+        symmetric: True
+      - src: F 
+        dst: E
         delay: 60ms
         symmetric: True
       - src: C 
@@ -69,6 +77,22 @@ network_constraints:
         symmetric: True
       - src: D 
         dst: A
+        delay: 20ms
+        symmetric: True
+      - src: E 
+        dst: A
+        delay: 20ms
+        symmetric: True
+      - src: E 
+        dst: B
+        delay: 20ms
+        symmetric: True
+      - src: E 
+        dst: C
+        delay: 20ms
+        symmetric: True
+      - src: E 
+        dst: D
         delay: 20ms
         symmetric: True
 
