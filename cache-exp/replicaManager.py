@@ -53,7 +53,7 @@ class ReplicaManager:
         self.num_evection = 0
         
     def start(self):
-
+        sum_cost = 0
         if not self.nodes_infos:
             self.writeOutput("no infos \n")
             return False
@@ -102,8 +102,9 @@ class ReplicaManager:
                     )
                     if t: 
                         cost = self.transfertCost(self.graphe_infos[l][task.id_node], task.ds_size)
+                        sum_cost += cost
                         self.transfert.write(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost}\n")
-                        print(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node}\n")
+                        print(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost}\n")
 
 
                 if not l or not t:
@@ -114,6 +115,7 @@ class ReplicaManager:
                     self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
 
                     cost = self.transfertCost(self.graphe_infos[self.id][task.id_node], task.ds_size)
+                    sum_cost += cost
                     self.transfert.write(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost}\n")
                     print(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost}\n")
 
@@ -128,7 +130,7 @@ class ReplicaManager:
         #process.terminate()
         #process.join()
         self.writeOutput(f"{self.nb_data_trasnfert}\n")
-        
+        print(sum_cost)
         return True
     
     #used
