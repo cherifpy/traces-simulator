@@ -26,6 +26,7 @@ if __name__ == "__main__":
             "ip":peer["ip"],
             "rep_port": peer["rep_port"],
         })
+        
     #TODO
 
 

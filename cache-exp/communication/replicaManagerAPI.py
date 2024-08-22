@@ -48,5 +48,5 @@ class ReplicaManagerAPI:
         self.app.run(port=5000)
 
 if __name__ == '__main__':
-    service1 = TaskManagerAPI()
+    service1 = ReplicaManagerAPI()
     service1.run()

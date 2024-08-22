@@ -25,7 +25,8 @@ class CacheManager(object):
             storage_space=self.storage_space,
             id_node=self.id_node,
             host=self.host,
-            port=self.listner_port
+            port=self.listner_port,
+            neighbors=neighbors
         )
 
     def start(self):

@@ -11,13 +11,14 @@ import importlib.util
 from cache import Cache
 
 class CacheManagerServer:
-    def __init__(self,storage_space, id_node, host='localhost', port=8888):
+    def __init__(self,storage_space, id_node,neighbors, host='localhost', port=8888):
         self.app = Flask(__name__)
         self.host = host
         self.port = port
         self.recieved_task = Queue()
         self.setup_routes()
         self.cache = Cache(storage_space, id_node)
+        self.neighbors = neighbors
         
         
         self.client = self.cache.connectToMemcache()
@@ -106,6 +107,32 @@ class CacheManagerServer:
             
             return jsonify(processed_data)
         
+        @self.app.route("/send-to", methodes=["POST"])
+        def transertTo():
+            data = request.json
+            path = data["path"]
+            
+            r = self.cache.sendDataSetTo(
+                ip_dst=data["dst_ip"],
+                id_dataset=data["id_dataset"],
+                size_ds=data["size_ds"],
+            ) 
+            n = path.pop()
+            if n != self.cache.id_node and len(path) != 1:
+                pass
+
+            elif n != self.cache.id_node and len(path) == 1:
+                #ici si il reste que le distinataire donc envoyer vers le memcached
+                r = self.cache.sendDataSetTo(
+                    ip_dst=self.cache.,
+                    id_dataset=data["id_dataset"],
+                    size_ds=data["size_ds"],
+                ) 
+                pass
+
+            processed_data = {"response":r}
+            
+            return jsonify(processed_data)
         #TODO
         @self.app.route('/send-and-delete', methods=["GET"])
         def sendAndDelete():

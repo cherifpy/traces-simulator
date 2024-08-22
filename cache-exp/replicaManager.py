@@ -9,6 +9,7 @@ from exp.params import  (
     BANDWIDTH,
     ENABEL_MIGRATION
 )
+
 from communication.send_data import recieveObject
 from communication.messages import Task
 from communication.cacheManagerServer import CacheManagerServer
@@ -16,10 +17,12 @@ from communication.replicaManagerAPI import ReplicaManagerAPI
 import multiprocessing 
 import pandas as pd
 import numpy as np
+from typing import Optional
 import time
 import requests
 import pylibmc
 import os
+import threading
 
 
 #path_to_tasks ="/Users/cherif/Documents/Traveaux/traces-simulator/cache-exp/exp/traces/traces_with_datasets.csv" ##"/exp/traces/traces_with_datasets.csv"
@@ -51,6 +54,7 @@ class ReplicaManager:
         self.transfert = open(str,'w')
         self.local_execution = local_execution
         self.num_evection = 0
+        self.last_node_recieved = None
         
     def start(self):
         sum_cost = 0
@@ -225,9 +229,10 @@ class ReplicaManager:
         servers = [f"{ip_node}:{MEMCACHED_LISTENING_PORT}"]  # Adresse du serveur Memcached
         
         client = pylibmc.Client(servers, binary=True, behaviors={"tcp_nodelay": True})
+        self.last_node_recieved = ip_node
         #TODO Check if the data is sended and ask the client to access id to set the LRU
         r = client.set(id_ds, content)
-
+        self.last_node_recieved = None
         return r 
     
     def accessData(self, task:Task, ip="localhost"):
@@ -275,13 +280,24 @@ class ReplicaManager:
         
         return n
 
+
+    def startTransefertOnThread(self, ip_node, id_dataset, ds_size, process:Optional[threading.Thread]):
+        if ip_node == self.last_node_recieved:
+            process.join()
+        sending_process = threading.Thread(target=self.sendDataSet, args=(ip_node, id_dataset, ds_size))
+        #sending_process = multiprocessing.Process(target=self.sendDataSet, args=[ip_node, id_dataset, ds_size])
+        sending_process.start()
+
+        return sending_process
+    
     #Note used
     def getEmptyNode(self):
         nodes = []
         for i, node in enumerate(self.nodes_infos):
             if node["remaining_space"] == node["storage_space"]:
                 nodes.append(i)
-        return nodes        
+        return nodes   
+         
     #Note used
     def selectNodeBySpace(self, task:Task):
         nodes = []
@@ -296,6 +312,7 @@ class ReplicaManager:
             else:
                 nodes.append(i)
         return nodes
+    
     #Note used
     def choseNode(self, task:Task):
         if self.datasetOnNeigbors(task.id_node, task.id_dataset):
@@ -306,19 +323,8 @@ class ReplicaManager:
             else:
                 return i
         return False
-    #Note used
-    def datasetOnNeigbors(self, node_i, id_dataset):
-        node_neighbors = self.graphe_infos[node_i]
-
-        for i, val in enumerate(node_neighbors):
-            if val > 0:
-                if i in self.location_table[id_dataset]:
-                    return True, {"sendData":"good"}
-        
-        return False, None
     
     def getDataSetLocation(self,id_ds):
-        
         return self.location_table[id_ds] if id_ds in self.location_table.keys() else []
     
     def startFlaskServer(self):
