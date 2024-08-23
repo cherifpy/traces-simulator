@@ -31,8 +31,11 @@ class CacheManagerServer:
         #used
         @self.app.route('/execut', methods=['POST'])    
         def process_data():
+            self.writeOutput("test-4")
             print("recieved task")
+            self.writeOutput("test-3")
             self.writeOutput("recieved task")
+            self.writeOutput("test-2")
             data = request.json
 
             task = Task.from_json(data["task"])
