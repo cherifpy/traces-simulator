@@ -81,9 +81,9 @@ class Cache:
         ds_size_bytes = ds_size*1024*1024+65
         cache_size_bytes = self.cache_size*1024*1024
         stats = self.getStats()[0][1]
-        used_memory = int(stats["bytes"].decode()) 
+        used_memory = int(stats["bytes"].decode())
         
-        if used_memory+ds_size_bytes >= cache_size_bytes:
+        if False:# used_memory+ds_size_bytes >= cache_size_bytes:
             return True, self.last_recently_used_item
         
         return False, None
