@@ -19,7 +19,7 @@ class Cache:
         self.data_access_frequency = {}
         self.memory_used = 0
         self.is_memcached_installed = False
-        self.last_recently_used_item = None
+        self.last_recently_used_item = []
 
     def sendDataSetTo(self, ip_dst, id_dataset,size_ds):
         
@@ -39,13 +39,15 @@ class Cache:
 
         return r 
 
-    #TODO
+    #TODO en cas de modification de politique d'eviction
     def accessData(self, id_dataset):
         value = self.client.get(id_dataset)
         if not value and value in self.ids_data:
             self.ids_data.remove(id_dataset)
             return False
-        
+        elif value and value in self.ids_data:
+            if id_dataset in self.last_recently_used_item: self.last_recently_used_item.remove(id_dataset)
+            self.last_recently_used_item.append(id_dataset)
         return True
     
     def getKeys(self):
@@ -73,20 +75,15 @@ class Cache:
 
         stats = pylibmc.Client([f'0.0.0.0:{MEMCACHED_LISTENING_PORT}'], binary=True, behaviors={"tcp_nodelay": True}).get_stats()
         return stats
-        if not verbos and stats:
-            return stats
-        elif not stats:
-            return {}
-        # Print the statistics
-        for key, value in stats[0][1].items():
-            print(f"{key.decode()}: {value}")
-        return stats
     
     def predictEviction(self,ds_size):
-        ds_size_bytes = ds_size*1024*1024
-        cache_size_bytes = self.cache_size*1024*1024
 
-        if self.memory_used+ds_size_bytes >= cache_size_bytes:
+        ds_size_bytes = ds_size*1024*1024+65
+        cache_size_bytes = self.cache_size*1024*1024
+        stats = self.cache.getStats()[0][1]
+        used_memory = int(stats["bytes"].decode()) 
+        
+        if used_memory+ds_size_bytes >= cache_size_bytes:
             return True, self.last_recently_used_item
         
         return False, None
@@ -108,35 +105,20 @@ class Cache:
             return None
 
 
-    def getFromCache(self, key):
-        try:
-            value = self.client.get(key)
-            return value
-        except Exception as e:
-            print(f"Error getting from Memcached: {e}")
-            return None
-
     def deleteFromCache(self, key):
         """Deletes a value from Memcached."""
         try:
             client = pylibmc.Client([f'0.0.0.0:{MEMCACHED_LISTENING_PORT}'], binary=True, behaviors={"tcp_nodelay": True})
             client.delete(key)
+            self.last_recently_used_item.remove(key)
+            self.ids_data.remove(key)
             return True
         except Exception as e:
             print(f"Error deleting from Memcached: {e}")
             return False
 
-    def getCacheStats(self):
-        
-        try:
-            stats = self.client.stats()
-            return stats
-        except Exception as e:
-            print(f"Error getting Memcached stats: {e}")
-            return None
 
     def getCacheSpaceUsed(self):
-        
         try:
             stats = self.get_memcache_stats(self.client)
             if stats:
@@ -154,38 +136,3 @@ class Cache:
             return True
         else: False
 
-    ##Je teste des truc
-    def Eviction(self):
-
-        pass
-
-
-"""def addDataOnCache(self, id_data,data_size):
-    
-    if id_data in self.ids_data:
-        return 0
-    else:
-        if self.memory_used + data_size < self.cache_size:  
-            self.memory_used = self.memory_used + data_size
-            self.ids_data.append(id_data)
-            self.datas_sizes[id_data] = data_size
-            return 1
-        else: return -1
-"""
-#from pymemcache.client import base
-#
-## Don't forget to run `memcached' before running this next line:
-#client = base.Client(('localhost', 11211))
-#
-## Once the client is instantiated, you can access the cache:
-##client.set('some_key', 'testthis')
-#
-## Retrieve previously set data again:
-##retour = client.get('test')
-##print(retour)
-#
-#stats = client.stats()
-#
-## Print the statistics
-#for key, value in stats.items():
-#    print(f"{key.decode()}: {value}")

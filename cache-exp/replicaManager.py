@@ -55,9 +55,11 @@ class ReplicaManager:
         self.local_execution = local_execution
         self.num_evection = 0
         self.last_node_recieved = None
+        self.data_sizes = {}
         
     def start(self):
         sum_cost = 0
+        process = None
         if not self.nodes_infos:
             self.writeOutput("no infos \n")
             return False
@@ -67,6 +69,8 @@ class ReplicaManager:
         self.writeOutput("start collection data \n")
         b, self.nodes_infos = self.collecteData()
         self.writeOutput(f"{str(self.nodes_infos)}\n")
+
+
         if not b:
             return False
         
@@ -83,18 +87,28 @@ class ReplicaManager:
                 id_dataset= row["dataset"],
                 ds_size=row["dataset_size"]
             )
+            self.data_sizes[task.id_dataset] = task.ds_size
             #print(self.nodes_infos[int(node_id)])
             node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
             node_port = self.nodes_infos[int(task.id_node)]["node_port"]
-            
+
             response = self.sendTask(task,node_port, node_ip)
 
+            if response["sendData"]:
 
-            if response['sendData']:
+                is_eviction = True if self.nodes_infos[task.id_node]["remaining_space"] < (task.ds_size*1024*1024+65) else False
+
                 if ENABEL_MIGRATION and response["eviction"]:
-                    r_eviction = self.manageEviction(task.id_node, task.id_dataset, task.ds_size)
-                    r2 = self.deleteAndSend(id_src_node=task.id_node,id_dst_node=r_eviction["id_dst_node"], id_dataset=task.id_dataset, ds_size=task.ds_size)
-                     
+
+                    for condidate in response["condidates"]:
+                        r_eviction = self.manageEviction(task.id_node, condidate, task.ds_size)
+                        #TODO erreur souned with dataset
+                        if r_eviction["send"]:
+                            r2 = self.deleteAndSend(id_src_node=task.id_node,id_dst_node=r_eviction["id_dst_node"], id_dataset=condidate, ds_size=task.ds_size)
+                            
+                else:
+                    self.nodes_infos[task.id_node]["remaining_space"] -= task.ds_size*1024*1024
+
                 _,l = self.searchForDataOnNeighbors(id_node=task.id_node, dataset=task.id_dataset)
                 t = False
                 if l:
@@ -107,7 +121,7 @@ class ReplicaManager:
                     if t: 
                         cost = self.transfertCost(self.graphe_infos[l][task.id_node], task.ds_size)
                         sum_cost += cost
-                        self.transfert.write(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost}\n")
+                        self.transfert.write(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost}, transfert\n")
                         print(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost}\n")
 
 
@@ -120,11 +134,9 @@ class ReplicaManager:
 
                     cost = self.transfertCost(self.graphe_infos[self.id][task.id_node], task.ds_size)
                     sum_cost += cost
-                    self.transfert.write(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost}\n")
+                    self.transfert.write(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost},transfert\n")
                     print(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost}\n")
 
-
-                
             else:
                 pass
 
@@ -196,6 +208,9 @@ class ReplicaManager:
             return "migrate"
         
     def manageEviction(self, id_node, id_ds, ds_size):
+        """
+            ici je supprimer direct si ka données et dans les voisie
+        """
         n = self.isOnNeighbords(id_node, id_ds)
         if len(n) != 0:
             return {"delete":True, "send":False} #demander au noeud de juste supprimer la données
@@ -205,7 +220,7 @@ class ReplicaManager:
             node = None
 
             for id_neighbors in range(self.nb_nodes):
-                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and self.nodes_infos[id_neighbors]["remaining_space"] > ds_size*1024*1024:
+                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and self.nodes_infos[id_neighbors]["remaining_space"] > (ds_size*1024*1024 + 65):
                     cost = self.transfertCost(self.graphe_infos[int(id_node)][id_neighbors], ds_size) 
                     if cost < min_access_and_transfet_time:
                             min_access_and_transfet_time = cost
@@ -222,17 +237,18 @@ class ReplicaManager:
         file_size_octet = ds_size*1024*1024
         with open(file_name, "wb") as p:
             p.write(os.urandom(file_size_octet))
-        
         with open(file_name, "rb") as p:
             content = p.read()
-         # Données massives de 5 MB
         servers = [f"{ip_node}:{MEMCACHED_LISTENING_PORT}"]  # Adresse du serveur Memcached
         
         client = pylibmc.Client(servers, binary=True, behaviors={"tcp_nodelay": True})
         self.last_node_recieved = ip_node
+
         #TODO Check if the data is sended and ask the client to access id to set the LRU
         r = client.set(id_ds, content)
+        #if r: self.location_table[id_ds].append()
         self.last_node_recieved = None
+
         return r 
     
     def accessData(self, task:Task, ip="localhost"):
@@ -268,7 +284,9 @@ class ReplicaManager:
             'ds_size': ds_size,
             'ip_dst_node': self.nodes_infos[id_dst_node]["node_ip"],
         })
-        
+        if response.json()["sended"]:
+            cost = self.transfertCost(self.graphe_infos[int(id_src_node)][int(id_dst_node)])
+            self.transfert.write(f"null,{id_dataset},{id_src_node},{ds_size},{id_dst_node},{cost},migration\n")
         return response.json()
 
     def isOnNeighbords(self,node,id_ds):
@@ -279,7 +297,13 @@ class ReplicaManager:
                 n.append(id_node)
         
         return n
+    
 
+    def dataOnNode(self,id_node, id_dataset):
+        if id_node in self.local_execution[id_dataset]:
+            return True
+        
+        return False
 
     def startTransefertOnThread(self, ip_node, id_dataset, ds_size, process:Optional[threading.Thread]):
         if ip_node == self.last_node_recieved:

@@ -21,12 +21,13 @@ if __name__ == "__main__":
 
     for peer in DATAS_RECIEVED['infos']:
         costs.append(peer["latency"])
-        neighbors.append({
+        neighbors[peer["id"]]= { 
             "id":peer["id"],
             "ip":peer["ip"],
             "rep_port": peer["rep_port"],
-        })
-        
+            'latency': peer["latency"]
+        }
+
     #TODO
 
 

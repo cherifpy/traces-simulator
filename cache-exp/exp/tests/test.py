@@ -38,7 +38,13 @@ def get_memcached_keys():
     ids_data = copy.deepcopy(keys)
     return ids_data
 
-# Example call to the function to retrieve keys
-retrieved_keys = get_memcached_keys()
-print("Retrieved keys:", retrieved_keys)
 
+
+
+import threading
+
+def test():
+    print("hello")
+
+r = threading.Thread(target=test)
+print(r)
