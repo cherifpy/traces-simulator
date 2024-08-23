@@ -93,7 +93,7 @@ class ReplicaManager:
             node_port = self.nodes_infos[int(task.id_node)]["node_port"]
 
             response = self.sendTask(task,node_port, node_ip)
-
+        
             if response["sendData"]:
 
                 is_eviction = True if self.nodes_infos[task.id_node]["remaining_space"] < (task.ds_size*1024*1024+65) else False

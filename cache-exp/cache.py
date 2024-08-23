@@ -80,7 +80,7 @@ class Cache:
 
         ds_size_bytes = ds_size*1024*1024+65
         cache_size_bytes = self.cache_size*1024*1024
-        stats = self.cache.getStats()[0][1]
+        stats = self.getStats()[0][1]
         used_memory = int(stats["bytes"].decode()) 
         
         if used_memory+ds_size_bytes >= cache_size_bytes:
