@@ -38,11 +38,11 @@ class CacheManagerServer:
             task = Task.from_json(data["task"])
             #{"task": data["task"], "type":data["type"] ,"status": "processed"}
             self.recieved_task.put(task)
-            
+            self.writeOutput(task)
             b1 = self.cache.checkOnCacheMemorie(task.id_dataset)
-            self.writeOutput(b1)
+            self.writeOutput("test")
             b2, condidates = self.cache.predictEviction(task.ds_size)
-            self.writeOutput(b2, condidates)
+            self.writeOutput("test2")
             if b1:
                 processed_data = {"sendData":False, "eviction":False}
             else:
