@@ -79,7 +79,8 @@ class Cache:
     def predictEviction(self,ds_size):
 
         ds_size_bytes = ds_size*1024*1024+65
-        cache_size_bytes = self.cache_size*1024*1024
+        
+        cache_size_bytes = self.cache_size
         stats = self.getStats()[0][1]
         used_memory = int(stats["bytes"].decode())
         

@@ -40,8 +40,9 @@ class CacheManagerServer:
             self.recieved_task.put(task)
             
             b1 = self.cache.checkOnCacheMemorie(task.id_dataset)
+            self.writeOutput(b1)
             b2, condidates = self.cache.predictEviction(task.ds_size)
-
+            self.writeOutput(b2, condidates)
             if b1:
                 processed_data = {"sendData":False, "eviction":False}
             else:

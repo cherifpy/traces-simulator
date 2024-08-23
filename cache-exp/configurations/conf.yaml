@@ -5,30 +5,30 @@ exp_env: debian11-min
 exp_walltime: 01:30:00
 execution_local: False
 machines:
-  - cluster: paravance
+  - cluster: parasilo
     nodes: 1
     roles: [A]
-    storage: 512
-  - cluster: paravance
+    storage: 1024
+  - cluster: parasilo
     nodes: 1
     roles: [B]
-    storage: 512
-  - cluster: paravance
+    storage: 1024
+  - cluster: parasilo
     nodes: 1
     roles: [C]
-    storage: 512
-  - cluster: paravance
+    storage: 1024
+  - cluster: parasilo
     nodes: 1
     roles: [D]
-    storage: 512
-  - cluster: paravance
+    storage: 1024
+  - cluster: parasilo
     nodes: 1
     roles: [E]
-    storage: 512
-  - cluster: paravance
+    storage: 1024
+  - cluster: parasilo
     nodes: 1
     roles: [F]
-    storage: 512
+    storage: 1024
 
 
 network_constraints:
