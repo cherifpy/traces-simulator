@@ -37,7 +37,7 @@ class CacheManagerServer:
 
             task = Task.from_json(data["task"])
             #{"task": data["task"], "type":data["type"] ,"status": "processed"}
-            self.recieved_task.put(task)
+            #self.recieved_task.put(task)
             self.writeOutput("test-1")
             b1 = self.cache.checkOnCacheMemorie(task.id_dataset)
             self.writeOutput("test")
