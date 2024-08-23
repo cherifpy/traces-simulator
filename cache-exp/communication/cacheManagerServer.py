@@ -31,21 +31,15 @@ class CacheManagerServer:
         #used
         @self.app.route('/execut', methods=['POST'])    
         def process_data():
-            self.writeOutput("test-4")
             print("recieved task")
-            self.writeOutput("test-3")
             self.writeOutput("recieved task")
-            self.writeOutput("test-2")
             data = request.json
 
             task = Task.from_json(data["task"])
             #{"task": data["task"], "type":data["type"] ,"status": "processed"}
             #self.recieved_task.put(task)
-            self.writeOutput("test-1")
             b1 = self.cache.checkOnCacheMemorie(task.id_dataset)
-            self.writeOutput("test")
             b2, condidates = self.cache.predictEviction(task.ds_size)
-            self.writeOutput("test2")
             if b1:
                 processed_data = {"sendData":False, "eviction":False}
             else:
