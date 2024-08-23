@@ -17,7 +17,7 @@ if __name__ == "__main__":
     IP_ADDRESS = DATAS_RECIEVED["IP_ADDRESS"]
     
     costs = []
-    neighbors = []
+    neighbors = {}
 
     for peer in DATAS_RECIEVED['infos']:
         costs.append(peer["latency"])

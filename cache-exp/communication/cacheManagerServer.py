@@ -112,7 +112,7 @@ class CacheManagerServer:
             
             return jsonify(processed_data)
         #TODO
-        @self.app.route("/send-to", methodes=["POST"])
+        @self.app.route("/send-to", methods=["POST"])
         def transertTo():
             data = request.json
             path = data["path"]
