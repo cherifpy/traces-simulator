@@ -1,5 +1,6 @@
 #here i have to manage replica
 from math import cos
+from platform import node
 from exp.params import  (
     NB_NODES, 
     SERVER_REPLICA_MANAGER_PORT, 
@@ -99,13 +100,13 @@ class ReplicaManager:
                 #is_eviction = True if self.nodes_infos[task.id_node]["remaining_space"] < (task.ds_size*1024*1024+65) else False
 
                 if ENABEL_MIGRATION and response["eviction"]:
-                    self.writeOutput("Eviction demandée")
+                    self.writeOutput(f"Eviction demandée {response}\n")
                     for condidate in response["condidates"]:
                         if (task.ds_size *1024*1024) + 65 > self.nodes_infos[task.id_node]["remaining_space"]:
 
                             r_eviction = self.manageEviction(task.id_node, condidate, task.ds_size)
                             self.writeOutput(f"{r_eviction}")
-                            #TODO erreur souned with dataset
+                            #TODO erreur sponed with dataset
                             if r_eviction["send"]:
                                 r2 = self.deleteAndSend(id_src_node=task.id_node,id_dst_node=r_eviction["id_dst_node"], id_dataset=condidate, ds_size=task.ds_size)
                             else:
@@ -289,7 +290,7 @@ class ReplicaManager:
             'ds_size': ds_size,
             'ip_dst_node': self.nodes_infos[id_dst_node]["node_ip"],
         })
-        self.output("migration declachée\n")
+        self.writeOutput("migration declachée\n")
         if response.json()["sended"]:
             cost = self.transfertCost(self.graphe_infos[int(id_src_node)][int(id_dst_node)])
             self.writeTransfert(f"null,{id_dataset},{id_src_node},{ds_size},{id_dst_node},{cost},migration\n")
@@ -303,7 +304,8 @@ class ReplicaManager:
             'id_dataset':id_dataset,
         })
         self.nodes_infos[node_id]["remaining_space"] = response.json()["remaining_space"]
-        
+        if response['response']:
+            self.writeOutput(f"{id_dataset} deleted from {node_id}\n")
         return response.json()
 
     def isOnNeighbords(self,node,id_ds):
