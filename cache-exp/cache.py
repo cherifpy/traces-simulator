@@ -109,7 +109,7 @@ class Cache:
     
     def addData(self, id_data, ds_size):
         self.datas_sizes[id_data] = ds_size
-        self.ids_data.remove(id_data)
+        while id_data in self.ids_data: self.ids_data.remove(id_data)
         self.ids_data.append(id_data)
         return True
     
