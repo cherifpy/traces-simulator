@@ -76,6 +76,16 @@ class Configuration:
         if self.execution_local:
             return False
 
+        print("storage restriction using memcached for All nodes ")
+        with self.enoslib.actions(roles=self.roles) as p: 
+            p.apt(name=['memcached'],state="present",)
+            p.command(
+                    task_name="Start memcached with a pecifique config",
+                    cmd=f"memcached -m {1024} -I {512}m -l 0.0.0.0 -p {self.memcached_listening_port} -u nobody", 
+                    background=True
+                )
+        return True
+    
         for i,machine in enumerate(self.machines):
             print("storage restriction using memcached for ", machine["roles"])
             with self.enoslib.actions(roles=self.roles[machine["roles"][0]]) as p:
