@@ -386,7 +386,9 @@ class ReplicaManager:
         latency_in_s = latency/1000
 
         return latency_in_s + (size_in_bits/bandwith_in_bits)
-        
+    
+    def calculateTTL(self, i):
+        pass
 
     def writeOutput(self, str):
         self.output = open(f"/tmp/log_M.txt",'a')
@@ -394,8 +396,8 @@ class ReplicaManager:
         self.output.close()
     
     def writeTransfert(self,str):
-        str = "/tmp/transfert_M.txt" if ENABEL_MIGRATION else "/tmp/transfert.txt"
-        self.transfert = open(str,'a')
+        path = "/tmp/transfert_M.txt" if ENABEL_MIGRATION else "/tmp/transfert.txt"
+        self.transfert = open(path,'a')
         self.transfert.write(str)
         self.transfert.close()
 
