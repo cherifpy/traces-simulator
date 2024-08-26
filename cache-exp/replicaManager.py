@@ -50,8 +50,8 @@ class ReplicaManager:
         self.ip = ip
         self.nb_data_trasnfert = 0
         self.output = open(f"/tmp/log_M.txt",'a')
-        str = "/tmp/transfert_M.txt" if ENABEL_MIGRATION else "/tmp/transfert.txt"
-        self.transfert = open(str,'w')
+        #str = "/tmp/transfert_M.txt" if ENABEL_MIGRATION else "/tmp/transfert.txt"
+        #self.transfert = open(str,'w')
         self.local_execution = local_execution
         self.num_evection = 0
         self.last_node_recieved = None
@@ -93,7 +93,7 @@ class ReplicaManager:
             node_port = self.nodes_infos[int(task.id_node)]["node_port"]
 
             response = self.sendTask(task,node_port, node_ip)
-        
+
             if response["sendData"]:
 
                 is_eviction = True if self.nodes_infos[task.id_node]["remaining_space"] < (task.ds_size*1024*1024+65) else False
@@ -121,7 +121,7 @@ class ReplicaManager:
                     if t: 
                         cost = self.transfertCost(self.graphe_infos[l][task.id_node], task.ds_size)
                         sum_cost += cost
-                        self.transfert.write(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost}, transfert\n")
+                        self.writeTransfert(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost}, transfert\n")
                         print(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost}\n")
 
 
@@ -134,7 +134,7 @@ class ReplicaManager:
 
                     cost = self.transfertCost(self.graphe_infos[self.id][task.id_node], task.ds_size)
                     sum_cost += cost
-                    self.transfert.write(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost},transfert\n")
+                    self.writeTransfert(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost},transfert\n")
                     print(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost}\n")
 
             else:
@@ -286,7 +286,7 @@ class ReplicaManager:
         })
         if response.json()["sended"]:
             cost = self.transfertCost(self.graphe_infos[int(id_src_node)][int(id_dst_node)])
-            self.transfert.write(f"null,{id_dataset},{id_src_node},{ds_size},{id_dst_node},{cost},migration\n")
+            self.writeTransfert(f"null,{id_dataset},{id_src_node},{ds_size},{id_dst_node},{cost},migration\n")
         return response.json()
 
     def isOnNeighbords(self,node,id_ds):
@@ -393,6 +393,11 @@ class ReplicaManager:
         self.output.write(str)
         self.output.close()
     
+    def writeTransfert(self,str):
+        str = "/tmp/transfert_M.txt" if ENABEL_MIGRATION else "/tmp/transfert.txt"
+        self.transfert = open(str,'w')
+        self.transfert.write(str)
+        self.transfert.close()
 
 if __name__ == "__main__":
 
