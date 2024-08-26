@@ -171,10 +171,11 @@ class CacheManagerServer:
 
             return jsonify(processed_data) 
         
-        @self.app.route('/delete-data', methods=['PULL'])
+        @self.app.route('/delete-data', methods=['GET'])
         def delete_data():
-            data = request.json
-            r = self.cache.deleteFromCache(data["id_dataset"])
+            id_dataset = request.args.get("id_dataset")
+            
+            r = self.cache.deleteFromCache(id_dataset)
 
             stats = self.cache.getStats()[0][1]
 
