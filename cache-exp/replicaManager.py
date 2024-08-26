@@ -101,7 +101,7 @@ class ReplicaManager:
 
                 if ENABEL_MIGRATION and response["eviction"]:
                     self.writeOutput(f"Eviction demandée {response}\n")
-                    for condidate in response["condidates"].reverse():
+                    for condidate in response["condidates"]:
                         if (task.ds_size *1024*1024) + 65 > self.nodes_infos[task.id_node]["remaining_space"]:
 
                             r_eviction = self.manageEviction(task.id_node, condidate, task.ds_size)
@@ -126,7 +126,7 @@ class ReplicaManager:
                     if t: 
                         cost = self.transfertCost(self.graphe_infos[l][task.id_node], task.ds_size)
                         sum_cost += cost
-                        self.writeTransfert(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost}, transfert\n")
+                        self.writeTransfert(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost}, transfert2\n")
                         print(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost}\n")
 
 
@@ -139,7 +139,7 @@ class ReplicaManager:
 
                     cost = self.transfertCost(self.graphe_infos[self.id][task.id_node], task.ds_size)
                     sum_cost += cost
-                    self.writeTransfert(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost},transfert\n")
+                    self.writeTransfert(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost},transfert1\n")
                     print(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost}\n")
 
             else:
