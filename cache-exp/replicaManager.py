@@ -395,7 +395,7 @@ class ReplicaManager:
     
     def writeTransfert(self,str):
         str = "/tmp/transfert_M.txt" if ENABEL_MIGRATION else "/tmp/transfert.txt"
-        self.transfert = open(str,'w')
+        self.transfert = open(str,'a')
         self.transfert.write(str)
         self.transfert.close()
 
