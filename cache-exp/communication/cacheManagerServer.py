@@ -118,7 +118,7 @@ class CacheManagerServer:
             ds_size = request.args.get("ds_size")
 
             b = self.cache.deleteFromCache(id_ds)
-            
+            self.writeOutput(b)
             if b:
                 t = self.cache.sendDataSetTo(
                     ip_dst=ip_dst_node,

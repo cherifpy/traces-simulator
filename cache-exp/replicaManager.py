@@ -101,7 +101,8 @@ class ReplicaManager:
 
                 if ENABEL_MIGRATION and response["eviction"]:
                     self.writeOutput(f"Eviction demandée {response}\n")
-                    for condidate in response["condidates"]:
+                    for condidate in response["condidates"].reverse():
+                        self.writeOutput(f"condidate {condidate}\n")
                         if (task.ds_size *1024*1024) + 65 > self.nodes_infos[task.id_node]["remaining_space"]:
 
                             r_eviction = self.manageEviction(task.id_node, condidate, task.ds_size)
@@ -110,7 +111,7 @@ class ReplicaManager:
                             if r_eviction["send"]:
                                 r2 = self.deleteAndSend(id_src_node=task.id_node,id_dst_node=r_eviction["id_dst_node"], id_dataset=condidate, ds_size=task.ds_size)
                             else:
-                                self.deleteFromCache(task.id_node, condidate)
+                                self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
                 else:
                     self.nodes_infos[task.id_node]["remaining_space"] -= task.ds_size*1024*1024 + 65
 
@@ -305,7 +306,7 @@ class ReplicaManager:
             'id_dataset':id_dataset,
         })
         self.nodes_infos[node_id]["remaining_space"] = response.json()["remaining_space"]
-        if response['response']:
+        if response['reponse']:
             self.writeOutput(f"{id_dataset} deleted from {node_id}\n")
         return response.json()
 
