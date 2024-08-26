@@ -101,7 +101,7 @@ class ReplicaManager:
 
                 if ENABEL_MIGRATION and response["eviction"]:
                     self.writeOutput(f"Eviction demandée {response}\n")
-                    for condidate in response["condidates"]:
+                    for condidate in response["condidates"].reverse():
                         if (task.ds_size *1024*1024) + 65 > self.nodes_infos[task.id_node]["remaining_space"]:
 
                             r_eviction = self.manageEviction(task.id_node, condidate, task.ds_size)

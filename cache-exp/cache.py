@@ -39,6 +39,20 @@ class Cache:
 
         return r 
 
+
+    def sendMessageToNode(self, id_node,id_dataset):
+        url = f'http://{self}:{self.nodes_infos[src]["node_port"]}/transfert'
+        
+        data = {
+            "dst_id": dst,
+            "dst_ip": self.nodes_infos[dst]["node_ip"], 
+            "id_dataset": id_dataset,
+            "size_ds": size_ds
+        }
+
+        response = requests.post(url, json=data)
+        #print(response.json()["response"])
+        return response.json()["response"]
     #TODO en cas de modification de politique d'eviction
     def accessData(self, id_dataset):
         value = self.client.get(id_dataset)

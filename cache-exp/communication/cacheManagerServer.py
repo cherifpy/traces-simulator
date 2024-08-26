@@ -109,6 +109,29 @@ class CacheManagerServer:
             processed_data = {"response":r}
             
             return jsonify(processed_data)
+        
+        #TODO
+        @self.app.route('/send-and-delete', methods=["GET"])
+        def sendAndDelete():
+            id_ds = request.args.get("id_dataset")
+            ip_dst_node = request.args.get("ip_dst_node")
+            ds_size = request.args.get("ds_size")
+
+            b = self.cache.deleteFromCache(id_ds)
+            
+            if b:
+                t = self.cache.sendDataSetTo(
+                    ip_dst=ip_dst_node,
+                    id_dataset=id_ds,
+                    size_ds=ds_size
+                    )
+                stats = self.cache.getStats()[0][1]
+                response = {"sended":t, "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())}
+            else:
+                response = {"sended":b}
+
+            return jsonify(response)
+
         #TODO
         @self.app.route("/send-to", methods=["POST"])
         def transertTo():
@@ -137,29 +160,7 @@ class CacheManagerServer:
             processed_data = {"response":r}
             
             return jsonify(processed_data)
-        #TODO
-        @self.app.route('/send-and-delete', methods=["GET"])
-        def sendAndDelete():
-            id_ds = request.args.get("id_dataset")
-            ip_dst_node = request.args.get("ip_dst_node")
-            ds_size = request.args.get("ds_size")
-
-            b = self.cache.deleteFromCache(id_ds)
-            
-            if b:
-                t = self.cache.sendDataSetTo(
-                    ip_dst=ip_dst_node,
-                    id_dataset=id_ds,
-                    size_ds=ds_size
-                    )
-                stats = self.cache.getStats()[0][1]
-                response = {"sended":t, "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())}
-            else:
-                response = {"sended":b}
-
-            return jsonify(response)
-
-
+        
         @self.app.route('/add-data', methods=['POST'])
         def add_data():
             data = request.json
