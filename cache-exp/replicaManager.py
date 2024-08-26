@@ -102,6 +102,7 @@ class ReplicaManager:
 
                     for condidate in response["condidates"]:
                         r_eviction = self.manageEviction(task.id_node, condidate, task.ds_size)
+                        self.writeOutput(f"{r_eviction}")
                         #TODO erreur souned with dataset
                         if r_eviction["send"]:
                             r2 = self.deleteAndSend(id_src_node=task.id_node,id_dst_node=r_eviction["id_dst_node"], id_dataset=condidate, ds_size=task.ds_size)
