@@ -116,6 +116,7 @@ class CacheManagerServer:
             id_ds = request.args.get("id_dataset")
             ip_dst_node = request.args.get("ip_dst_node")
             ds_size = request.args.get("ds_size")
+            port_dst = request.args.get("port_dst_node")
 
             b = self.cache.deleteFromCache(id_ds)
             self.writeOutput(b)
@@ -125,6 +126,7 @@ class CacheManagerServer:
                     id_dataset=id_ds,
                     size_ds=ds_size
                     )
+                if t: self.cache.notifyNode(ip_dst_node,port_dst, id_ds)
                 stats = self.cache.getStats()[0][1]
                 response = {"sended":t, "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())}
             else:
@@ -185,6 +187,13 @@ class CacheManagerServer:
                 "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())
                 })
         
+        @self.app.route("/notify",methods=['GET'])
+        def notify():
+            id_ds = request.args.get("id_dataset")
+            self.cache.ids_data.append(id_ds)
+
+            return jsonify({"added":True})
+            
         
         @self.app.route('/shutdown', methods=['POST'])
         def shutdown():
@@ -214,7 +223,7 @@ class CacheManagerServer:
         
     def writeOutput(self, str):
         out = open(f"/tmp/log_{self.cache.id_node}.txt",'a')
-        out.write(str)
+        out.write(f"{str}")
         out.close()
           
         

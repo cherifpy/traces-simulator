@@ -290,6 +290,7 @@ class ReplicaManager:
             'id_dataset':id_dataset,
             'ds_size': ds_size,
             'ip_dst_node': self.nodes_infos[id_dst_node]["node_ip"],
+            'port_dst_node':self.nodes_infos[id_dst_node]["node_port"]
         })
         self.writeOutput("migration declachée\n")
         self.writeOutput(response.text)

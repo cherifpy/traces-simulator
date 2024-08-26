@@ -6,6 +6,7 @@ import os
 import copy 
 from pymemcache.client.base import Client
 import re
+import requests
 
 class Cache:
     def __init__(self, cache_size, node_id):
@@ -40,19 +41,19 @@ class Cache:
         return r 
 
 
-    def sendMessageToNode(self, id_node,id_dataset):
-        url = f'http://{self}:{self.nodes_infos[src]["node_port"]}/transfert'
         
-        data = {
-            "dst_id": dst,
-            "dst_ip": self.nodes_infos[dst]["node_ip"], 
+    def notifyNode(self, ip_node, port_node, id_dataset):
+        url = f'http://{ip_node}:{port_node}/notify'
+        
+        data = { 
             "id_dataset": id_dataset,
-            "size_ds": size_ds
         }
 
-        response = requests.post(url, json=data)
+        response = requests.get(url, json=data)
         #print(response.json()["response"])
-        return response.json()["response"]
+        return response.json()
+        
+    
     #TODO en cas de modification de politique d'eviction
     def accessData(self, id_dataset):
         value = self.client.get(id_dataset)
@@ -92,13 +93,13 @@ class Cache:
     
     def predictEviction(self,ds_size):
 
-        ds_size_bytes = ds_size*1024*1024+65
+        ds_size_bytes = (ds_size*1024*1024)+65
         
         cache_size_bytes = self.cache_size
         stats = self.getStats()[0][1]
         used_memory = int(stats["bytes"].decode())
         
-        if used_memory+ds_size_bytes >= cache_size_bytes:
+        if used_memory+ds_size_bytes > cache_size_bytes:
             return True, self.last_recently_used_item
         
         return False, None
@@ -108,7 +109,9 @@ class Cache:
     
     def addData(self, id_data, ds_size):
         self.datas_sizes[id_data] = ds_size
-        return self.ids_data.append(id_data)
+        self.ids_data.remove(id_data)
+        self.ids_data.append(id_data)
+        return True
     
     
     def connectToMemcache(self):
@@ -119,19 +122,20 @@ class Cache:
             print(f"Error connecting to Memcached: {e}")
             return None
 
-
+    #TODO a revoire le return true dans except
     def deleteFromCache(self, key):
         """Deletes a value from Memcached."""
         try:
             client = pylibmc.Client([f'0.0.0.0:{MEMCACHED_LISTENING_PORT}'], binary=True, behaviors={"tcp_nodelay": True})
             r = client.delete(key)
+            #ca retourne une exption la 
             self.last_recently_used_item.remove(key)
             self.ids_data.remove(key)
             return r
         
         except Exception as e:
             print(f"Error deleting from Memcached: {e}")
-            return False
+            return True
 
 
     def getCacheSpaceUsed(self):
