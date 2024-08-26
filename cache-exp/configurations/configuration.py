@@ -81,7 +81,7 @@ class Configuration:
             p.apt(name=['memcached'],state="present",)
             p.command(
                     task_name="Start memcached with a pecifique config",
-                    cmd=f"memcached -m {1024} -I {512}m -l 0.0.0.0 -p {self.memcached_listening_port} -u nobody", 
+                    cmd=f"memcached -m {2048} -I {512}m -l 0.0.0.0 -p {self.memcached_listening_port} -u nobody", 
                     background=True
                 )
         return True
