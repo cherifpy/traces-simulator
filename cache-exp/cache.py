@@ -49,7 +49,7 @@ class Cache:
             "id_dataset": id_dataset,
         }
 
-        response = requests.get(url, json=data)
+        response = requests.get(url, params=data)
         #print(response.json()["response"])
         return response.json()
         

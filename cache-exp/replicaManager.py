@@ -292,7 +292,7 @@ class ReplicaManager:
             'ip_dst_node': self.nodes_infos[id_dst_node]["node_ip"],
             'port_dst_node':self.nodes_infos[id_dst_node]["node_port"]
         })
-        self.writeOutput("migration declachée\n")
+        self.writeOutput("migration declanchée\n")
         self.writeOutput(response.text)
         if response.json()["sended"]:
             cost = self.transfertCost(self.graphe_infos[int(id_src_node)][int(id_dst_node)])
