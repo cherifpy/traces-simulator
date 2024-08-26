@@ -96,19 +96,22 @@ class ReplicaManager:
 
             if response["sendData"]:
 
-                is_eviction = True if self.nodes_infos[task.id_node]["remaining_space"] < (task.ds_size*1024*1024+65) else False
+                #is_eviction = True if self.nodes_infos[task.id_node]["remaining_space"] < (task.ds_size*1024*1024+65) else False
 
                 if ENABEL_MIGRATION and response["eviction"]:
 
                     for condidate in response["condidates"]:
-                        r_eviction = self.manageEviction(task.id_node, condidate, task.ds_size)
-                        self.writeOutput(f"{r_eviction}")
-                        #TODO erreur souned with dataset
-                        if r_eviction["send"]:
-                            r2 = self.deleteAndSend(id_src_node=task.id_node,id_dst_node=r_eviction["id_dst_node"], id_dataset=condidate, ds_size=task.ds_size)
-                            
+                        if (task.ds_size *1024*1024) + 65 > self.nodes_infos[task.id_node]["remaining_space"]:
+
+                            r_eviction = self.manageEviction(task.id_node, condidate, task.ds_size)
+                            self.writeOutput(f"{r_eviction}")
+                            #TODO erreur souned with dataset
+                            if r_eviction["send"]:
+                                r2 = self.deleteAndSend(id_src_node=task.id_node,id_dst_node=r_eviction["id_dst_node"], id_dataset=condidate, ds_size=task.ds_size)
+                            else:
+                                self.deleteFromCache(task.id_node, condidate)
                 else:
-                    self.nodes_infos[task.id_node]["remaining_space"] -= task.ds_size*1024*1024
+                    self.nodes_infos[task.id_node]["remaining_space"] -= task.ds_size*1024*1024 + 65
 
                 _,l = self.searchForDataOnNeighbors(id_node=task.id_node, dataset=task.id_dataset)
                 t = False
@@ -214,6 +217,7 @@ class ReplicaManager:
         """
         n = self.isOnNeighbords(id_node, id_ds)
         if len(n) != 0:
+            
             return {"delete":True, "send":False} #demander au noeud de juste supprimer la données
 
         else:
@@ -285,9 +289,21 @@ class ReplicaManager:
             'ds_size': ds_size,
             'ip_dst_node': self.nodes_infos[id_dst_node]["node_ip"],
         })
+        self.output("migration declachée\n")
         if response.json()["sended"]:
             cost = self.transfertCost(self.graphe_infos[int(id_src_node)][int(id_dst_node)])
             self.writeTransfert(f"null,{id_dataset},{id_src_node},{ds_size},{id_dst_node},{cost},migration\n")
+        self.nodes_infos[id_src_node]['remaining_space'] = response.json()['remaining_space']
+        return response.json()
+
+    def deleteFromCache(self,node_id, node_ip, node_port, id_dataset):
+        url = f'http://{node_ip}:{node_port}/delete-data'
+
+        response = requests.get(url,params={
+            'id_dataset':id_dataset,
+        })
+        self.nodes_infos[node_id]["remaining_space"] = response.json()["remaining_space"]
+        
         return response.json()
 
     def isOnNeighbords(self,node,id_ds):

@@ -112,8 +112,9 @@ class Cache:
             client = pylibmc.Client([f'0.0.0.0:{MEMCACHED_LISTENING_PORT}'], binary=True, behaviors={"tcp_nodelay": True})
             client.delete(key)
             self.last_recently_used_item.remove(key)
-            self.ids_data.remove(key)
-            return True
+            r = self.ids_data.remove(key)
+            return r
+        
         except Exception as e:
             print(f"Error deleting from Memcached: {e}")
             return False

@@ -152,7 +152,8 @@ class CacheManagerServer:
                     id_dataset=id_ds,
                     size_ds=ds_size
                     )
-                response = {"sended":t}
+                stats = self.cache.getStats()[0][1]
+                response = {"sended":t, "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())}
             else:
                 response = {"sended":b}
 
@@ -173,9 +174,15 @@ class CacheManagerServer:
         @self.app.route('/delete-data', methods=['PULL'])
         def delete_data():
             data = request.json
-            self.cache.deleteFromCache(data["id_dataset"])
-            processed_data = {"response":"good"}
-            return jsonify(processed_data) 
+            r = self.cache.deleteFromCache(data["id_dataset"])
+
+            stats = self.cache.getStats()[0][1]
+
+            return jsonify({
+                "reponse":r,
+                "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())
+                })
+        
         
         @self.app.route('/shutdown', methods=['POST'])
         def shutdown():
