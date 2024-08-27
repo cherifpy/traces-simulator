@@ -301,16 +301,19 @@ class ReplicaManager:
             self.writeTransfert(f"null,{id_dataset},{id_src_node},{ds_size},{id_dst_node},{cost},migration\n")
             self.nodes_infos[id_src_node]['remaining_space'] = response.json()['remaining_space']
         return response.json()
-
+    
     def deleteFromCache(self,node_id, node_ip, node_port, id_dataset):
         url = f'http://{node_ip}:{node_port}/delete-data'
 
         response = requests.get(url,params={
             'id_dataset':id_dataset,
         })
+    
         self.nodes_infos[node_id]["remaining_space"] = response.json()["remaining_space"]
-        if response['reponse']:
+
+        if response.json()['reponse']:
             self.writeOutput(f"{id_dataset} deleted from {node_id}\n")
+
         return response.json()
 
     def notifyNode(self, ip_node, port_node, id_dataset):
