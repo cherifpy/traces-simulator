@@ -103,7 +103,7 @@ class ReplicaManager:
                     self.writeOutput(f"Eviction demandée {response}\n")
                     for condidate in reversed(response["condidates"]):
                         self.writeOutput(f"condidate {condidate}\n")
-                        if (task.ds_size *1024*1024) + 65 > self.nodes_infos[task.id_node]["remaining_space"]:
+                        if (task.ds_size*1024*1024) + 65 > self.nodes_infos[task.id_node]["remaining_space"]:
 
                             r_eviction = self.manageEviction(task.id_node, condidate, task.ds_size)
                             self.writeOutput(f"{r_eviction}")
@@ -297,9 +297,9 @@ class ReplicaManager:
         self.writeOutput("migration declanchée\n")
         self.writeOutput(response.text)
         if response.json()["sended"]:
-            cost = self.transfertCost(self.graphe_infos[int(id_src_node)][int(id_dst_node)])
+            cost = self.transfertCost(self.graphe_infos[int(id_src_node)][int(id_dst_node)],ds_size)
             self.writeTransfert(f"null,{id_dataset},{id_src_node},{ds_size},{id_dst_node},{cost},migration\n")
-        self.nodes_infos[id_src_node]['remaining_space'] = response.json()['remaining_space']
+            self.nodes_infos[id_src_node]['remaining_space'] = response.json()['remaining_space']
         return response.json()
 
     def deleteFromCache(self,node_id, node_ip, node_port, id_dataset):
