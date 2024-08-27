@@ -110,7 +110,7 @@ class ReplicaManager:
                             #TODO erreur sponed with dataset
                             if r_eviction["send"]:
                                 id_dst_node = r_eviction["id_dst_node"]
-                                self.deleteAndSendOnThread(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=task.ds_size)
+                                self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=task.ds_size)
                                 #if r2 : self.notifyNode(self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , condidate)
                             else:
                                 self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
@@ -147,7 +147,7 @@ class ReplicaManager:
                 self.nb_data_trasnfert_avoided+=1
                 pass
 
-            
+            #self.accessData()
             b, self.nodes_infos = self.collecteData()
 
         #process.terminate()
