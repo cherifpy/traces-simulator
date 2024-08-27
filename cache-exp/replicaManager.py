@@ -96,9 +96,7 @@ class ReplicaManager:
             response = self.sendTask(task,node_port, node_ip)
 
             if response["sendData"]:
-
                 #is_eviction = True if self.nodes_infos[task.id_node]["remaining_space"] < (task.ds_size*1024*1024+65) else False
-
                 if ENABEL_MIGRATION and response["eviction"]:
                     self.writeOutput(f"Eviction demandée {response}\n")
                     b, self.nodes_infos = self.collecteData()
@@ -138,7 +136,7 @@ class ReplicaManager:
 
                 if not l or not t:
                     #if with eviction change here add the condition to send the data somewhere
-                    self.sendDataSetOnThread(id_node=task.id_node,ip_node=node_ip, id_dataset=task.id_dataset, ds_size=task.ds_size,process=None)
+                    self.sendDataSet(id_node=task.id_node,ip_node=node_ip, id_ds=task.id_dataset, ds_size=task.ds_size)
                     self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
                     self.nb_data_trasnfert +=1
                     cost = self.transfertCost(self.graphe_infos[self.id][task.id_node], task.ds_size)
@@ -204,7 +202,7 @@ class ReplicaManager:
 
         url = f'http://{ip}:{port}/execut'
         data = {"task": task.to_json(), "type":"task"}
-
+        
         response = requests.post(url, json=data)
         self.writeOutput(f"task {task.id_task} sended to {task.id_node}\n")
         return response.json()

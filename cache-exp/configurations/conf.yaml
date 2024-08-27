@@ -33,7 +33,7 @@ machines:
 
 network_constraints:
   - default_delay: 20ms
-    default_rate: 1gbit
+    default_rate: 10gbit
     constraints: 
       - src: F 
         dst: B
@@ -77,23 +77,23 @@ network_constraints:
         symmetric: True
       - src: D 
         dst: A
-        delay: 20ms
+        delay: 10ms
         symmetric: True
       - src: E 
         dst: A
-        delay: 20ms
+        delay: 10ms
         symmetric: True
       - src: E 
         dst: B
-        delay: 20ms
+        delay: 10ms
         symmetric: True
       - src: E 
         dst: C
-        delay: 20ms
+        delay: 10ms
         symmetric: True
       - src: E 
         dst: D
-        delay: 20ms
+        delay: 10ms
         symmetric: True
 
 
