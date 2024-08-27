@@ -25,7 +25,7 @@ class Cache:
     def sendDataSetTo(self, ip_dst, id_dataset,size_ds):
         
         file_name = '/tmp/tmp.bin'
-        file_size_octet = size_ds*1024*1024
+        file_size_octet = int(size_ds)*1024*1024
         with open(file_name, "wb") as p:
             p.write(os.urandom(file_size_octet))
         
@@ -40,19 +40,6 @@ class Cache:
 
         return r 
 
-
-        
-    def notifyNode(self, ip_node, port_node, id_dataset):
-        url = f'http://{ip_node}:{port_node}/notify'
-        
-        data = { 
-            "id_dataset": id_dataset,
-        }
-
-        response = requests.get(url, params=data)
-        #print(response.json()["response"])
-        return response.json()
-        
     
     #TODO en cas de modification de politique d'eviction
     def accessData(self, id_dataset):
@@ -93,11 +80,11 @@ class Cache:
     
     def predictEviction(self,ds_size):
 
-        ds_size_bytes = (ds_size*1024*1024)+65
+        ds_size_bytes = (int(ds_size)*1024*1024)+65
         
         cache_size_bytes = self.cache_size
         stats = self.getStats()[0][1]
-        used_memory = int(stats["bytes"].decode())
+        used_memory = stats["bytes"].decode()
         
         if used_memory+ds_size_bytes > cache_size_bytes:
             return True, self.last_recently_used_item

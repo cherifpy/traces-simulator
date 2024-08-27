@@ -109,7 +109,9 @@ class ReplicaManager:
                             self.writeOutput(f"{r_eviction}")
                             #TODO erreur sponed with dataset
                             if r_eviction["send"]:
-                                r2 = self.deleteAndSend(id_src_node=task.id_node,id_dst_node=r_eviction["id_dst_node"], id_dataset=condidate, ds_size=task.ds_size)
+                                id_dst_node = r_eviction["id_dst_node"]
+                                r2 = self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=task.ds_size)
+                                if r2 : self.notifyNode(self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , condidate)
                             else:
                                 self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
                 else:
@@ -309,6 +311,17 @@ class ReplicaManager:
         self.nodes_infos[node_id]["remaining_space"] = response.json()["remaining_space"]
         if response['reponse']:
             self.writeOutput(f"{id_dataset} deleted from {node_id}\n")
+        return response.json()
+
+    def notifyNode(self, ip_node, port_node, id_dataset):
+        url = f'http://{ip_node}:{port_node}/notify'
+        
+        data = { 
+            "id_dataset": id_dataset,
+        }
+
+        response = requests.get(url, params=data)
+        #print(response.json()["response"])
         return response.json()
 
     def isOnNeighbords(self,node,id_ds):

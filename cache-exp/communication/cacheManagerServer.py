@@ -126,7 +126,7 @@ class CacheManagerServer:
                     id_dataset=id_ds,
                     size_ds=ds_size
                     )
-                if t: self.cache.notifyNode(ip_dst_node,port_dst, id_ds)
+                
                 stats = self.cache.getStats()[0][1]
                 response = {"sended":t, "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())}
             else:
