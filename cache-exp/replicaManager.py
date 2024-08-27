@@ -93,7 +93,6 @@ class ReplicaManager:
             #print(self.nodes_infos[int(node_id)])
             node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
             node_port = self.nodes_infos[int(task.id_node)]["node_port"]
-
             response = self.sendTask(task,node_port, node_ip)
 
             if response["sendData"]:
@@ -111,8 +110,8 @@ class ReplicaManager:
                             #TODO erreur sponed with dataset
                             if r_eviction["send"]:
                                 id_dst_node = r_eviction["id_dst_node"]
-                                r2 = self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=task.ds_size)
-                                if r2 : self.notifyNode(self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , condidate)
+                                self.deleteAndSendOnThread(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=task.ds_size)
+                                #if r2 : self.notifyNode(self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , condidate)
                             else:
                                 self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
                 else:
@@ -138,9 +137,8 @@ class ReplicaManager:
 
                 if not l or not t:
                     #if with eviction change here add the condition to send the data somewhere
-                    s = self.sendDataSet(node_ip, id_ds=task.id_dataset, ds_size=task.ds_size)
+                    self.sendDataSetOnThread(id_node=task.id_node,ip_node=node_ip, id_dataset=task.id_dataset, ds_size=task.ds_size,process=None)
                     self.nb_data_trasnfert +=1
-                    if s:self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
                     cost = self.transfertCost(self.graphe_infos[self.id][task.id_node], task.ds_size)
                     self.writeTransfert(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost},transfert1\n")
                     print(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost}\n")
@@ -235,7 +233,7 @@ class ReplicaManager:
 
 
         
-    def sendDataSet(self, ip_node, id_ds,ds_size):
+    def sendDataSet(self,id_node, ip_node, id_ds,ds_size):
         if self.local_execution:
             return True
         file_name = '/tmp/tmp.bin'
@@ -253,6 +251,8 @@ class ReplicaManager:
         r = client.set(id_ds, content)
         #if r: self.location_table[id_ds].append()
         self.last_node_recieved = None
+
+        if r: self.addToLocationTable(id_dataset=id_ds,id_node=id_node)
 
         return r 
     
@@ -298,6 +298,7 @@ class ReplicaManager:
             self.nodes_infos[id_src_node]['remaining_space'] = response.json()['remaining_space']
             self.location_table[id_dataset].append(id_dst_node)
             self.location_table[id_dataset].remove(id_src_node)
+            self.notifyNode(self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , id_dataset)
         return response.json()
     
     def deleteFromCache(self,node_id, node_ip, node_port, id_dataset):
@@ -324,6 +325,15 @@ class ReplicaManager:
         response = requests.get(url, params=data)
         #print(response.json()["response"])
         return response.json()
+    
+    def deleteAndSendOnThread(self, id_src_node, id_dst_node, id_dataset, ds_size):
+        
+        sending_process = threading.Thread(target=self.deleteAndSend, args=(id_src_node,id_dst_node, id_dataset, id_dataset,ds_size))
+        #sending_process = multiprocessing.Process(target=self.sendDataSet, args=[ip_node, id_dataset, ds_size])
+        sending_process.start()
+
+        return sending_process
+        
 
     def isOnNeighbords(self,node,id_ds):
         n = []
@@ -341,10 +351,9 @@ class ReplicaManager:
         
         return False
 
-    def startTransefertOnThread(self, ip_node, id_dataset, ds_size, process:Optional[threading.Thread]):
-        if ip_node == self.last_node_recieved:
-            process.join()
-        sending_process = threading.Thread(target=self.sendDataSet, args=(ip_node, id_dataset, ds_size))
+    def sendDataSetOnThread(self, id_node,ip_node, id_dataset, ds_size, process:Optional[threading.Thread]):
+        
+        sending_process = threading.Thread(target=self.sendDataSet, args=(id_node,ip_node, id_dataset, ds_size))
         #sending_process = multiprocessing.Process(target=self.sendDataSet, args=[ip_node, id_dataset, ds_size])
         sending_process.start()
 

@@ -101,12 +101,12 @@ class CacheManagerServer:
         def transfert():
             data = request.json
             
-            r = self.cache.sendDataSetTo(
+            self.cache.sendDataSetToOnthread(
                 ip_dst=data["dst_ip"],
                 id_dataset=data["id_dataset"],
                 size_ds=data["size_ds"]
             ) 
-            processed_data = {"response":r}
+            processed_data = {"response":True}
             
             return jsonify(processed_data)
         

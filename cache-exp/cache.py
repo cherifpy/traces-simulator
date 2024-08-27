@@ -6,7 +6,7 @@ import os
 import copy 
 from pymemcache.client.base import Client
 import re
-import requests
+import threading
 
 class Cache:
     def __init__(self, cache_size, node_id):
@@ -39,7 +39,13 @@ class Cache:
         r = client_tmp.set(id_dataset, content)
 
         return r 
+    
+    def sendDataSetToOnthread(self, ip_dst, id_dataset,size_ds):
+        sending_process = threading.Thread(target=self.sendDataSetTo, args=(ip_dst,id_dataset,size_ds))
+        #sending_process = multiprocessing.Process(target=self.sendDataSet, args=[ip_node, id_dataset, ds_size])
+        sending_process.start()
 
+        return sending_process
     
     #TODO en cas de modification de politique d'eviction
     def accessData(self, id_dataset):
