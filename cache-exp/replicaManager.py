@@ -101,6 +101,7 @@ class ReplicaManager:
 
                 if ENABEL_MIGRATION and response["eviction"]:
                     self.writeOutput(f"Eviction demandée {response}\n")
+                    b, self.nodes_infos = self.collecteData()
                     for condidate in reversed(response["condidates"]):
                         self.writeOutput(f"condidate {condidate}\n")
                         if (task.ds_size*1024*1024) + 65 > self.nodes_infos[task.id_node]["remaining_space"]:
@@ -138,6 +139,7 @@ class ReplicaManager:
                 if not l or not t:
                     #if with eviction change here add the condition to send the data somewhere
                     self.sendDataSetOnThread(id_node=task.id_node,ip_node=node_ip, id_dataset=task.id_dataset, ds_size=task.ds_size,process=None)
+                    self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
                     self.nb_data_trasnfert +=1
                     cost = self.transfertCost(self.graphe_infos[self.id][task.id_node], task.ds_size)
                     self.writeTransfert(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost},transfert1\n")
@@ -148,7 +150,6 @@ class ReplicaManager:
                 pass
 
             #self.accessData()
-            b, self.nodes_infos = self.collecteData()
 
         #process.terminate()
         #process.join()
@@ -253,7 +254,7 @@ class ReplicaManager:
         self.last_node_recieved = None
 
         if r: 
-            self.addToLocationTable(id_dataset=id_ds,id_node=id_node)
+            
             self.accessData(id_node,id_ds)
 
         return r 
