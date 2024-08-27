@@ -57,6 +57,7 @@ class ReplicaManager:
         self.num_evection = 0
         self.last_node_recieved = None
         self.data_sizes = {}
+        self.nb_data_trasnfert_avoided = 0
         
     def start(self):
         sum_cost = 0
