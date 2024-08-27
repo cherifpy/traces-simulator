@@ -147,7 +147,7 @@ class ReplicaManager:
                 self.nb_data_trasnfert_avoided+=1
                 pass
 
-            self.accessData(task, node_ip)
+            
             b, self.nodes_infos = self.collecteData()
 
         #process.terminate()
@@ -252,16 +252,18 @@ class ReplicaManager:
         #if r: self.location_table[id_ds].append()
         self.last_node_recieved = None
 
-        if r: self.addToLocationTable(id_dataset=id_ds,id_node=id_node)
+        if r: 
+            self.addToLocationTable(id_dataset=id_ds,id_node=id_node)
+            self.accessData(id_node,id_ds)
 
         return r 
     
-    def accessData(self, task:Task, ip="localhost"):
+    def accessData(self, id_node, id_dataset, ip="localhost"):
 
-        url = f'http://{self.nodes_infos[task.id_node]["node_ip"]}:{self.nodes_infos[task.id_node]["node_port"]}/access-data'
+        url = f'http://{self.nodes_infos[id_node]["node_ip"]}:{self.nodes_infos[id_node]["node_port"]}/access-data'
 
         response = requests.get(url,params={
-            'id_dataset':task.id_dataset
+            'id_dataset':id_dataset
         })
         
         return response.json()
@@ -299,6 +301,7 @@ class ReplicaManager:
             self.location_table[id_dataset].append(id_dst_node)
             self.location_table[id_dataset].remove(id_src_node)
             self.notifyNode(self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , id_dataset)
+            self.accessData(id_src_node,id_dataset)
         return response.json()
     
     def deleteFromCache(self,node_id, node_ip, node_port, id_dataset):
