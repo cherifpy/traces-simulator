@@ -115,7 +115,8 @@ class ReplicaManager:
                             else:
                                 self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
                 else:
-                    self.nodes_infos[task.id_node]["remaining_space"] -= task.ds_size*1024*1024 + 65
+                    #self.nodes_infos[task.id_node]["remaining_space"] -= task.ds_size*1024*1024 + 65
+                    pass
 
                 _,l = self.searchForDataOnNeighbors(id_node=task.id_node, dataset=task.id_dataset)
                 t = False
@@ -128,24 +129,23 @@ class ReplicaManager:
                     )
                     if t: 
                         cost = self.transfertCost(self.graphe_infos[l][task.id_node], task.ds_size)
-                        sum_cost += cost
-                        self.writeTransfert(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost}, transfert2\n")
+                        self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
+                        self.nb_data_trasnfert +=1
+                        self.writeTransfert(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost},transfert2\n")
                         print(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost}\n")
 
 
                 if not l or not t:
                     #if with eviction change here add the condition to send the data somewhere
-                    self.sendDataSet(node_ip, id_ds=task.id_dataset, ds_size=task.ds_size)
+                    s = self.sendDataSet(node_ip, id_ds=task.id_dataset, ds_size=task.ds_size)
                     self.nb_data_trasnfert +=1
-                    
-                    self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
-
+                    if s:self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
                     cost = self.transfertCost(self.graphe_infos[self.id][task.id_node], task.ds_size)
-                    sum_cost += cost
                     self.writeTransfert(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost},transfert1\n")
                     print(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost}\n")
 
             else:
+                self.nb_data_trasnfert_avoided+=1
                 pass
 
             self.accessData(task, node_ip)
@@ -153,7 +153,8 @@ class ReplicaManager:
 
         #process.terminate()
         #process.join()
-        self.writeOutput(f"{self.nb_data_trasnfert}\n")
+        self.writeOutput(f"nb_transfert {self.nb_data_trasnfert}\n")
+        self.writeOutput(f"nb transfert avoided: {self.nb_data_trasnfert_avoided}")
         print(sum_cost)
         return True
     
@@ -180,19 +181,23 @@ class ReplicaManager:
     
     #used
     def searchForDataOnNeighbors(self, id_node, dataset):
+        """
+            need to change this to select from where to get th data
+        """
         locations = []
         latency = []
-        
+        dataset_location = self.getDataSetLocation(id_ds=dataset)
         for node, c in enumerate(self.graphe_infos[id_node]):
-            if c > 0 and c < self.graphe_infos[self.id][node] and c in self.getDataSetLocation(id_ds=dataset):
+            if c > 0 and c < self.graphe_infos[self.id][node] and node in dataset_location:
                 locations.append(node)                
                 latency.append(c)
             
         if len(locations) == 0:
             return None, None
-        min_latency = np.min(latency)
+        
+        i_min = np.argmin(latency)
 
-        return min_latency, locations[np.argmin(latency)]
+        return latency[i_min], locations[i_min]
     
     #used
     def sendTask(self, task:Task, port, ip="localhost"):
@@ -203,17 +208,7 @@ class ReplicaManager:
         response = requests.post(url, json=data)
         self.writeOutput(f"task {task.id_task} sended to {task.id_node}\n")
         return response.json()
-    
 
-    def evectData(self,id_node,id_dataset, dataset_size, with_migration=False):
-
-        if not with_migration:
-            self.location_table[id_node] = [x for x in self.location_table[id_node] if x != id_node]
-            self.nodes_infos[id_dataset]["remaining_space"] += dataset_size
-
-            return "delete"
-        else:
-            return "migrate"
         
     def manageEviction(self, id_node, id_ds, ds_size):
         """
@@ -229,11 +224,11 @@ class ReplicaManager:
             node = None
 
             for id_neighbors in range(self.nb_nodes):
-                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and self.nodes_infos[id_neighbors]["remaining_space"] > (ds_size*1024*1024 + 65):
+                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and self.nodes_infos[id_neighbors]["remaining_space"] > ((ds_size*1024*1024) + 65):
                     cost = self.transfertCost(self.graphe_infos[int(id_node)][id_neighbors], ds_size) 
-                    if cost < min_access_and_transfet_time:
-                            min_access_and_transfet_time = cost
-                            node = id_neighbors
+                    if cost <= min_access_and_transfet_time:
+                        min_access_and_transfet_time = cost
+                        node = id_neighbors
 
             return {"delete":True, "send": True if not node is None else False, "id_dst_node":node}
 
@@ -310,9 +305,9 @@ class ReplicaManager:
         response = requests.get(url,params={
             'id_dataset':id_dataset,
         })
-    
+        print(response.text)
         self.nodes_infos[node_id]["remaining_space"] = response.json()["remaining_space"]
-        self.location_table[id_dataset].remove(node_id)
+        if node_id in self.location_table[id_dataset]: self.location_table[id_dataset].remove(node_id)
         if response.json()['reponse']:
             self.writeOutput(f"{id_dataset} deleted from {node_id}\n")
 
@@ -405,7 +400,8 @@ class ReplicaManager:
         if id_dataset in self.location_table.keys():
             if id_node not in self.location_table[id_dataset]:
                 self.location_table[id_dataset].append(id_node)
-                return True
+            return True
+            
         else:
             self.location_table[id_dataset] = [id_node]
             return True

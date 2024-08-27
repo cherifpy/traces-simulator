@@ -44,10 +44,13 @@ class Cache:
     #TODO en cas de modification de politique d'eviction
     def accessData(self, id_dataset):
         value = self.client.get(id_dataset)
+        
         if not value and id_dataset in self.ids_data:
             self.ids_data.remove(id_dataset)
             return False
-        elif value and id_dataset in self.ids_data:
+        
+        elif value:
+            if id_dataset not in self.ids_data: self.ids_data.append(id_dataset)
             if id_dataset in self.last_recently_used_item: self.last_recently_used_item.remove(id_dataset)
             self.last_recently_used_item.append(id_dataset)
         return True
