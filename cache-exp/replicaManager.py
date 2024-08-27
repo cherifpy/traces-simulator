@@ -102,7 +102,7 @@ class ReplicaManager:
                     b, self.nodes_infos = self.collecteData()
                     for condidate in reversed(response["condidates"]):
                         self.writeOutput(f"condidate {condidate}\n")
-                        if (task.ds_size*1024*1024) + 65 > self.nodes_infos[task.id_node]["remaining_space"]:
+                        if (task.ds_size*1024) + 65 > self.nodes_infos[task.id_node]["remaining_space"]:
 
                             r_eviction = self.manageEviction(task.id_node, condidate, task.ds_size)
                             self.writeOutput(f"{r_eviction}\n")
@@ -222,7 +222,7 @@ class ReplicaManager:
             node = None
 
             for id_neighbors in range(self.nb_nodes):
-                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and self.nodes_infos[id_neighbors]["remaining_space"] > ((ds_size*1024*1024) + 65):
+                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and self.nodes_infos[id_neighbors]["remaining_space"] > ((ds_size*1024) + 65):
                     cost = self.transfertCost(self.graphe_infos[int(id_node)][id_neighbors], ds_size) 
                     if cost <= min_access_and_transfet_time:
                         min_access_and_transfet_time = cost
@@ -236,7 +236,7 @@ class ReplicaManager:
         if self.local_execution:
             return True
         file_name = '/tmp/tmp.bin'
-        file_size_octet = ds_size*1024*1024
+        file_size_octet = ds_size*1024
         with open(file_name, "wb") as p:
             p.write(os.urandom(file_size_octet))
         with open(file_name, "rb") as p:
@@ -429,8 +429,8 @@ class ReplicaManager:
     
 
     def transfertCost(self, latency, data_size):
-        bandwith_in_bits = BANDWIDTH*1024*1024*8
-        size_in_bits = data_size*1024*1024*8
+        bandwith_in_bits = BANDWIDTH*1024*8
+        size_in_bits = data_size*1024*8
         latency_in_s = latency/1000
 
         return latency_in_s + (size_in_bits/bandwith_in_bits)

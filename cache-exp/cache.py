@@ -25,7 +25,7 @@ class Cache:
     def sendDataSetTo(self, ip_dst, id_dataset,size_ds):
         
         file_name = '/tmp/tmp.bin'
-        file_size_octet = int(size_ds)*1024*1024
+        file_size_octet = int(size_ds)*1024
         with open(file_name, "wb") as p:
             p.write(os.urandom(file_size_octet))
         
@@ -89,7 +89,7 @@ class Cache:
     
     def predictEviction(self,ds_size):
 
-        ds_size_bytes = (int(ds_size)*1024*1024)+65
+        ds_size_bytes = (int(ds_size)*1024)+65
         
         cache_size_bytes = self.cache_size
         stats = self.getStats()[0][1]
