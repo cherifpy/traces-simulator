@@ -114,7 +114,7 @@ class ReplicaManager:
                             else:
                                 self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
                 else:
-                    #self.nodes_infos[task.id_node]["remaining_space"] -= task.ds_size*1024*1024 + 65
+                    self.nodes_infos[task.id_node]["remaining_space"] -= task.ds_size*1024 + 65
                     pass
 
                 _,l = self.searchForDataOnNeighbors(id_node=task.id_node, dataset=task.id_dataset)
@@ -147,7 +147,7 @@ class ReplicaManager:
                 self.nb_data_trasnfert_avoided+=1
                 pass
 
-            #self.accessData()
+            self.accessDataOnThread(task.id_node,task.id_dataset)
 
         #process.terminate()
         #process.join()
@@ -251,10 +251,7 @@ class ReplicaManager:
         #if r: self.location_table[id_ds].append()
         self.last_node_recieved = None
 
-        if r: 
-            
-            self.accessData(id_node,id_ds)
-
+        
         return r 
     
     def accessData(self, id_node, id_dataset, ip="localhost"):
@@ -266,6 +263,12 @@ class ReplicaManager:
         })
         
         return response.json()
+
+    def accessDataOnThread(self, id_node, id_dataset, ip="localhost"):
+        process = threading.Thread(target=self.accessData, args=(id_node, id_dataset))
+        process.start()
+
+        return process
     
     def askForATransfert(self, src, dst, id_dataset,size_ds):
         
