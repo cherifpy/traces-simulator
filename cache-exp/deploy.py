@@ -18,7 +18,7 @@ def run_command(command):
 
 def InfosToSend(id_peer:int,graphe_info,ip_address, rep_port, cache_size):
     data = {}
-    data["CACHE_SIZE"] = cache_size*1024
+    data["CACHE_SIZE"] = cache_size*1024*1024 #touche pas a ca
     data["infos"] = []
     data["SITE_ID"] = id_peer
     data["REP_PORT"] = rep_port + id_peer

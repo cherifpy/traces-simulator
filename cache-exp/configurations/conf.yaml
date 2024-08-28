@@ -8,27 +8,27 @@ machines:
   - cluster: parasilo
     nodes: 1
     roles: [A]
-    storage: 1024
+    storage: 2
   - cluster: parasilo
     nodes: 1
     roles: [B]
-    storage: 1024
+    storage: 2
   - cluster: parasilo
     nodes: 1
     roles: [C]
-    storage: 1024
+    storage: 2
   - cluster: parasilo
     nodes: 1
     roles: [D]
-    storage: 1024
+    storage: 2
   - cluster: parasilo
     nodes: 1
     roles: [E]
-    storage: 1024
+    storage: 2
   - cluster: parasilo
     nodes: 1
     roles: [F]
-    storage: 1024
+    storage: 2
 
 
 network_constraints:
