@@ -144,6 +144,7 @@ class ReplicaManager:
                     print(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost}\n")
 
             else:
+                self.writeTransfert(f"{task.id_task},{task.id_dataset},-1,{task.ds_size},{task.id_node},0,NoTransfert\n")
                 self.nb_data_trasnfert_avoided+=1
                 pass
 
