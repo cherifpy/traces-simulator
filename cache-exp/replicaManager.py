@@ -99,7 +99,7 @@ class ReplicaManager:
                 #is_eviction = True if self.nodes_infos[task.id_node]["remaining_space"] < (task.ds_size*1024*1024+65) else False
                 if ENABEL_MIGRATION and response["eviction"]:
                     self.writeOutput(f"Eviction demandée {response}\n")
-                    b, self.nodes_infos = self.collecteData()
+                    
                     for condidate in reversed(response["condidates"]):
                         self.writeOutput(f"condidate {condidate}\n")
                         if (task.ds_size*1024) + 65 > self.nodes_infos[task.id_node]["remaining_space"]:
@@ -147,6 +147,7 @@ class ReplicaManager:
                 self.nb_data_trasnfert_avoided+=1
                 pass
 
+            b, self.nodes_infos = self.collecteData()
             self.accessDataOnThread(task.id_node,task.id_dataset)
 
         #process.terminate()
@@ -160,7 +161,7 @@ class ReplicaManager:
     def collecteData(self):
         if len(self.nodes_infos.keys()) == 0:
             return False, {}
-        
+        self.location_table = {}
         for key in self.nodes_infos.keys():
             url = f'http://{self.nodes_infos[key]["node_ip"]}:{self.nodes_infos[key]["node_port"]}/infos'
             response = requests.get(url).json()
