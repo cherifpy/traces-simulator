@@ -150,7 +150,7 @@ class ReplicaManager:
                 pass
 
             b, self.nodes_infos = self.collecteData()
-            self.accessDataOnThread(task.id_node,task.id_dataset)
+            self.accessData(task.id_node,task.id_dataset)
 
         #process.terminate()
         #process.join()

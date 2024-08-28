@@ -53,6 +53,7 @@ class Cache:
         
         if not value and id_dataset in self.ids_data:
             self.ids_data.remove(id_dataset)
+            if id_dataset in self.last_recently_used_item: self.last_recently_used_item.remove(id_dataset)
             return False
         
         elif value:
@@ -125,8 +126,8 @@ class Cache:
             client = pylibmc.Client([f'0.0.0.0:{MEMCACHED_LISTENING_PORT}'], binary=True, behaviors={"tcp_nodelay": True})
             r = client.delete(key)
             #ca retourne une exption la 
-            self.last_recently_used_item.remove(key)
-            self.ids_data.remove(key)
+            if key in self.last_recently_used_item: self.last_recently_used_item.remove(key)
+            if key in self.ids_data:self.ids_data.remove(key)
             return r
         
         except Exception as e:
