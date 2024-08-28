@@ -104,12 +104,12 @@ class ReplicaManager:
                         self.writeOutput(f"condidate {condidate}\n")
                         if (task.ds_size*1024) + 65 > self.nodes_infos[task.id_node]["remaining_space"]:
 
-                            r_eviction = self.manageEviction(task.id_node, condidate, task.ds_size)
+                            r_eviction = self.manageEviction(task.id_node, condidate, self.data_sizes[condidate])
                             self.writeOutput(f"{r_eviction}\n")
                             #TODO erreur sponed with dataset
                             if r_eviction["send"]:
                                 id_dst_node = r_eviction["id_dst_node"]
-                                self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=task.ds_size)
+                                self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=self.data_sizes[condidate])
                                 #if r2 : self.notifyNode(self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , condidate)
                             else:
                                 self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
