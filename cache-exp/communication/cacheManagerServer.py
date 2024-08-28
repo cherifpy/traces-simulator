@@ -62,7 +62,7 @@ class CacheManagerServer:
                     "id_node": self.cache.id_node,
                     "storage_space": int(stats["limit_maxbytes"].decode()),
                     "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode()),
-                    'keys': self.cache.last_recently_used_item #self.cache.getKeys()
+                    'keys': self.cache.getKeys()
                 }
                 self.cache.cache_size = int(stats["limit_maxbytes"].decode())
                 self.cache.memory_used  = int(stats["bytes"].decode())
@@ -71,7 +71,7 @@ class CacheManagerServer:
                     "id_node": self.cache.id_node,
                     "storage_space": self.cache.cache_size,
                     "remaining_space":self.cache.cache_size - self.cache.memory_used,
-                    'keys': self.cache.last_recently_used_item #self.cache.getKeys()
+                    'keys': self.cache.getKeys()
                 }
             self.writeOutput(f"{data}")
             self.writeOutput("info sended\n")
