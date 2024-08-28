@@ -316,6 +316,7 @@ class ReplicaManager:
             'id_dataset':id_dataset,
         })
         print(response.text)
+        self.writeOutput(f"{response.text}")
         self.nodes_infos[node_id]["remaining_space"] = response.json()["remaining_space"]
         if node_id in self.location_table[id_dataset]: self.location_table[id_dataset].remove(node_id)
         if response.json()['reponse']:
