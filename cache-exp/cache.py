@@ -63,7 +63,7 @@ class Cache:
         return True
     
     def getKeys(self):
-        client = Client(("127.0.0.1", MEMCACHED_LISTENING_PORT)) 
+        client = Client(("0.0.0.0", MEMCACHED_LISTENING_PORT)) 
         stats_items = client.stats('items')
         keys = []
         self.memory_used = 0
@@ -73,7 +73,7 @@ class Cache:
                 parts = stat_key.decode().split(':')
                 if len(parts) == 3 and parts[2] == 'number':
                     slab_id = parts[1]
-                    cachedump = client.stats(f'cachedump',f'{slab_id}','100')
+                    cachedump = client.stats(f'cachedump',f'{slab_id}','0')
                 
                     for key, infos in cachedump.items():
                         numbers = re.findall(r'\d+', infos.decode())

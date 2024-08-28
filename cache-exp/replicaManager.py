@@ -147,7 +147,7 @@ class ReplicaManager:
             else:
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},-1,{task.ds_size},{task.id_node},0,NoTransfert\n")
                 self.nb_data_trasnfert_avoided+=1
-                pass
+                
 
             b, self.nodes_infos = self.collecteData()
             self.accessData(task.id_node,task.id_dataset)
@@ -176,6 +176,7 @@ class ReplicaManager:
             for id_ds in self.nodes_infos[key]["keys"]:
                 self.addToLocationTable(key, id_ds)
             #print(f"received data from {key}, {self.nodes_infos[key]}")
+        self.writeOutput(f"{self.nodes_infos}")
         self.writeOutput("finishing collecting data from actors\n")
         
         return True, self.nodes_infos
@@ -318,8 +319,8 @@ class ReplicaManager:
         print(response.text)
         self.writeOutput(f"{response.text}")
         self.nodes_infos[node_id]["remaining_space"] = response.json()["remaining_space"]
-        if node_id in self.location_table[id_dataset]: self.location_table[id_dataset].remove(node_id)
         if response.json()['reponse']:
+            if node_id in self.location_table[id_dataset]: self.location_table[id_dataset].remove(node_id)
             self.writeOutput(f"{id_dataset} deleted from {node_id}\n")
             self.notifyNode(node_ip,node_port , id_dataset, add=False)
 
