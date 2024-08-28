@@ -101,12 +101,12 @@ class CacheManagerServer:
         def transfert():
             data = request.json
             
-            self.cache.sendDataSetToOnthread(
+            r = self.cache.sendDataSetTo(
                 ip_dst=data["dst_ip"],
                 id_dataset=data["id_dataset"],
                 size_ds=data["size_ds"]
             ) 
-            processed_data = {"response":True}
+            processed_data = {"response":r}
             
             return jsonify(processed_data)
         
@@ -197,7 +197,7 @@ class CacheManagerServer:
                 if id_ds not in self.cache.ids_data:self.cache.ids_data.append(id_ds)
             else:
                 if id_ds in self.cache.ids_data:self.cache.ids_data.remove(id_ds)
-                
+
             return jsonify({"added":True})
             
         

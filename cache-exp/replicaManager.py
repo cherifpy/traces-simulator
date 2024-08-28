@@ -68,8 +68,7 @@ class ReplicaManager:
         
         #process = self.startThread()
         traces = pd.read_csv(self.traces_path)
-        self.writeOutput("start collection data \n")
-        b, self.nodes_infos = self.collecteData()
+        
         self.writeOutput(f"{str(self.nodes_infos)}\n")
 
 
@@ -77,7 +76,7 @@ class ReplicaManager:
             return False
         
         for index, row in traces.iterrows():
-            
+            b, self.nodes_infos = self.collecteData()
             task_infos = {
                 'time' : row["time_compute (s)"],
                 'application_type': row["application_type"]
@@ -149,7 +148,7 @@ class ReplicaManager:
                 self.nb_data_trasnfert_avoided+=1
                 
 
-            b, self.nodes_infos = self.collecteData()
+            
             self.accessData(task.id_node,task.id_dataset)
 
         #process.terminate()
