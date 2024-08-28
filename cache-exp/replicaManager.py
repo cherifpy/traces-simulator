@@ -111,10 +111,10 @@ class ReplicaManager:
                                 self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
                                 
                 elif not ENABEL_MIGRATION and response["eviction"]:
-                        for data in self.nodes_infos[task.id_node]['task.id_node']:
+                        for data in reversed(response["condidates"]):
                             if (task.ds_size*1024) + 65 > self.nodes_infos[task.id_node]["remaining_space"]:
                                 self.deleteFromCache(task.id_node, node_ip, node_port, data)
-                             
+                               
                 else:
                     self.nodes_infos[task.id_node]["remaining_space"] -= task.ds_size*1024 + 65
                     
