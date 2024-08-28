@@ -113,9 +113,10 @@ class ReplicaManager:
                                 #if r2 : self.notifyNode(self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , condidate)
                             else:
                                 self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
+                                
                 else:
                     self.nodes_infos[task.id_node]["remaining_space"] -= task.ds_size*1024 + 65
-                    pass
+                    
 
                 _,l = self.searchForDataOnNeighbors(id_node=task.id_node, dataset=task.id_dataset)
                 t = False
@@ -297,15 +298,15 @@ class ReplicaManager:
             'port_dst_node':self.nodes_infos[id_dst_node]["node_port"]
         })
         self.writeOutput("migration declanchée\n")
-        self.writeOutput(f"{response.text}\n")
+        self.writeOutput(f"{response.text}")
         if response.json()["sended"]:
             cost = self.transfertCost(self.graphe_infos[int(id_src_node)][int(id_dst_node)],ds_size)
             self.writeTransfert(f"null,{id_dataset},{id_src_node},{ds_size},{id_dst_node},{cost},migration\n")
             self.nodes_infos[id_src_node]['remaining_space'] = response.json()['remaining_space']
             self.location_table[id_dataset].append(id_dst_node)
             self.location_table[id_dataset].remove(id_src_node)
-            self.notifyNode(self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , id_dataset)
-            self.accessData(id_src_node,id_dataset)
+            self.notifyNode(self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , id_dataset, add=True)
+            #self.accessData(id_src_node,id_dataset)
         return response.json()
     
     def deleteFromCache(self,node_id, node_ip, node_port, id_dataset):
@@ -319,17 +320,19 @@ class ReplicaManager:
         if node_id in self.location_table[id_dataset]: self.location_table[id_dataset].remove(node_id)
         if response.json()['reponse']:
             self.writeOutput(f"{id_dataset} deleted from {node_id}\n")
+            self.notifyNode(node_ip,node_port , id_dataset, add=False)
 
         return response.json()
 
-    def notifyNode(self, ip_node, port_node, id_dataset):
+    def notifyNode(self, ip_node, port_node, id_dataset, add=True):
         url = f'http://{ip_node}:{port_node}/notify'
         
         data = { 
             "id_dataset": id_dataset,
+            "add":add
         }
 
-        response = requests.get(url, params=data)
+        response = requests.post(url, json=data)
         #print(response.json()["response"])
         return response.json()
     

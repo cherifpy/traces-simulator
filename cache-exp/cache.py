@@ -131,7 +131,7 @@ class Cache:
         
         except Exception as e:
             print(f"Error deleting from Memcached: {e}")
-            return True
+            return False
 
 
     def getCacheSpaceUsed(self):

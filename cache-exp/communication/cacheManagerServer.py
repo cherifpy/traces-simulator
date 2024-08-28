@@ -187,11 +187,17 @@ class CacheManagerServer:
                 "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())
                 })
         
-        @self.app.route("/notify",methods=['GET'])
+        @self.app.route("/notify",methods=['POST'])
         def notify():
-            id_ds = request.args.get("id_dataset")
-            self.cache.ids_data.append(id_ds)
+            data = request.json
+            id_ds = data["id_dataset"]
 
+            if data["add"]:
+
+                if id_ds not in self.cache.ids_data:self.cache.ids_data.append(id_ds)
+            else:
+                if id_ds in self.cache.ids_data:self.cache.ids_data.remove(id_ds)
+                
             return jsonify({"added":True})
             
         
