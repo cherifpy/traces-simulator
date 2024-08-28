@@ -2,30 +2,30 @@
 job_name: test_conf
 user_id: csimohammed
 exp_env: debian11-min
-exp_walltime: 01:30:00
+exp_walltime: 02:30:00
 execution_local: False
 machines:
-  - cluster: parasilo
+  - cluster: paravance
     nodes: 1
     roles: [A]
     storage: 2
-  - cluster: parasilo
+  - cluster: paravance
     nodes: 1
     roles: [B]
     storage: 2
-  - cluster: parasilo
+  - cluster: paravance
     nodes: 1
     roles: [C]
     storage: 2
-  - cluster: parasilo
+  - cluster: paravance
     nodes: 1
     roles: [D]
     storage: 2
-  - cluster: parasilo
+  - cluster: paravance
     nodes: 1
     roles: [E]
     storage: 2
-  - cluster: parasilo
+  - cluster: paravance
     nodes: 1
     roles: [F]
     storage: 2
