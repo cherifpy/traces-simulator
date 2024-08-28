@@ -64,6 +64,7 @@ class CacheManagerServer:
                     "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode()),
                     'keys': self.cache.getKeys()
                 }
+                self.cache.cache_size = int(stats["limit_maxbytes"].decode())
                 self.cache.memory_used  = int(stats["bytes"].decode())
             else:
                 data = {
@@ -72,6 +73,7 @@ class CacheManagerServer:
                     "remaining_space":self.cache.cache_size - self.cache.memory_used,
                     'keys': self.cache.getKeys()
                 }
+            self.writeOutput(f"{data}")
             self.writeOutput("info sended\n")
             return jsonify(data)
         

@@ -71,9 +71,6 @@ class ReplicaManager:
         
         self.writeOutput(f"{str(self.nodes_infos)}\n")
 
-
-        if not b:
-            return False
         
         for index, row in traces.iterrows():
             b, self.nodes_infos = self.collecteData()
@@ -239,7 +236,7 @@ class ReplicaManager:
         if self.local_execution:
             return True
         file_name = '/tmp/tmp.bin'
-        file_size_octet = ds_size*1024
+        file_size_octet = int(ds_size)*1024
         with open(file_name, "wb") as p:
             p.write(os.urandom(file_size_octet))
         with open(file_name, "rb") as p:
