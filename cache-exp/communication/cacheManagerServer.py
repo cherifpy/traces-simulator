@@ -63,8 +63,10 @@ class CacheManagerServer:
                     "id_node": self.cache.id_node,
                     "storage_space": int(stats["limit_maxbytes"].decode()),
                     "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode()),
-                    'keys': self.cache.last_recently_used_item #self.cache.getKeys()
+                    'keys': self.cache.id_node #self.cache.getKeys()
                 }
+                self.writeOutput("here\n")
+                
                 self.cache.cache_size = int(stats["limit_maxbytes"].decode())
                 self.cache.memory_used  = int(stats["bytes"].decode())
             else:
@@ -72,8 +74,9 @@ class CacheManagerServer:
                     "id_node": self.cache.id_node,
                     "storage_space": self.cache.cache_size,
                     "remaining_space":self.cache.cache_size - self.cache.memory_used,
-                    'keys': self.cache.last_recently_used_item #self.cache.getKeys()
+                    'keys': self.cache.ids_data #self.cache.getKeys()
                 }
+                self.writeOutput("not here\n")
             self.writeOutput(f"{data}")
             self.writeOutput("info sended\n")
             return jsonify(data)
@@ -199,10 +202,18 @@ class CacheManagerServer:
             id_ds = data["id_dataset"]
 
             if data["add"]:
-
+                if id_ds in self.cache.last_recently_used_item:
+                    self.cache.last_recently_used_item.remove(id_ds)
+                    self.cache.last_recently_used_item.insert(0,id_ds)
+                else:
+                    self.cache.last_recently_used_item.insert(0,id_ds)
+                    
                 if id_ds not in self.cache.ids_data:self.cache.ids_data.append(id_ds)
+                self.writeOutput(f"{id_ds} deleted\n")
             else:
+                if id_ds in self.cache.last_recently_used_item: self.cache.last_recently_used_item.remove(id_ds)
                 if id_ds in self.cache.ids_data:self.cache.ids_data.remove(id_ds)
+                self.writeOutput(f"{id_ds} removed\n")
 
             return jsonify({"added":True})
             

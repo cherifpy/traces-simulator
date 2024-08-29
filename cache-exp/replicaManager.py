@@ -118,7 +118,8 @@ class ReplicaManager:
                                 self.deleteFromCache(task.id_node, node_ip, node_port, data)
                                
                 else:
-                    self.nodes_infos[task.id_node]["remaining_space"] -= task.ds_size*1024 + 65
+                    pass
+                    #self.nodes_infos[task.id_node]["remaining_space"] -= task.ds_size*1024 + 65
                     
 
                 _,l = self.searchForDataOnNeighbors(id_node=task.id_node, dataset=task.id_dataset)
