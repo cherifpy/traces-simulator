@@ -63,7 +63,7 @@ class CacheManagerServer:
                     "id_node": self.cache.id_node,
                     "storage_space": int(stats["limit_maxbytes"].decode()),
                     "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode()),
-                    'keys': self.cache.id_node #self.cache.getKeys()
+                    'keys': self.cache.ids_data #self.cache.getKeys()
                 }
                 self.writeOutput("here\n")
                 
