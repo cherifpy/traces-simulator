@@ -160,7 +160,7 @@ class ReplicaManager:
         print(sum_cost)
         return True
     
-    #used
+    #used a copie
     def collecteData(self):
         if len(self.nodes_infos.keys()) == 0:
             return False, {}
@@ -168,8 +168,7 @@ class ReplicaManager:
         for key in self.nodes_infos.keys():
             url = f'http://{self.nodes_infos[key]["node_ip"]}:{self.nodes_infos[key]["node_port"]}/infos'
             response = requests.get(url).json()
-            
-            
+    
             self.nodes_infos[key]["storage_space"] = response["storage_space"]
             self.nodes_infos[key]["remaining_space"] = response["remaining_space"]
             self.nodes_infos[key]["keys"] = response['keys']
@@ -202,7 +201,7 @@ class ReplicaManager:
 
         return latency[i_min], locations[i_min]
     
-    #used
+    #used a copie
     def sendTask(self, task:Task, port, ip="localhost"):
 
         url = f'http://{ip}:{port}/execut'
@@ -212,14 +211,13 @@ class ReplicaManager:
         self.writeOutput(f"task {task.id_task} sended to {task.id_node}\n")
         return response.json()
 
-        
+    #used a copie
     def manageEviction(self, id_node, id_ds, ds_size):
         """
             ici je supprimer direct si ka données et dans les voisie
         """
         n = self.isOnNeighbords(id_node, id_ds)
         if len(n) != 0:
-            
             return {"delete":True, "send":False} #demander au noeud de juste supprimer la données
 
         else:
@@ -235,6 +233,31 @@ class ReplicaManager:
 
             return {"delete":True, "send": True if not node is None else False, "id_dst_node":node}
 
+    def manageMigrationV1(self):
+        """
+            here i will use the TTL to decide if a had to migrate or send 
+        """
+        
+        pass
+
+    def migrate(self, task, condidate):
+        
+        operation = {}
+        self.writeOutput(f"Eviction demandée\n")  
+        for condidate in condidate: #enlever reversed pour que l'exp soit la meme avec celle de hier
+            self.writeOutput(f"condidate {condidate}\n")
+            if (task.ds_size*1024) + 65 > self.nodes_infos[task.id_node]["remaining_space"]:
+                r_eviction = self.manageEviction(task.id_node, condidate, self.data_sizes[condidate])
+                self.writeOutput(f"{r_eviction}\n")
+                #TODO erreur sponed with dataset
+                if r_eviction["send"]:
+                    id_dst_node = r_eviction["id_dst_node"]
+                    self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=self.data_sizes[condidate])
+                    #if r2 : self.notifyNode(self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , condidate)
+                else:
+                    node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
+                    node_port = self.nodes_infos[int(task.id_node)]["node_port"]
+                    self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
 
         
     def sendDataSet(self,id_node, ip_node, id_ds,ds_size):

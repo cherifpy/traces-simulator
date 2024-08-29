@@ -66,7 +66,7 @@ class Cache:
         client = Client(("0.0.0.0", MEMCACHED_LISTENING_PORT)) 
         stats_items = client.stats('items')
         keys = []
-        self.memory_used = 0
+        
         # Parse slab IDs from the 'stats items' command
         for stat_key, stat_value in stats_items.items():
             if stat_key.decode().startswith('items:'):
@@ -77,7 +77,7 @@ class Cache:
                 
                     for key, infos in cachedump.items():
                         numbers = re.findall(r'\d+', infos.decode())
-                        self.memory_used += int(numbers[0])
+                        
                         keys.append(key.decode())
                 
         self.ids_data = copy.deepcopy(keys)
@@ -94,6 +94,7 @@ class Cache:
         
         cache_size_bytes = self.cache_size
         stats = self.getStats()[0][1]
+        self.memory_used = int(stats["bytes"].decode())
         used_memory = stats["bytes"].decode()
         
         if int(used_memory)+ds_size_bytes > cache_size_bytes:

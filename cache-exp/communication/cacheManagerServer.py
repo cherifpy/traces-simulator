@@ -57,6 +57,7 @@ class CacheManagerServer:
         @self.app.route('/infos', methods=['GET'])
         def get_info():
             stats = self.cache.getStats()[0][1]
+            
             if stats:
                 data = {
                     "id_node": self.cache.id_node,
@@ -81,6 +82,7 @@ class CacheManagerServer:
         @self.app.route("/access-data", methods=['GET'])
         def ckeckData():
             stats = self.cache.getStats()[0][1]
+            self.cache.memory_used = int(stats["bytes"].decode())
             id_ds = request.args.get("id_dataset")
             b = self.cache.accessData(id_ds)
 
@@ -93,6 +95,7 @@ class CacheManagerServer:
         def infoForEvection():
 
             stats = self.cache.getStats()[0][1]
+            self.cache.memory_used = int(stats["bytes"].decode())
             return jsonify({
                 "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode()),
                 'last_recently_used': self.cache.last_recently_used_item
@@ -130,6 +133,7 @@ class CacheManagerServer:
                     )
                 
                 stats = self.cache.getStats()[0][1]
+                self.cache.memory_used = int(stats["bytes"].decode())
                 response = {"sended":t, "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())}
             else:
                 response = {"sended":b}
@@ -183,7 +187,7 @@ class CacheManagerServer:
             r = self.cache.deleteFromCache(id_dataset)
 
             stats = self.cache.getStats()[0][1]
-
+            self.cache.memory_used = int(stats["bytes"].decode())
             return jsonify({
                 "reponse":r,
                 "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())
