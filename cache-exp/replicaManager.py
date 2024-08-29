@@ -58,6 +58,8 @@ class ReplicaManager:
         self.last_node_recieved = None
         self.data_sizes = {}
         self.nb_data_trasnfert_avoided = 0
+        self.data = {}
+        self.replicas = {}
         
     def start(self):
         sum_cost = 0
@@ -75,7 +77,7 @@ class ReplicaManager:
         for index, row in traces.iterrows():
             b, self.nodes_infos = self.collecteData()
             task_infos = {
-                'time' : row["time_compute (s)"],
+                'time' : row["time_compute (s)"],  
                 'application_type': row["application_type"]
             }
             task = Task(
@@ -233,25 +235,46 @@ class ReplicaManager:
 
             return {"delete":True, "send": True if not node is None else False, "id_dst_node":node}
 
-    def manageMigrationV1(self):
+    def manageEvictionV2(self, id_node, id_ds, ds_size, availabel_space):
         """
             here i will use the TTL to decide if a had to migrate or send 
         """
+        n = self.isOnNeighbords(id_node, id_ds)
+        if len(n) != 0:
+            return {"delete":True, "send":False} #demander au noeud de juste supprimer la données
+
+        else:
+            min_access_and_transfet_time = float('inf')
+            node = None
+
+            for id_neighbors in range(self.nb_nodes):
+                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and availabel_space > ((ds_size*1024) + 65):
+                    cost = self.transfertCost(self.graphe_infos[int(id_node)][id_neighbors], ds_size) 
+                    if cost <= min_access_and_transfet_time:
+                        min_access_and_transfet_time = cost
+                        node = id_neighbors
+
+        return {"delete":True, "send": True if not node is None else False, "id_dst_node":node}
         
-        pass
 
     def migrate(self, task, condidate):
         
-        operation = {}
+        operation = []
         self.writeOutput(f"Eviction demandée\n")  
+
         for condidate in condidate: #enlever reversed pour que l'exp soit la meme avec celle de hier
+            
             self.writeOutput(f"condidate {condidate}\n")
-            if (task.ds_size*1024) + 65 > self.nodes_infos[task.id_node]["remaining_space"]:
-                r_eviction = self.manageEviction(task.id_node, condidate, self.data_sizes[condidate])
+            space_availabel = self.nodes_infos[task.id_node]["remaining_space"]
+            if (task.ds_size*1024) + 65 > space_availabel:
+
+                r_eviction = self.manageEvictionV1(task.id_node, condidate, self.data_sizes[condidate],space_availabel)
+
                 self.writeOutput(f"{r_eviction}\n")
                 #TODO erreur sponed with dataset
                 if r_eviction["send"]:
                     id_dst_node = r_eviction["id_dst_node"]
+                    operation.append(("migrate", condidate, id_dst_node))
                     self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=self.data_sizes[condidate])
                     #if r2 : self.notifyNode(self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , condidate)
                 else:
