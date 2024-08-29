@@ -209,7 +209,7 @@ class CacheManagerServer:
                     self.cache.last_recently_used_item.insert(0,id_ds)
                     
                 if id_ds not in self.cache.ids_data:self.cache.ids_data.append(id_ds)
-                self.writeOutput(f"{id_ds} deleted\n")
+                self.writeOutput(f"{id_ds} added\n")
             else:
                 if id_ds in self.cache.last_recently_used_item: self.cache.last_recently_used_item.remove(id_ds)
                 if id_ds in self.cache.ids_data:self.cache.ids_data.remove(id_ds)
