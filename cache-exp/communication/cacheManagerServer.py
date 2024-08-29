@@ -214,8 +214,11 @@ class CacheManagerServer:
                 if id_ds in self.cache.last_recently_used_item: self.cache.last_recently_used_item.remove(id_ds)
                 if id_ds in self.cache.ids_data:self.cache.ids_data.remove(id_ds)
                 self.writeOutput(f"{id_ds} removed\n")
-
-            return jsonify({"added":True})
+                
+            stats = self.cache.getStats()[0][1]
+            return jsonify({"added":True,
+                            "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())
+            })
             
         
         @self.app.route('/shutdown', methods=['POST'])
