@@ -236,7 +236,7 @@ class ReplicaManager:
 
             return {"delete":True, "send": True if not node is None else False, "id_dst_node":node}
 
-    def manageEvictionV2(self, id_node, id_ds, ds_size, availabel_space):
+    def manageEvictionV2(self, id_node, id_ds, ds_size, space_availabel):
         """
             here i will use the TTL to decide if a had to migrate or send 
         """
@@ -249,7 +249,7 @@ class ReplicaManager:
             node = None
 
             for id_neighbors in range(self.nb_nodes):
-                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and availabel_space > ((ds_size*1024) + 65):
+                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and space_availabel > ((ds_size*1024) + 65):
                     cost = self.transfertCost(self.graphe_infos[int(id_node)][id_neighbors], ds_size) 
                     if cost <= min_access_and_transfet_time:
                         min_access_and_transfet_time = cost
@@ -258,12 +258,12 @@ class ReplicaManager:
         return {"delete":True, "send": True if not node is None else False, "id_dst_node":node}
         
 
-    def migrate(self, task, condidate):
+    def migrate(self, task, condidates):
         
         operation = []
         self.writeOutput(f"Eviction demandée\n")  
 
-        for condidate in condidate: #enlever reversed pour que l'exp soit la meme avec celle de hier
+        for condidate in condidates: #enlever reversed pour que l'exp soit la meme avec celle de hier
             
             self.writeOutput(f"condidate {condidate}\n")
             space_availabel = self.nodes_infos[task.id_node]["remaining_space"]
@@ -272,12 +272,10 @@ class ReplicaManager:
                 r_eviction = self.manageEvictionV1(task.id_node, condidate, self.data_sizes[condidate],space_availabel)
 
                 self.writeOutput(f"{r_eviction}\n")
-                #TODO erreur sponed with dataset
                 if r_eviction["send"]:
                     id_dst_node = r_eviction["id_dst_node"]
                     operation.append(("migrate", condidate, id_dst_node))
                     self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=self.data_sizes[condidate])
-                    #if r2 : self.notifyNode(self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , condidate)
                 else:
                     node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
                     node_port = self.nodes_infos[int(task.id_node)]["node_port"]
@@ -370,6 +368,7 @@ class ReplicaManager:
 
         if response.json()['reponse']:
             if node_id in self.location_table[id_dataset]: self.location_table[id_dataset].remove(node_id)
+            self.nodes_infos[node_id]['remaining_space'] = response.json()['remaining_space']
             self.writeOutput(f"{id_dataset} deleted from {node_id}\n")
             self.notifyNode(node_ip,node_port , id_dataset, add=False)
 
