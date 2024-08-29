@@ -260,7 +260,7 @@ class ReplicaManager:
 
     def migrate(self, task, condidates):
         
-        operation = []
+        operations = []
         self.writeOutput(f"Eviction demandée\n")  
 
         for condidate in condidates: #enlever reversed pour que l'exp soit la meme avec celle de hier
@@ -274,12 +274,17 @@ class ReplicaManager:
                 self.writeOutput(f"{r_eviction}\n")
                 if r_eviction["send"]:
                     id_dst_node = r_eviction["id_dst_node"]
-                    operation.append(("migrate", condidate, id_dst_node))
-                    self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=self.data_sizes[condidate])
+                    operations.append(("migrate", condidate,id_dst_node))
+                    #self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=self.data_sizes[condidate])
                 else:
                     node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
                     node_port = self.nodes_infos[int(task.id_node)]["node_port"]
-                    self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
+                    operations.append("delete", condidate, task.id_node)
+                    #self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
+        
+        
+
+        return operations
 
         
     def sendDataSet(self,id_node, ip_node, id_ds,ds_size):
@@ -352,7 +357,8 @@ class ReplicaManager:
             self.nodes_infos[id_src_node]['remaining_space'] = response.json()['remaining_space']
             self.location_table[id_dataset].append(id_dst_node)
             self.location_table[id_dataset].remove(id_src_node)
-            self.notifyNode(self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , id_dataset, add=True)
+            
+            self.notifyNode(id_dst_node,self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , id_dataset, add=True)
             #self.accessData(id_src_node,id_dataset)
         return response.json()
     
@@ -368,21 +374,22 @@ class ReplicaManager:
 
         if response.json()['reponse']:
             if node_id in self.location_table[id_dataset]: self.location_table[id_dataset].remove(node_id)
-            self.nodes_infos[node_id]['remaining_space'] = response.json()['remaining_space']
+            
             self.writeOutput(f"{id_dataset} deleted from {node_id}\n")
-            self.notifyNode(node_ip,node_port , id_dataset, add=False)
+            self.notifyNode(node_id,node_ip,node_port , id_dataset, add=False)
 
         return response.json()
 
-    def notifyNode(self, ip_node, port_node, id_dataset, add=True):
+    def notifyNode(self, id_node,ip_node, port_node, id_dataset, add=True):
         url = f'http://{ip_node}:{port_node}/notify'
         
         data = { 
             "id_dataset": id_dataset,
             "add":add
         }
-
+        
         response = requests.post(url, json=data)
+        self.nodes_infos[id_node]['remaining_space'] = response.json()['remaining_space']
         #print(response.json()["response"])
         return response.json()
     
