@@ -35,7 +35,7 @@ class CacheManagerServer:
 
     def setup_routes(self):
         
-        @self.app.route("/process", methods="POST")
+        @self.app.route("/process", methods=["POST"])
         def process():
 
             data_r = request.json
