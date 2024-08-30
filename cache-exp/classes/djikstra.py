@@ -17,7 +17,7 @@ def dijkstra(graph, start_node, end_node):
             continue
 
         for neighbor in range(num_nodes):
-            if graph[current_node][neighbor] > 0:  # Lien direct
+            if graph[current_node][neighbor] != -1:  # Lien direct
                 distance = current_distance + graph[current_node][neighbor]
                 if distance < distances[neighbor]:
                     distances[neighbor] = distance
@@ -35,7 +35,7 @@ def dijkstra(graph, start_node, end_node):
     return path, distances[end_node]
 
 
-if __name__ =='__main__':
+if __name__ == '__main__':
     graph = [
         [0, 0, 1, 1, 0, 0],   # Nœud 0
         [0, 0, 0, 0, 1, 0],   # Nœud 1

@@ -45,14 +45,13 @@ def SendInfoToManager(id_peer, config,ips_address, rep_port):
     data["infos"] = {}
     
     for i in range(len(config)):
-        if config[id_peer,i] > 0:
-            peer = {
-                'latency' : config[id_peer,i],
-                "id": i,
-                "node_ip" : ips_address[i], 
-                "node_port" : rep_port+i,
-            } 
-            data["infos"][i] = peer
+        peer = {
+            'latency' : config[id_peer,i],
+            "id": i,
+            "node_ip" : ips_address[i], 
+            "node_port" : rep_port+i,
+        } 
+        data["infos"][i] = peer
     return data
 
 ###### Start a reservation
@@ -115,8 +114,6 @@ if True:
                 infos_nodes.append({"node_ip":IPS_ADDRESS[i], "node_port":port_rep})
                 port_rep += 1
                 time.sleep(1)
-                
-        
  
     else:
         for i, machine in enumerate(config.machines):
