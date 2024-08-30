@@ -42,7 +42,7 @@ class CacheManagerServer:
 
             if data_r["target"] in self.neighbors.keys():
                 if data_r["methode"] == "POST":
-                    reponse = requests.post(url=data_r["url"],data=data_r["data"])
+                    reponse = requests.post(url=data_r["url"],json=data_r["data"])
                 else:
                     reponse = requests.get(url=data_r["url"], params=data_r["data"])
             
@@ -56,7 +56,7 @@ class CacheManagerServer:
                     'target':data_r['target'], 
                 }
                 url = f"http://{self.neighbors[new_target]['ip']}:{self.neighbors[new_target]['rep_port']}/process"
-                reponse = requests.post(url=url, data=data_send)
+                reponse = requests.post(url, json=data_send)
 
             
             return reponse

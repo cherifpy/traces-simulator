@@ -224,8 +224,9 @@ class ReplicaManager:
             
             self.writeOutput(f'{path}')
             n = path.pop(0)
-            ip_n = self.nodes_infos[int(task.id_node)]["node_ip"]
-            port_n = self.nodes_infos[int(task.id_node)]["node_port"] 
+            next_dst = path.pop(0)
+            ip_n = self.nodes_infos[int(next_dst)]["node_ip"]
+            port_n = self.nodes_infos[int(next_dst)]["node_port"] 
 
             data_to_send = {
                     'data' : data,
@@ -236,6 +237,7 @@ class ReplicaManager:
                 }
              
             url = f'http://{ip_n}:{port_n}/process'
+            self.writeOutput(url)
             response = requests.post(url, json=data_to_send)
             self.writeOutput(response.text)
             return response.json()
