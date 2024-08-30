@@ -29,8 +29,6 @@ machines:
     nodes: 1
     roles: [F]
     storage: 2
-
-
 network_constraints:
   - default_delay: 20ms
     default_rate: 100mbit

@@ -303,13 +303,13 @@ class Configuration:
             print("No influx installed")
     
         return False
-
+        
     def getGraphe(self):
         self.graphe = np.zeros((self.nb_sites,self.nb_sites))
 
         for i in range(self.nb_sites):
             node_i = self.machines[i]["roles"][0]
-            for j in range(self.nb_sites):
+            for j in range(i, self.nb_sites):
                 node_j = self.machines[j]["roles"][0]
                 if i == j: self.graphe[i,j] = -1
                 else:
@@ -322,10 +322,11 @@ class Configuration:
     def getLatencyBetweenNodes(self, node1:str, node2:str):
         
         for const in self.contraintes:
-            if const['src'] == node1 and const['dst'] == node2:
+            if (const['src'] == node1 and const['dst'] == node2) or ( const['src'] == node2 and const['dst'] == node1) :
                 return int(const['delay'][0:-2]), const['symmetric'] 
+        
         return -1, False
-
+    
     def getStorageCapacities(self,):
         
         collector_address = self.roles['Qnode1'][0].address

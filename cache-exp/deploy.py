@@ -1,4 +1,3 @@
-from client import CacheManager
 import subprocess
 import time
 from configurations.configuration import Configuration
@@ -75,7 +74,8 @@ if True:
     CONFIG_GRAPHE = config.getGraphe()
     IPS_ADDRESS = config.getAllIPs()
 
-    print(IPS_ADDRESS)
+
+    print(CONFIG_GRAPHE)
     #config.provider.destroy()
     
     infos_nodes= []

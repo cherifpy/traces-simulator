@@ -218,7 +218,8 @@ class ReplicaManager:
             
             response = requests.post(url, json=data)
             self.writeOutput(f"task {task.id_task} sended to {task.id_node}\n")
-            return response.json(), self.graphe_infos[self.id][task.id_dataset]
+
+            return response.json(), self.graphe_infos[self.id][task.id_node]
         
         else:
             path, cost =  dijkstra(self.graphe_infos, self.id, task.id_node)
