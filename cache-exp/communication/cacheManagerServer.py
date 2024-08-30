@@ -25,6 +25,7 @@ class CacheManagerServer:
         self.setup_routes()
         self.cache = Cache(storage_space, id_node)
         self.neighbors = neighbors
+        self.nb_requests_processed = {}
         
         
         self.client = self.cache.connectToMemcache()
@@ -32,7 +33,7 @@ class CacheManagerServer:
             self.writeOutput("connected to memecached\n")
         else:
             self.writeOutput("not connected to memecached\n")
-
+    
     def setup_routes(self):
         
         @self.app.route("/process", methods=["POST"])
@@ -292,7 +293,12 @@ class CacheManagerServer:
             processed_data = {"response":"good"}
             
             return jsonify(processed_data)
-        
+    
+    def addRequest(self,id_dataset):
+        if id_dataset in self.nb_requests_processed.keys():
+            self.nb_requests_processed[id_dataset] +=1
+        else:
+            self.nb_requests_processed[id_dataset] =1
     def run(self):
         try:
             self.app.run(host="0.0.0.0", port=self.port)

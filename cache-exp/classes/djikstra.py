@@ -17,7 +17,7 @@ def dijkstra(graph, start_node, end_node):
             continue
 
         for neighbor in range(num_nodes):
-            if graph[current_node][neighbor] != -1:  # Lien direct
+            if graph[current_node][neighbor] > 0:  # Lien direct
                 distance = current_distance + graph[current_node][neighbor]
                 if distance < distances[neighbor]:
                     distances[neighbor] = distance
@@ -46,6 +46,6 @@ if __name__ == '__main__':
     ]
     # Exemples d'utilisation
     start_node = 0
-    end_node = 1
+    end_node = 4
     path, cost = dijkstra(graph, start_node, end_node)
     print(f"Chemin le plus court: {path} avec un coût de {cost}")

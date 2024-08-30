@@ -37,32 +37,33 @@ network_constraints:
     constraints: 
       - src: F 
         dst: B
-        delay: 60ms
+        delay: 100ms
         symmetric: True
       - src: F 
         dst: C
-        delay: 50ms
+        delay: 100ms
         symmetric: True
       - src: F 
         dst: A
-        delay: 60ms
+        delay: 100ms                                                 
         symmetric: True
       - src: A 
-        dst: D
-        delay: 1ms
-        symmetric: True
-      - src: D 
         dst: B
-        delay: 30ms
-        symmetric: True
-      - src: B 
-        dst: E
-        delay: 30ms
+        delay: 80ms
         symmetric: True
       - src: B 
         dst: C
-        delay: 10ms
+        delay: 60ms
         symmetric: True
+      - src: B 
+        dst: D
+        delay: 50ms
+        symmetric: True
+      - src: B 
+        dst: E
+        delay: 40ms
+        symmetric: True
+
 
 
 

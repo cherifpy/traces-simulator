@@ -91,7 +91,7 @@ class ReplicaManager:
             
             node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
             node_port = self.nodes_infos[int(task.id_node)]["node_port"]
-            response = self.sendTask(task,node_port, node_ip)
+            response, latency = self.sendTask(task,node_port, node_ip)
 
             if response["sendData"]:
                 #is_eviction = True if self.nodes_infos[task.id_node]["remaining_space"] < (task.ds_size*1024*1024+65) else False
@@ -135,7 +135,7 @@ class ReplicaManager:
                     )
                     if t: 
                         self.data[task.id_dataset].updateNbReplica(add=True)
-                        cost = self.transfertCost(self.graphe_infos[l][task.id_node], task.ds_size)
+                        cost = self.transfertCost(latency, task.ds_size)
                         self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
                         self.nb_data_trasnfert +=1
                         self.writeTransfert(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost},transfert2\n")
@@ -148,7 +148,7 @@ class ReplicaManager:
                     self.data[task.id_dataset].updateNbReplica(add=True)
                     self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
                     self.nb_data_trasnfert +=1
-                    cost = self.transfertCost(self.graphe_infos[self.id][task.id_node], task.ds_size)
+                    cost = self.transfertCost(latency, task.ds_size)
                     self.writeTransfert(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost},transfert1\n")
                     print(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost}\n")
 
@@ -218,7 +218,7 @@ class ReplicaManager:
             
             response = requests.post(url, json=data)
             self.writeOutput(f"task {task.id_task} sended to {task.id_node}\n")
-            return response.json()
+            return response.json(), self.graphe_infos[self.id][task.id_dataset]
         
         else:
             path, cost =  dijkstra(self.graphe_infos, self.id, task.id_node)
@@ -241,7 +241,7 @@ class ReplicaManager:
             self.writeOutput(url)
             response = requests.post(url, json=data_to_send)
             self.writeOutput(response.text)
-            return response.json()
+            return response.json(), cost
 
     #used a copie
     def manageEviction(self, id_node, id_ds, ds_size):
