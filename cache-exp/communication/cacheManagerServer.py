@@ -55,7 +55,7 @@ class CacheManagerServer:
                     'path': data_r['path'],
                     'target':data_r['target'], 
                 }
-                url = f"http://{self.neighbors[new_target]["ip"]}:{self.neighbors[new_target]["rep_port"]}/process"
+                url = f"http://{self.neighbors[new_target]['ip']}:{self.neighbors[new_target]['rep_port']}/process"
                 reponse = requests.post(url=url, data=data_send)
 
             
