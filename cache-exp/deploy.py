@@ -117,7 +117,8 @@ if True:
  
     else:
         for i, machine in enumerate(config.machines):
-            print(f"Role = {config.roles[machine['roles'][0]]}\n")
+            print(f"======= node {i} ========\n")
+            print(f"{machine["roles"][0]}\n")
             with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
                 #p.ensure_python()
                 p.apt(name=["git","python3-pip"], state="present")
@@ -133,7 +134,7 @@ if True:
                     task_name = "installing python libs",
                     cmd = "pip3 install pandas pylibmc numpy sockets PyYAML Flask pymemcache"
                 )
-            print(f"======= node {i} ========")
+            
             
             if i==(NB_NODES-1):
 

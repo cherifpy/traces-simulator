@@ -219,8 +219,9 @@ class ReplicaManager:
             response = requests.post(url, json=data)
             self.writeOutput(f"task {task.id_task} sended to {task.id_node}\n")
             return response.json()
+        
         else:
-            path, cost =  dijkstra(self.graphe_infos, 0, task.id_node)
+            path, cost =  dijkstra(self.graphe_infos, self.id, task.id_node)
             
             self.writeOutput(f'{path}')
             n = path.pop(0)
@@ -547,7 +548,7 @@ class ReplicaManager:
         return False
     
     def isNeighbors(self, id_node):
-        if self.graphe_infos[int(self.id)][int(id_node)] > 0:
+        if self.graphe_infos[self.id][int(id_node)] > 0:
             return True
         else: 
             return False
