@@ -268,6 +268,9 @@ class ReplicaManager:
         """
             here i will use the TTL to decide if a had to migrate or send 
         """
+        if self.data[id_ds].nb_replica >= TTL_MIN :
+            return {"delete":True, "send":False}
+
         n = self.isOnNeighbords(id_node, id_ds)
         if len(n) != 0:
             return {"delete":True, "send":False} #demander au noeud de juste supprimer la données
@@ -290,8 +293,7 @@ class ReplicaManager:
             ici je supprimer direct si ka données et dans les voisie
             pourquoi pas choisir la donnée avec un tres TTL pour la supprimer du cache
         """
-        if self.data[id_ds].nb_replica >= TTL_MIN :
-            return {"delete":True, "send":False}
+        
 
         n = self.isOnNeighbords(id_node, id_ds)
         if len(n) != 0:
