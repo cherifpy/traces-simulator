@@ -111,6 +111,26 @@ class Cache:
         self.ids_data.append(id_data)
         return True
     
+    def migrateData(self, id_ds, ds_size,ip_dst_node):
+
+        b = self.deleteFromCache(id_ds)
+        self.writeOutput(b)
+        if b:
+            t = self.sendDataSetTo(
+                ip_dst=ip_dst_node,
+                id_dataset=id_ds,
+                size_ds=ds_size
+                )
+            
+            stats = self.getStats()[0][1]
+            self.memory_used = int(stats["bytes"].decode())
+            response = {"sended":t, "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())}
+        else:
+            response = {"sended":b}
+        
+        return response
+
+    
     
     def connectToMemcache(self):
         try:

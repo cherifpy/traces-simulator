@@ -2,7 +2,7 @@
 job_name: test_conf
 user_id: csimohammed
 exp_env: debian11-min
-exp_walltime: 05:00:00
+exp_walltime: 00:10:00
 execution_local: False
 machines:
   - cluster: paravance
@@ -44,57 +44,26 @@ network_constraints:
         delay: 50ms
         symmetric: True
       - src: F 
-        dst: D
-        delay: 50ms
-        symmetric: True
-      - src: F 
         dst: A
         delay: 60ms
         symmetric: True
-      - src: F 
-        dst: E
-        delay: 60ms
-        symmetric: True
-      - src: C 
-        dst: B
-        delay: 8ms
-        symmetric: True
       - src: A 
-        dst: B
+        dst: D
         delay: 1ms
         symmetric: True
       - src: D 
         dst: B
         delay: 30ms
         symmetric: True
-      - src: C 
-        dst: D
+      - src: B 
+        dst: E
         delay: 30ms
         symmetric: True
-      - src: C 
-        dst: A
-        delay: 10ms
-        symmetric: True
-      - src: D 
-        dst: A
-        delay: 10ms
-        symmetric: True
-      - src: E 
-        dst: A
-        delay: 10ms
-        symmetric: True
-      - src: E 
-        dst: B
-        delay: 10ms
-        symmetric: True
-      - src: E 
+      - src: B 
         dst: C
         delay: 10ms
         symmetric: True
-      - src: E 
-        dst: D
-        delay: 10ms
-        symmetric: True
+
 
 
 

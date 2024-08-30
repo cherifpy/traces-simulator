@@ -1,7 +1,13 @@
+from concurrent.futures import thread
 from crypt import methods
+from multiprocessing import process
 import sys
 import os
+import threading
 from urllib import response
+
+from pytest import param
+import requests
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from flask import Flask, request, jsonify
 from communication.messages import Task
@@ -11,7 +17,7 @@ import importlib.util
 from cache import Cache
 
 class CacheManagerServer:
-    def __init__(self,storage_space, id_node,neighbors, host='localhost', port=8888):
+    def __init__(self,storage_space, id_node,neighbors:dict, host='localhost', port=8888):
         self.app = Flask(__name__)
         self.host = host
         self.port = port
@@ -28,6 +34,34 @@ class CacheManagerServer:
             self.writeOutput("not connected to memecached\n")
 
     def setup_routes(self):
+        
+        @self.app.route("/process", methods="POST")
+        def process():
+
+            data_r = request.json
+
+            if data_r["target"] in self.neighbors.keys():
+                if data_r["methode"] == "POST":
+                    reponse = requests.post(url=data_r["url"],data=data_r["data"])
+                else:
+                    reponse = requests.get(url=data_r["url"], params=data_r["data"])
+            
+            else:
+                new_target = data_r['path'].pop(0)
+                data_send = {
+                    'data' : data_r["data"],
+                    'url':data_r["url"],
+                    'methode':data_r["methode"],
+                    'path': data_r['path'],
+                    'target':data_r['target'], 
+                }
+                url = f"http://{self.neighbors[new_target]["ip"]}:{self.neighbors[new_target]["rep_port"]}/process"
+                reponse = requests.post(url=url, data=data_send)
+
+            
+            return reponse
+
+        
         #used
         @self.app.route('/execut', methods=['POST'])    
         def process_data():
@@ -214,13 +248,32 @@ class CacheManagerServer:
                 if id_ds in self.cache.last_recently_used_item: self.cache.last_recently_used_item.remove(id_ds)
                 if id_ds in self.cache.ids_data:self.cache.ids_data.remove(id_ds)
                 self.writeOutput(f"{id_ds} removed\n")
-                
+
             stats = self.cache.getStats()[0][1]
             return jsonify({"added":True,
                             "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())
             })
             
-        
+        @self.app.route("/operations")
+        def operation():
+            data = request.json
+            operations = data["operations"]
+            threads = []
+            for opt in operations:
+                if opt[0] == 'migrate':
+                    ip_dst_node = self.neighbors[opt[3]]['ip']
+                    thread = threading.Thread(target=self.cache.migrateData, args=(opt[1], opt[2], ip_dst_node))
+                    threads.append(thread)
+                    thread.start()
+            # Attendre la fin de tous les threads
+            for thread in threads:
+                thread.join()
+            
+            stats = self.cache.getStats()[0][1]
+            return jsonify({"added":True,
+                            "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())
+            })
+
         @self.app.route('/shutdown', methods=['POST'])
         def shutdown():
             shutdown_server = request.environ.get('werkzeug.server.shutdown')
