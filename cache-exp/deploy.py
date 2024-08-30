@@ -41,10 +41,10 @@ def SendInfoToManager(id_peer, config,ips_address, rep_port):
     data = {}
     data["IP_ADDRESS"] = str(ips_address[id_peer])
     data['graphe_infos'] = config
-    data["IPs_ADDRESS"] = ips_address
+    data["IPs_ADDRESS"] =ips_address[:-1]
     data["infos"] = {}
     
-    for i in range(len(config)):
+    for i in range(len(config)-1):
         peer = {
             'latency' : config[id_peer,i],
             "id": i,
