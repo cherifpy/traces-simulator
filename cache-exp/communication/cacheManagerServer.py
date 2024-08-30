@@ -39,8 +39,9 @@ class CacheManagerServer:
         def process():
 
             data_r = request.json
-            self.writeOutput(f"{data_r}")
+            self.writeOutput(f"{data_r} {self.neighbors.keys()}\n")
             if data_r["target"] in self.neighbors.keys():
+                self.writeOutput(f"neu\n")
                 if data_r["methode"] == "POST":
                     reponse = requests.post(url=data_r["url"],json=data_r["data"])
                 else:
@@ -59,7 +60,7 @@ class CacheManagerServer:
                 reponse = requests.post(url, json=data_send)
 
             
-            return jsonify(reponse)
+            return jsonify(reponse.json())
 
         
         #used
