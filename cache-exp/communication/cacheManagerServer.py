@@ -254,7 +254,7 @@ class CacheManagerServer:
                             "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())
             })
             
-        @self.app.route("/operations")
+        @self.app.route("/operations", methods=['POST'])
         def operation():
             data = request.json
             operations = data["operations"]
