@@ -81,8 +81,7 @@ class ReplicaManager:
         
         for index, row in traces.iterrows():
             b, self.nodes_infos = self.collecteData()
-            task_infos = {'time' : row["time_compute (s)"],  'application_type': row["application_type"]
-                          }
+            task_infos = {'time' : row["time_compute (s)"],  'application_type': row["application_type"]}
             task = Task(id_task=row["id_task"],id_node= row["node_id"],infos= task_infos,id_dataset= row["dataset"],ds_size=row["dataset_size"])
 
             self.data_sizes[task.id_dataset] = task.ds_size
@@ -239,7 +238,7 @@ class ReplicaManager:
             url = f'http://{ip_n}:{port_n}/process'
             response = requests.post(url, json=data_to_send)
             self.writeOutput(response.text)
-        return response
+            return response.json()
 
     #used a copie
     def manageEviction(self, id_node, id_ds, ds_size):
@@ -544,7 +543,7 @@ class ReplicaManager:
         return False
     
     def isNeighbors(self, id_node):
-        if self.graphe_infos[int(self.id)][int(id_node)] != 0:
+        if self.graphe_infos[int(self.id)][int(id_node)] > 0:
             return True
         else: 
             return False
