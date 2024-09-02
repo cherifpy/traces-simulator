@@ -140,14 +140,14 @@ if True:
 
                 data = SendInfoToManager(i, CONFIG_GRAPHE,IPS_ADDRESS, REP_PORT)
                 print(data)
-                with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
+                """with config.enoslib.actions(roles=config.roles[machine["roles"][0]]) as p:
                     p.command(
                         task_name = "Executing the code on a site",
                         cmd = f"python3 /home/csimohammed/exp/cache-exp/replicaManager.py > /tmp/output{i}_and_errors.log 2>&1",
                         background=True
                     )
                 print(IPS_ADDRESS[i])
-                sendObject(data, IPS_ADDRESS[i])
+                sendObject(data, IPS_ADDRESS[i])"""
                 
 
             else: 
