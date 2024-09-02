@@ -1,9 +1,9 @@
-NB_NODES = 6
+NB_NODES = 9
 SERVER_REPLICA_MANAGER_PORT= 3030
 REP_PORT = 8880
 MEMCACHED_LISTENING_PORT = 5555
 PATH_TO_TASKS ="/home/csimohammed/exp/cache-exp/exp/traces/random_subset.csv" 
 PATH_TO_CONFIG_FILE = "/home/csimohammed/exp/cache-exp/configurations/conf.yaml" #"/Users/cherif/Documents/Traveaux/traces-simulator/cache-exp/configurations/conf.yaml"
-BANDWIDTH = 100
+BANDWIDTH = 1024
 ENABEL_MIGRATION = True
-TTL_MIN = 2 #Un ttl qui peut etre mi a jour a chaque fois que la donnée est dans l'infra (on peu le minimiser selon l'infrastructure a partire des données de l'infrastructure)
+TTL_MIN = 3 #Un ttl qui peut etre mi a jour a chaque fois que la donnée est dans l'infra (on peu le minimiser selon l'infrastructure a partire des données de l'infrastructure)
