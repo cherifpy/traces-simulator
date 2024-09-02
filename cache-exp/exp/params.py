@@ -5,5 +5,5 @@ MEMCACHED_LISTENING_PORT = 5555
 PATH_TO_TASKS ="/home/csimohammed/exp/cache-exp/exp/traces/random_subset.csv" 
 PATH_TO_CONFIG_FILE = "/home/csimohammed/exp/cache-exp/configurations/conf.yaml" #"/Users/cherif/Documents/Traveaux/traces-simulator/cache-exp/configurations/conf.yaml"
 BANDWIDTH = 1024
-ENABEL_MIGRATION = True
+ENABEL_MIGRATION = False
 TTL_MIN = 3 #Un ttl qui peut etre mi a jour a chaque fois que la donnée est dans l'infra (on peu le minimiser selon l'infrastructure a partire des données de l'infrastructure)
