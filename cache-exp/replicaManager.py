@@ -101,7 +101,7 @@ class ReplicaManager:
                     
                     for condidate in response["condidates"]: #enlever reversed pour que l'exp soit la meme avec celle de hier
                         self.writeOutput(f"condidate {condidate}\n")
-                        if (task.ds_size*1024) + 65 > self.nodes_infos[task.id_node]["remaining_space"]:
+                        if (task.ds_size*1024) + 1024 > self.nodes_infos[task.id_node]["remaining_space"]:
 
                             r_eviction = self.serachReplicaDistination(task.id_node, condidate, self.data_sizes[condidate])
                             self.writeOutput(f"{r_eviction}\n")
@@ -116,7 +116,7 @@ class ReplicaManager:
                                 
                 elif not ENABEL_MIGRATION and response["eviction"]:
                         for data in reversed(response["condidates"]):
-                            if (task.ds_size*1024) + 65 > self.nodes_infos[task.id_node]["remaining_space"]:
+                            if (task.ds_size*1024) + 1024 > self.nodes_infos[task.id_node]["remaining_space"]:
                                 self.deleteFromCache(task.id_node, node_ip, node_port, data)
                                 self.data[data].updateNbReplica(add=False)
                                
@@ -140,7 +140,7 @@ class ReplicaManager:
                         self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
                         self.nb_data_trasnfert +=1
                         self.writeTransfert(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost},transfert2\n")
-                        print(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost}\n")
+                        #print(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost}\n")
                         
 
                 if not l or not t:
@@ -151,7 +151,7 @@ class ReplicaManager:
                     self.nb_data_trasnfert +=1
                     cost = self.transfertCost(latency, task.ds_size)
                     self.writeTransfert(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost},transfert1\n")
-                    print(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost}\n")
+                    #print(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost}\n")
 
             else:
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},-1,{task.ds_size},{task.id_node},0,NoTransfert\n")
@@ -264,7 +264,7 @@ class ReplicaManager:
             node = None
 
             for id_neighbors in range(self.nb_nodes):
-                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and self.nodes_infos[id_neighbors]["remaining_space"] > ((ds_size*1024) + 65):
+                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and self.nodes_infos[id_neighbors]["remaining_space"] > ((ds_size*1024) + 1024):
                     cost = self.transfertCost(self.graphe_infos[int(id_node)][id_neighbors], ds_size) 
                     if cost <= min_access_and_transfet_time:
                         min_access_and_transfet_time = cost
@@ -288,7 +288,7 @@ class ReplicaManager:
             node = None
 
             for id_neighbors in range(self.nb_nodes):
-                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and space_availabel > ((ds_size*1024) + 65):
+                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and space_availabel > ((ds_size*1024) + 1024):
                     cost = self.transfertCost(self.graphe_infos[int(id_node)][id_neighbors], ds_size) 
                     if cost <= min_access_and_transfet_time:
                         min_access_and_transfet_time = cost
@@ -312,7 +312,7 @@ class ReplicaManager:
             node = None
 
             for id_neighbors in range(self.nb_nodes):
-                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and self.nodes_infos[id_neighbors]["remaining_space"] > ((ds_size*1024) + 65):
+                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and self.nodes_infos[id_neighbors]["remaining_space"] > ((ds_size*1024) + 1024):
                     cost = self.transfertCost(self.graphe_infos[int(id_node)][id_neighbors], ds_size) 
                     if cost <= min_access_and_transfet_time:
                         min_access_and_transfet_time = cost
@@ -330,7 +330,7 @@ class ReplicaManager:
             
             self.writeOutput(f"condidate {condidate}\n")
             space_availabel = self.nodes_infos[task.id_node]["remaining_space"]
-            if (task.ds_size*1024) + 65 > space_availabel:
+            if (task.ds_size*1024) + 1024 > space_availabel:
 
                 r_eviction = self.manageEvictionV1(task.id_node, condidate, self.data_sizes[condidate],space_availabel)
 
@@ -340,7 +340,7 @@ class ReplicaManager:
                     operations.append(("migrate", condidate,id_dst_node))
                     #self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=self.data_sizes[condidate])
                 else:
-                    space_availabel += (task.ds_size*1024) + 65
+                    space_availabel += (task.ds_size*1024) + 1024
                     operations.append("delete", condidate, task.id_node)
                     #self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
         
@@ -440,9 +440,8 @@ class ReplicaManager:
         print(response.text)
         self.writeOutput(f"{response.text}")
         self.nodes_infos[node_id]["remaining_space"] = response.json()["remaining_space"]
-
+        if node_id in self.location_table[id_dataset]: self.location_table[id_dataset].remove(node_id)
         if response.json()['reponse']:
-            if node_id in self.location_table[id_dataset]: self.location_table[id_dataset].remove(node_id)
             
             self.writeOutput(f"{id_dataset} deleted from {node_id}\n")
             self.notifyNode(node_id,node_ip,node_port , id_dataset, add=False)
@@ -497,23 +496,23 @@ class ReplicaManager:
 
         if len(self.isOnNeighbords(id_node, id_ds)) != 0: return {"delete":True, "send":False} #demander au noeud de juste supprimer la données
 
-        else:
-            min_access_and_transfet_time = -1
-            node = None
+        
+        min_access_and_transfet_time = -1
+        node = None
 
-            for id_neighbors in range(self.nb_nodes):
-                space_availabel = self.nodes_infos[id_neighbors]["remaining_space"]
-                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and space_availabel > ((ds_size*1024) + 65):
-                    popularity = 0 if id_ds not in self.nodes_infos[id_neighbors]['popularities'].keys() else self.nodes_infos[id_neighbors]['popularities'][id_ds]
-                    cost =  transefrtWithGain(
-                        b=BANDWIDTH,
-                        l=self.graphe_infos[int(id_node)][id_neighbors],
-                        s=ds_size*1024,
-                        n=popularity, 
-                    )
-                    if cost > min_access_and_transfet_time:
-                        min_access_and_transfet_time = cost
-                        node = id_neighbors
+        for id_neighbors in range(self.nb_nodes):
+            space_availabel = self.nodes_infos[id_neighbors]["remaining_space"]
+            if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and space_availabel > ((ds_size*1024) + 1024):
+                popularity = 0 if id_ds not in self.nodes_infos[id_neighbors]['popularities'].keys() else self.nodes_infos[id_neighbors]['popularities'][id_ds]
+                cost =  transefrtWithGain(
+                    b=BANDWIDTH,
+                    l=self.graphe_infos[int(id_node)][id_neighbors],
+                    s=ds_size,
+                    n=popularity, 
+                )
+                if cost > min_access_and_transfet_time:
+                    min_access_and_transfet_time = cost
+                    node = id_neighbors
 
         return {"delete":True, "send": True if not node is None else False, "id_dst_node":node}
 

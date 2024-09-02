@@ -148,7 +148,7 @@ class Cache:
             r = client.delete(key)
             #ca retourne une exption la 
             if key in self.last_recently_used_item: self.last_recently_used_item.remove(key)
-            if key in self.ids_data:self.ids_data.remove(key)
+            if key in self.ids_data: self.ids_data.remove(key)
             return r
         
         except Exception as e:

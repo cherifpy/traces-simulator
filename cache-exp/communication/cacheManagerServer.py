@@ -74,7 +74,7 @@ class CacheManagerServer:
         #used
         @self.app.route('/execut', methods=['POST'])    
         def process_data():
-            print("recieved task")
+            #print("recieved task")
             self.writeOutput("recieved task")
             data = request.json
 
@@ -297,7 +297,7 @@ class CacheManagerServer:
         @self.app.route('/say', methods=['GET'])
         def say():
             param1 = request.args.get('num', 'Guest')
-            print(param1)
+            #print(param1)
             processed_data = {"response":"good"}
             
             return jsonify(processed_data)
