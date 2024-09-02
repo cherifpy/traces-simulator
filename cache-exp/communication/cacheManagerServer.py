@@ -105,7 +105,7 @@ class CacheManagerServer:
                 data = {
                     "id_node": self.cache.id_node,
                     "storage_space": int(stats["limit_maxbytes"].decode()),
-                    "remaining_space":int(stats["limit_maxbytes"].decode()) - (int(stats["bytes"].decode()) + 10*1014),
+                    "remaining_space":int(stats["limit_maxbytes"].decode()) - (int(stats["bytes"].decode()))- (10*1024),
                     'keys': self.cache.ids_data, #self.cache.getKeys()
                     'popularities':self.nb_requests_processed
                 }
@@ -135,7 +135,7 @@ class CacheManagerServer:
 
             return jsonify({
                 "reponse":b,
-                "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())
+                "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())- (10*1024)
                 })
         
         @self.app.route("/get-infos-for-evection", methods=["GET"])
@@ -144,7 +144,7 @@ class CacheManagerServer:
             stats = self.cache.getStats()[0][1]
             self.cache.memory_used = int(stats["bytes"].decode())
             return jsonify({
-                "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode()),
+                "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())- (10*1024),
                 'last_recently_used': self.cache.last_recently_used_item
             })
 
@@ -181,7 +181,7 @@ class CacheManagerServer:
                 
                 stats = self.cache.getStats()[0][1]
                 self.cache.memory_used = int(stats["bytes"].decode())
-                response = {"sended":t, "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())}
+                response = {"sended":t, "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())- (10*1024)}
             else:
                 response = {"sended":b}
 
@@ -237,7 +237,7 @@ class CacheManagerServer:
             self.cache.memory_used = int(stats["bytes"].decode())
             return jsonify({
                 "reponse":r,
-                "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())
+                "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode()) - (10*1024)
                 })
         
         @self.app.route("/notify",methods=['POST'])
@@ -261,7 +261,7 @@ class CacheManagerServer:
 
             stats = self.cache.getStats()[0][1]
             return jsonify({"added":True,
-                            "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())
+                            "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode()) - (10*1024)
             })
             
         @self.app.route("/operations", methods=['POST'])
@@ -281,7 +281,7 @@ class CacheManagerServer:
             
             stats = self.cache.getStats()[0][1]
             return jsonify({"added":True,
-                            "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())
+                            "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())- (10*1024)
             })
 
         @self.app.route('/shutdown', methods=['POST'])

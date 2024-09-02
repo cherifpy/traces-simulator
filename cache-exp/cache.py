@@ -97,7 +97,7 @@ class Cache:
         self.memory_used = int(stats["bytes"].decode())
         used_memory = stats["bytes"].decode()
         
-        if int(used_memory)+ds_size_bytes > cache_size_bytes:
+        if int(used_memory)+ds_size_bytes > (cache_size_bytes - 10*1024):
             return True, self.last_recently_used_item
         
         return False, None
@@ -124,7 +124,7 @@ class Cache:
             
             stats = self.getStats()[0][1]
             self.memory_used = int(stats["bytes"].decode())
-            response = {"sended":t, "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())}
+            response = {"sended":t, "remaining_space":int(stats["limit_maxbytes"].decode()) - (int(stats["bytes"].decode()))- (10*1024)}
         else:
             response = {"sended":b}
         
