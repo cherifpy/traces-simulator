@@ -487,7 +487,7 @@ class ReplicaManager:
         
         return False
 
-    def serachReplicaDistination(self,id_ds, ds_size,id_node):
+    def serachReplicaDistination(self,id_node,id_ds, ds_size):
         """
             here i will use the TTL to decide if a had to migrate or send 
         """
@@ -502,7 +502,7 @@ class ReplicaManager:
             node = None
 
             for id_neighbors in range(self.nb_nodes):
-
+                space_availabel = self.nodes_infos[id_neighbors]["remaining_space"]
                 if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and space_availabel > ((ds_size*1024) + 65):
                     popularity = 0 if id_ds not in self.nodes_infos[id_neighbors]['popularities'].keys() else self.nodes_infos[id_neighbors]['popularities'][id_ds]
                     cost =  transefrtWithGain(
