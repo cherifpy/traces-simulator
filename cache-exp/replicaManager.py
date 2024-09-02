@@ -16,7 +16,8 @@ from exp.params import  (
 from communication.send_data import recieveObject
 from communication.messages import Task
 from communication.cacheManagerServer import CacheManagerServer
-from communication.replicaManagerAPI import ReplicaManagerAPI
+from communication.replicaManagerServer import ReplicaManagerServer
+from functions.costs import transefrtWithGain
 from classes.data import Data
 from classes.djikstra import dijkstra
 from typing import Optional, Dict
@@ -102,10 +103,10 @@ class ReplicaManager:
                         self.writeOutput(f"condidate {condidate}\n")
                         if (task.ds_size*1024) + 65 > self.nodes_infos[task.id_node]["remaining_space"]:
 
-                            r_eviction = self.manageEviction(task.id_node, condidate, self.data_sizes[condidate])
+                            r_eviction = self.serachReplicaDistination(task.id_node, condidate, self.data_sizes[condidate])
                             self.writeOutput(f"{r_eviction}\n")
                             #TODO erreur sponed with dataset
-                            if r_eviction["send"]:
+                            if r_eviction["send"]: 
                                 id_dst_node = r_eviction["id_dst_node"]
                                 self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=self.data_sizes[condidate])
                                 #if r2 : self.notifyNode(self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , condidate)
@@ -180,6 +181,7 @@ class ReplicaManager:
             self.nodes_infos[key]["storage_space"] = response["storage_space"]
             self.nodes_infos[key]["remaining_space"] = response["remaining_space"]
             self.nodes_infos[key]["keys"] = response['keys']
+            self.nodes_infos[key]["popularities"] = response["popularities"]
 
             for id_ds in self.nodes_infos[key]["keys"]:
                 self.addToLocationTable(key, id_ds)
@@ -236,6 +238,7 @@ class ReplicaManager:
                     'methode':'POST',
                     'path': path,
                     'target':task.id_node, 
+                    'id_ds':task.id_dataset
                 }
              
             url = f'http://{ip_n}:{port_n}/process'
@@ -484,6 +487,36 @@ class ReplicaManager:
         
         return False
 
+    def serachReplicaDistination(self,id_ds, ds_size,id_node):
+        """
+            here i will use the TTL to decide if a had to migrate or send 
+        """
+        data = self.data[id_ds]
+
+        if self.data[id_ds].nb_replica >= TTL_MIN : return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
+
+        if len(self.isOnNeighbords(id_node, id_ds)) != 0: return {"delete":True, "send":False} #demander au noeud de juste supprimer la données
+
+        else:
+            min_access_and_transfet_time = float('inf')
+            node = None
+
+            for id_neighbors in range(self.nb_nodes):
+
+                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and space_availabel > ((ds_size*1024) + 65):
+                    popularity = 0 if id_ds not in self.nodes_infos[id_neighbors]['popularities'].keys() else self.nodes_infos[id_neighbors]['popularities'][id_ds]
+                    cost =  transefrtWithGain(
+                        b=BANDWIDTH,
+                        l=self.graphe_infos[int(id_node)][id_neighbors],
+                        s=ds_size*1024,
+                        n=popularity, 
+                    )
+                    if cost <= min_access_and_transfet_time:
+                        min_access_and_transfet_time = cost
+                        node = id_neighbors
+
+        return {"delete":True, "send": True if not node is None else False, "id_dst_node":node}
+
     def sendDataSetOnThread(self, id_node,ip_node, id_dataset, ds_size, process:Optional[threading.Thread]):
         
         sending_process = threading.Thread(target=self.sendDataSet, args=(id_node,ip_node, id_dataset, ds_size))
@@ -531,7 +564,7 @@ class ReplicaManager:
     
     def startFlaskServer(self):
         pass
-        self.api_server = ReplicaManagerAPI( 
+        self.api_server = ReplicaManagerServer( 
             host=self.ip,
             port=self.port,
             replica_manager=self

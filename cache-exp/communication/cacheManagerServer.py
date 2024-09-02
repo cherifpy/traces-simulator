@@ -56,7 +56,14 @@ class CacheManagerServer:
                     'methode':data_r["methode"],
                     'path': data_r['path'],
                     'target':data_r['target'], 
+                    'id_ds': data_r["id_ds"]
                 }
+
+                if data_r['id_ds'] in self.nb_requests_processed.keys():
+                    self.nb_requests_processed[data_r["id_ds"]] += 1
+                else:
+                    self.nb_requests_processed[data_r["id_ds"]] = 1
+
                 url = f"http://{self.neighbors[new_target]['ip']}:{self.neighbors[new_target]['rep_port']}/process"
                 reponse = requests.post(url, json=data_send)
 
@@ -99,7 +106,8 @@ class CacheManagerServer:
                     "id_node": self.cache.id_node,
                     "storage_space": int(stats["limit_maxbytes"].decode()),
                     "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode()),
-                    'keys': self.cache.ids_data #self.cache.getKeys()
+                    'keys': self.cache.ids_data, #self.cache.getKeys()
+                    'popularities':self.nb_requests_processed
                 }
                 self.writeOutput("here\n")
                 
