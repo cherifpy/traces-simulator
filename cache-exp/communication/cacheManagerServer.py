@@ -105,7 +105,7 @@ class CacheManagerServer:
                 data = {
                     "id_node": self.cache.id_node,
                     "storage_space": int(stats["limit_maxbytes"].decode()),
-                    "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode()),
+                    "remaining_space":int(stats["limit_maxbytes"].decode()) - (int(stats["bytes"].decode()) + 10*1014),
                     'keys': self.cache.ids_data, #self.cache.getKeys()
                     'popularities':self.nb_requests_processed
                 }

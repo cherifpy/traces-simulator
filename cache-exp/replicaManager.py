@@ -99,7 +99,7 @@ class ReplicaManager:
                 if ENABEL_MIGRATION and response["eviction"]:
                     self.writeOutput(f"Eviction demandée {response}\n")
                     
-                    for condidate in response["condidates"]: #enlever reversed pour que l'exp soit la meme avec celle de hier
+                    for condidate in reversed(response["condidates"]): #enlever reversed pour que l'exp soit la meme avec celle de hier
                         self.writeOutput(f"condidate {condidate}\n")
                         if (task.ds_size*1024) + 1024 > self.nodes_infos[task.id_node]["remaining_space"]:
 
@@ -122,8 +122,7 @@ class ReplicaManager:
                                
                 else:
                     pass
-                    #self.nodes_infos[task.id_node]["remaining_space"] -= task.ds_size*1024 + 65
-                    
+                    #self.nodes_infos[task.id_node]["remaining_space"] -= task.ds_size*1024 + 65         
 
                 _,l = self.searchForDataOnNeighbors(id_node=task.id_node, dataset=task.id_dataset)
                 t = False
@@ -241,10 +240,10 @@ class ReplicaManager:
                     'id_ds':task.id_dataset
                 }
              
-            url = f'http://{ip_n}:{port_n}/process'
-            self.writeOutput(url)
-            response = requests.post(url, json=data_to_send)
-            self.writeOutput(response.text)
+            url2 = f'http://{ip_n}:{port_n}/process'
+            self.writeOutput(url2)
+            response = requests.post(url2, json=data_to_send)
+            print(response.text)
             return response.json(), cost
 
     #used a copie
@@ -326,7 +325,7 @@ class ReplicaManager:
         operations = []
         self.writeOutput(f"Eviction demandée\n")  
 
-        for condidate in condidates: #enlever reversed pour que l'exp soit la meme avec celle de hier
+        for condidate in reversed(condidates): #enlever reversed pour que l'exp soit la meme avec celle de hier
             
             self.writeOutput(f"condidate {condidate}\n")
             space_availabel = self.nodes_infos[task.id_node]["remaining_space"]
@@ -419,7 +418,7 @@ class ReplicaManager:
             'port_dst_node':self.nodes_infos[id_dst_node]["node_port"]
         })
         self.writeOutput("migration declanchée\n")
-        self.writeOutput(f"{response.text}")
+        self.writeOutput(f"{response.text}\n")
         if response.json()["sended"]:
             cost = self.transfertCost(self.graphe_infos[int(id_src_node)][int(id_dst_node)],ds_size)
             self.writeTransfert(f"null,{id_dataset},{id_src_node},{ds_size},{id_dst_node},{cost},migration\n")
