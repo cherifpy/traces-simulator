@@ -8,23 +8,23 @@ machines:
   - cluster: paravance
     nodes: 1
     roles: [A]
-    storage: 32
+    storage: 10
   - cluster: paravance
     nodes: 1
     roles: [B]
-    storage: 32
+    storage: 10
   - cluster: paravance
     nodes: 1
     roles: [C]
-    storage: 32
+    storage: 10
   - cluster: paravance
     nodes: 1
     roles: [D]
-    storage: 32
+    storage: 10
   - cluster: paravance
     nodes: 1
     roles: [E]
-    storage: 32
+    storage: 10
   - cluster: paravance
     nodes: 1
     roles: [F]
@@ -32,15 +32,15 @@ machines:
   - cluster: paravance
     nodes: 1
     roles: [G]
-    storage: 32
+    storage: 10
   - cluster: paravance
     nodes: 1
     roles: [H]
-    storage: 32
+    storage: 10
   - cluster: paravance
     nodes: 1
     roles: [I]
-    storage: 32
+    storage: 10
 network_constraints:
   - default_delay: 20ms
     default_rate: 100mbit
