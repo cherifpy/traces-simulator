@@ -498,7 +498,7 @@ class ReplicaManager:
         if len(self.isOnNeighbords(id_node, id_ds)) != 0: return {"delete":True, "send":False} #demander au noeud de juste supprimer la données
 
         else:
-            min_access_and_transfet_time = float('inf')
+            min_access_and_transfet_time = -1
             node = None
 
             for id_neighbors in range(self.nb_nodes):
@@ -511,7 +511,7 @@ class ReplicaManager:
                         s=ds_size*1024,
                         n=popularity, 
                     )
-                    if cost <= min_access_and_transfet_time:
+                    if cost > min_access_and_transfet_time:
                         min_access_and_transfet_time = cost
                         node = id_neighbors
 
