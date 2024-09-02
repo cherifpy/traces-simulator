@@ -100,7 +100,7 @@ class ReplicaManager:
                     self.writeOutput(f"Eviction demandée {response}\n")
                     
                     for condidate in reversed(response["condidates"]): #enlever reversed pour que l'exp soit la meme avec celle de hier
-                        self.writeOutput(f"condidate {condidate}\n")
+                        #self.writeOutput(f"condidate {condidate}\n")
                         if (task.ds_size*1024) + 1024 > self.nodes_infos[task.id_node]["remaining_space"]:
 
                             r_eviction = self.serachReplicaDistination(task.id_node, condidate, self.data_sizes[condidate])
@@ -209,6 +209,9 @@ class ReplicaManager:
         i_min = np.argmin(latency)
 
         return latency[i_min], locations[i_min]
+    
+    
+
     
     #used a copie
     def sendTask(self, task:Task, port, ip="localhost"):
@@ -440,19 +443,21 @@ class ReplicaManager:
         self.writeOutput(f"{response.text}")
         self.nodes_infos[node_id]["remaining_space"] = response.json()["remaining_space"]
         if node_id in self.location_table[id_dataset]: self.location_table[id_dataset].remove(node_id)
+        self.deleteFromLocationTable(node_id, id_dataset)
+        self.notifyNode(node_id,node_ip,node_port , id_dataset, add=False)
         if response.json()['reponse']:
             
             self.writeOutput(f"{id_dataset} deleted from {node_id}\n")
-            self.notifyNode(node_id,node_ip,node_port , id_dataset, add=False)
+            #self.notifyNode(node_id,node_ip,node_port , id_dataset, add=False)
 
         return response.json()
 
-    def notifyNode(self, id_node,ip_node, port_node, id_dataset, add=True):
+    def notifyNode(self, id_node,ip_node, port_node, id_dataset, add):
         url = f'http://{ip_node}:{port_node}/notify'
         
         data = { 
             "id_dataset": id_dataset,
-            "add":add
+            "add":1 if add else 2
         }
         
         response = requests.post(url, json=data)
@@ -559,6 +564,8 @@ class ReplicaManager:
     
     def getDataSetLocation(self,id_ds):
         return self.location_table[id_ds] if id_ds in self.location_table.keys() else []
+
+    
     
     def startFlaskServer(self):
         pass
@@ -582,6 +589,12 @@ class ReplicaManager:
         
         return False
     
+    def deleteFromLocationTable(self,id_node, id_dataset):
+        if id_dataset in self.location_table.keys():
+            if id_node in self.location_table[id_dataset]:
+                self.location_table[id_dataset].remove(id_node)
+        return True
+
     def isNeighbors(self, id_node):
         if self.graphe_infos[self.id][int(id_node)] > 0:
             return True

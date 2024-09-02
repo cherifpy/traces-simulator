@@ -31,7 +31,7 @@ class Cache:
         
         with open(file_name, "rb") as p:
             content = p.read()
-         # Données massives de 5 MB
+        
         servers = [f"{ip_dst}:{MEMCACHED_LISTENING_PORT}"]  # Adresse du serveur Memcached
         
         #TODO Check if the data is sended and ask the client to access id to set the LRU
