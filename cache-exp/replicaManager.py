@@ -10,7 +10,8 @@ from exp.params import  (
     MEMCACHED_LISTENING_PORT,
     BANDWIDTH,
     ENABEL_MIGRATION,
-    TTL_MIN
+    TTL_MIN,
+    EXECUTION_LOCAL
 )
 
 from communication.send_data import recieveObject
@@ -26,7 +27,7 @@ import pandas as pd
 import numpy as np
 import time
 import requests
-import pylibmc
+if not EXECUTION_LOCAL: import pylibmc
 import os
 import threading
 
@@ -359,6 +360,9 @@ class ReplicaManager:
 
         
     def sendDataSet(self,id_node, ip_node, id_ds,ds_size):
+        if EXECUTION_LOCAL:
+            return True
+        
         if self.local_execution:
             return True
         file_name = '/tmp/tmp.bin'
@@ -442,7 +446,7 @@ class ReplicaManager:
         print(response.text)
         self.writeOutput(f"{response.text}")
         self.nodes_infos[node_id]["remaining_space"] = response.json()["remaining_space"]
-        if node_id in self.location_table[id_dataset]: self.location_table[id_dataset].remove(node_id)
+        while node_id in self.location_table[id_dataset]: self.location_table[id_dataset].remove(node_id)
         self.deleteFromLocationTable(node_id, id_dataset)
         self.notifyNode(node_id,node_ip,node_port , id_dataset, add=False)
         if response.json()['reponse']:
@@ -591,7 +595,7 @@ class ReplicaManager:
     
     def deleteFromLocationTable(self,id_node, id_dataset):
         if id_dataset in self.location_table.keys():
-            if id_node in self.location_table[id_dataset]:
+            while id_node in self.location_table[id_dataset]:
                 self.location_table[id_dataset].remove(id_node)
         return True
 

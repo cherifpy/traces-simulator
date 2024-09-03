@@ -4,9 +4,6 @@ from multiprocessing import process
 import sys
 import os
 import threading
-from urllib import response
-
-from pytest import param
 import requests
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from flask import Flask, request, jsonify
@@ -15,6 +12,7 @@ from queue import Queue
 import multiprocessing
 import importlib.util
 from cache import Cache
+from exp.params import EXECUTION_LOCAL
 
 class CacheManagerServer:
     def __init__(self,storage_space, id_node,neighbors:dict, host='localhost', port=8888):
@@ -91,6 +89,7 @@ class CacheManagerServer:
 
                 #TODO:this function have a probleme
                 self.cache.addData(task.id_dataset, task.ds_size)
+                self.cache.memory_used += (task.ds_size*1024 + 100)
 
             self.writeOutput(f"task recieved {str(task)} asking th controller to send the data:{not b1}\n")
 
@@ -170,7 +169,7 @@ class CacheManagerServer:
             ds_size = request.args.get("ds_size")
             port_dst = request.args.get("port_dst_node")
 
-            b = self.cache.deleteFromCache(id_ds)
+            b = self.cache.deleteFromCache(id_ds, ds_size=ds_size)
             self.writeOutput(b)
             if b:
                 t = self.cache.sendDataSetTo(
@@ -231,7 +230,7 @@ class CacheManagerServer:
         def delete_data():
             id_dataset = request.args.get("id_dataset")
             
-            r = self.cache.deleteFromCache(id_dataset)
+            r = self.cache.deleteFromCache(id_dataset,ds_size=100)
 
             stats = self.cache.getStats()[0][1]
             self.cache.memory_used = int(stats["bytes"].decode())
@@ -246,17 +245,17 @@ class CacheManagerServer:
             id_ds = data["id_dataset"]
 
             if int(data["add"]) == 1:
-                if id_ds in self.cache.last_recently_used_item:
+                while id_ds in self.cache.last_recently_used_item:
                     self.cache.last_recently_used_item.remove(id_ds)
-                    self.cache.last_recently_used_item.insert(0,id_ds)
-                else:
-                    self.cache.last_recently_used_item.insert(0,id_ds)
+                self.cache.last_recently_used_item.insert(0,id_ds)
+                
                     
                 if id_ds not in self.cache.ids_data: self.cache.ids_data.append(id_ds)
                 self.writeOutput(f"{id_ds} added\n")
+                
             else:
-                if id_ds in self.cache.last_recently_used_item: self.cache.last_recently_used_item.remove(id_ds)
-                if id_ds in self.cache.ids_data:self.cache.ids_data.remove(id_ds)
+                while id_ds in self.cache.last_recently_used_item: self.cache.last_recently_used_item.remove(id_ds)
+                while id_ds in self.cache.ids_data:self.cache.ids_data.remove(id_ds)
                 self.writeOutput(f"{id_ds} removed\n")
 
             stats = self.cache.getStats()[0][1]

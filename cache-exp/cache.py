@@ -1,7 +1,7 @@
 import time
 import numpy as np
-import pylibmc
-from exp.params import MEMCACHED_LISTENING_PORT
+if not EXECUTION_LOCAL: import pylibmc
+from exp.params import MEMCACHED_LISTENING_PORT, EXECUTION_LOCAL
 import os
 import copy 
 from pymemcache.client.base import Client
@@ -23,7 +23,9 @@ class Cache:
         self.last_recently_used_item = []
 
     def sendDataSetTo(self, ip_dst, id_dataset,size_ds):
-        
+        if EXECUTION_LOCAL:
+            return True
+
         file_name = '/tmp/tmp.bin'
         file_size_octet = int(size_ds)*1024
         with open(file_name, "wb") as p:
@@ -49,16 +51,16 @@ class Cache:
     
     #TODO en cas de modification de politique d'eviction
     def accessData(self, id_dataset):
-        value = self.client.get(id_dataset)
+        value = self.client.get(id_dataset) if not EXECUTION_LOCAL else True
         
         if not value and id_dataset in self.ids_data:
-            self.ids_data.remove(id_dataset)
-            if id_dataset in self.last_recently_used_item: self.last_recently_used_item.remove(id_dataset)
+            while id_dataset in self.ids_data: self.ids_data.remove(id_dataset)
+            while id_dataset in self.last_recently_used_item: self.last_recently_used_item.remove(id_dataset)
             return False
         
         elif value:
             if id_dataset not in self.ids_data: self.ids_data.append(id_dataset)
-            if id_dataset in self.last_recently_used_item: self.last_recently_used_item.remove(id_dataset)
+            while id_dataset in self.last_recently_used_item: self.last_recently_used_item.remove(id_dataset)
             self.last_recently_used_item.append(id_dataset)
         return True
     
@@ -84,7 +86,8 @@ class Cache:
         return self.ids_data
 
     def getStats(self, verbos=False):
-
+        if EXECUTION_LOCAL:
+            return [("0", {"bytes":f'{self.memory_used}'.encode(),"limit_maxbytes":f'{self.cache_size}'.encode()})]
         stats = pylibmc.Client([f'0.0.0.0:{MEMCACHED_LISTENING_PORT}'], binary=True, behaviors={"tcp_nodelay": True}).get_stats()
         return stats
     
@@ -141,14 +144,18 @@ class Cache:
             return None
 
     #TODO a revoire le return true dans except
-    def deleteFromCache(self, key):
+    def deleteFromCache(self, key,ds_size=0):
         """Deletes a value from Memcached."""
+        if EXECUTION_LOCAL:
+            self.memory_used-=(ds_size*1024+100)
+            return True
         try:
+            
             client = pylibmc.Client([f'0.0.0.0:{MEMCACHED_LISTENING_PORT}'], binary=True, behaviors={"tcp_nodelay": True})
             r = client.delete(key)
             #ca retourne une exption la 
-            if key in self.last_recently_used_item: self.last_recently_used_item.remove(key)
-            if key in self.ids_data: self.ids_data.remove(key)
+            while key in self.last_recently_used_item: self.last_recently_used_item.remove(key)
+            while key in self.ids_data: self.ids_data.remove(key)
             return r
         
         except Exception as e:
