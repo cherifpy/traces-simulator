@@ -134,7 +134,7 @@ class ReplicaManager:
                     if t: 
                         self.data[task.id_dataset].updateNbReplica(add=True)
                         cost = self.transfertCost(latency, task.ds_size)
-                        self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
+                        #self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
                         ##self.addDataToTable(task.id_node, task.id_dataset)
                         
                         self.nb_data_trasnfert +=1
@@ -146,7 +146,7 @@ class ReplicaManager:
                     #if with eviction change here add the condition to send the data somewhere
                     self.sendDataSet(id_node=task.id_node,ip_node=node_ip, id_ds=task.id_dataset, ds_size=task.ds_size)
                     self.data[task.id_dataset].updateNbReplica(add=True)
-                    self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
+                    #self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
                     #self.addDataToTable(task.id_node, task.id_dataset)
                     self.nb_data_trasnfert +=1
                     cost = self.transfertCost(latency, task.ds_size)
@@ -239,9 +239,10 @@ class ReplicaManager:
 
         for index, row in traces.iterrows():
             b, self.nodes_infos = self.collecteData()
+            
             task_infos = {'time' : row["time_compute (s)"],  'application_type': row["application_type"]}
             task = Task(id_task=row["id_task"],id_node= row["node_id"],infos= task_infos,id_dataset= row["dataset"],ds_size=row["dataset_size"])
-
+            print(f"node:{task.id_node}\n")
             self.data_sizes[task.id_dataset] = task.ds_size
             
             if task.id_dataset not in self.data.keys(): 
@@ -250,7 +251,7 @@ class ReplicaManager:
             node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
             node_port = self.nodes_infos[int(task.id_node)]["node_port"]
             response, latency = self.sendTask(task,node_port, node_ip)
-
+            print(f"{response}\n")
             if response["sendData"]:
                 if ENABEL_MIGRATION and response["eviction"]:
                     for condidate in reversed(self.nodes_infos[task.id_node]["keys"]): #enlever reversed pour que l'exp soit la meme avec celle de hier
@@ -419,7 +420,7 @@ class ReplicaManager:
             url2 = f'http://{ip_n}:{port_n}/process'
             ##self.writeOutput(url2)
             response = requests.post(url2, json=data_to_send)
-            print(response.text)
+            #print(response.text)
             return response.json(), cost
 
     #used a copie
@@ -586,7 +587,7 @@ class ReplicaManager:
         print(response.text)
         ##self.writeOutput(f"{response.text}")
         self.nodes_infos[node_id]["remaining_space"] = response.json()["remaining_space"]
-        while node_id in self.location_table[id_dataset]: self.location_table[id_dataset].remove(node_id)
+        #while node_id in self.location_table[id_dataset]: self.location_table[id_dataset].remove(node_id)
         #self.deleteFromLocationTable(node_id, id_dataset)
         self.notifyNode(node_id,node_ip,node_port , id_dataset, add=False)
         if response.json()['reponse']:
