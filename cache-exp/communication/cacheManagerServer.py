@@ -105,7 +105,7 @@ class CacheManagerServer:
                     "id_node": self.cache.id_node,
                     "storage_space": int(stats["limit_maxbytes"].decode()),
                     "remaining_space":int(stats["limit_maxbytes"].decode()) - (int(stats["bytes"].decode()))- (10*1024),
-                    'keys': self.cache.last_recently_used_item, #self.cache.getKeys()
+                    #'keys': self.cache.last_recently_used_item, #self.cache.getKeys()
                     'popularities':self.nb_requests_processed
                 }
                 self.writeOutput("here\n")
@@ -117,7 +117,7 @@ class CacheManagerServer:
                     "id_node": self.cache.id_node,
                     "storage_space": self.cache.cache_size,
                     "remaining_space":self.cache.cache_size - self.cache.memory_used,
-                    'keys': self.cache.ids_data #self.cache.getKeys()
+                    #'keys': self.cache.ids_data #self.cache.getKeys()
                 }
                 self.writeOutput("not here\n")
             self.writeOutput(f"{data}")
