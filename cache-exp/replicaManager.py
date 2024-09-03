@@ -214,8 +214,12 @@ class ReplicaManager:
                 eviction = self.sendDataToTask(task=task, latency=latency)
                 if eviction and ENABEL_MIGRATION:
                     i = 0
-                    condidates = copy.deepcopy(reversed(self.nodes_infos[task.id_node]["keys"]))
-                    while eviction:
+                    if 'keys' in self.nodes_infos[task.id_node].keys():
+                        condidates = copy.deepcopy(reversed(self.nodes_infos[task.id_node]["keys"]))
+                    else:
+                        condidates = []
+
+                    while not eviction:
                         condidate = condidates[i] 
 
                         r_eviction = self.serachReplicaDistination(task.id_node, condidate, self.data_sizes[condidate])
@@ -300,7 +304,7 @@ class ReplicaManager:
         node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
         node_port = self.nodes_infos[int(task.id_node)]["node_port"]
         _,l = self.searchForDataOnNeighbors(id_node=task.id_node, dataset=task.id_dataset)
-        id_src_node = None
+        
         t = False
         if l:
             #TODO verifier ca je dois gere l'eviction la
