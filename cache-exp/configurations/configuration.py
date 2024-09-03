@@ -86,6 +86,7 @@ class Configuration:
                 )
         return True
     
+    
         for i,machine in enumerate(self.machines):
             print("storage restriction using memcached for ", machine["roles"])
             with self.enoslib.actions(roles=self.roles[machine["roles"][0]]) as p:
@@ -112,6 +113,20 @@ class Configuration:
                 
 
                 #
+    def deployRedis(self, port=5555):
+        if self.execution_local:
+            return False
+
+        print("storage restriction using memcached for All nodes ")
+        with self.enoslib.actions(roles=self.roles) as p: 
+            p.apt(name=['redis-server'],state="present",)
+            p.command(
+                    task_name="Start redis with a pecifique config",
+                    cmd=f"redis-server --bind 0.0.0.0 --protected-mode no --maxmemory {50}mb --port {self.memcached_listening_por}", 
+                    background=True
+                )
+        return True
+    
     def setNetworkConstraintes(self):
         if self.execution_local:
             return None

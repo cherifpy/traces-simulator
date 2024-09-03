@@ -26,7 +26,7 @@ class CacheManagerServer:
         self.nb_requests_processed = {}
         
         
-        self.client = self.cache.connectToMemcache()
+        self.client = self.cache.connectToRedis()
         if self.client != None:
             self.writeOutput("connected to memecached\n")
         else:
@@ -88,8 +88,8 @@ class CacheManagerServer:
                 processed_data = {"sendData":True, "eviction":b2, "condidates":condidates}
 
                 #TODO:this function have a probleme
-                self.cache.addData(task.id_dataset, task.ds_size)
-                self.cache.memory_used += (task.ds_size*1024)
+                #self.cache.addData(task.id_dataset, task.ds_size)
+                #self.cache.memory_used += (task.ds_size*1024)
 
             self.writeOutput(f"task recieved {str(task)} asking th controller to send the data:{not b1}\n")
 
@@ -103,21 +103,31 @@ class CacheManagerServer:
             if stats:
                 data = {
                     "id_node": self.cache.id_node,
-                    "storage_space": int(stats["limit_maxbytes"].decode()),
-                    "remaining_space":int(stats["limit_maxbytes"].decode()) - (int(stats["bytes"].decode())),
-                    #'keys': self.cache.last_recently_used_item, #self.cache.getKeys()
+                    "storage_space": int(stats["maxmemory"]),
+                    "remaining_space":int(stats["maxmemory"]) - (int(stats["used_memory"].decode())),
+                    'keys': self.cache.getKeys(),
                     'popularities':self.nb_requests_processed
                 }
+
+                """
+                    data = {
+                    "id_node": self.cache.id_node,
+                    "storage_space": int(stats["limit_maxbytes"].decode()),
+                    "remaining_space":int(stats["limit_maxbytes"].decode()) - (int(stats["bytes"].decode())),
+                    'keys': self.cache.getKeys(),
+                    'popularities':self.nb_requests_processed
+                }
+                """
                 self.writeOutput("here\n")
                 
-                self.cache.cache_size = int(stats["limit_maxbytes"].decode())
-                self.cache.memory_used  = int(stats["bytes"].decode())
+                self.cache.cache_size = int(stats["maxmemory"])
+                self.cache.memory_used  = int(stats["used_memory"])
             else:
                 data = {
                     "id_node": self.cache.id_node,
                     "storage_space": self.cache.cache_size,
                     "remaining_space":self.cache.cache_size - self.cache.memory_used,
-                    #'keys': self.cache.ids_data #self.cache.getKeys()
+                    'keys': self.cache.ids_data #self.cache.getKeys()
                 }
                 self.writeOutput("not here\n")
             self.writeOutput(f"{data}")
@@ -128,22 +138,22 @@ class CacheManagerServer:
         @self.app.route("/access-data", methods=['GET'])
         def ckeckData():
             stats = self.cache.getStats()[0][1]
-            self.cache.memory_used = int(stats["bytes"].decode())
+            self.cache.memory_used = int(stats["used_memory"])
             id_ds = request.args.get("id_dataset")
             b = self.cache.accessData(id_ds)
 
             return jsonify({
                 "reponse":b,
-                "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())
+                "remaining_space":int(stats["maxmemory"]) - int(stats["used_memory"])
                 })
         
         @self.app.route("/get-infos-for-evection", methods=["GET"])
         def infoForEvection():
 
             stats = self.cache.getStats()[0][1]
-            self.cache.memory_used = int(stats["bytes"].decode())
+            self.cache.memory_used = int(stats["used_memory"])
             return jsonify({
-                "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode()),
+                "remaining_space":int(stats["maxmemory"]) - int(stats["used_memory"]),
                 'last_recently_used': self.cache.last_recently_used_item
             })
 
@@ -179,8 +189,8 @@ class CacheManagerServer:
                     )
                 
                 stats = self.cache.getStats()[0][1]
-                self.cache.memory_used = int(stats["bytes"].decode())
-                response = {"sended":t, "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())}
+                self.cache.memory_used = int(stats["used_memory"])
+                response = {"sended":t, "remaining_space":int(stats["maxmemory"]) - int(stats["used_memory"])}
             else:
                 response = {"sended":b}
 
@@ -233,10 +243,10 @@ class CacheManagerServer:
             r = self.cache.deleteFromCache(id_dataset,ds_size=100)
 
             stats = self.cache.getStats()[0][1]
-            self.cache.memory_used = int(stats["bytes"].decode())
+            self.cache.memory_used = int(stats["used_memory"])
             return jsonify({
                 "reponse":r,
-                "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())
+                "remaining_space":int(stats["maxmemory"]) - int(stats["used_memory"])
                 })
         
         @self.app.route("/notify",methods=['POST'])
@@ -244,7 +254,7 @@ class CacheManagerServer:
             data = request.json
             id_ds = data["id_dataset"]
 
-            if int(data["add"]) == 1:
+            """if int(data["add"]) == 1:
                 while id_ds in self.cache.last_recently_used_item:
                     self.cache.last_recently_used_item.remove(id_ds)
                 self.cache.last_recently_used_item.insert(0,id_ds)
@@ -256,11 +266,11 @@ class CacheManagerServer:
             else:
                 while id_ds in self.cache.last_recently_used_item: self.cache.last_recently_used_item.remove(id_ds)
                 while id_ds in self.cache.ids_data:self.cache.ids_data.remove(id_ds)
-                self.writeOutput(f"{id_ds} removed\n")
-
+                self.writeOutput(f"{id_ds} removed\n")"""
+            self.cache.ids_data = self.cache.getKeys()
             stats = self.cache.getStats()[0][1]
             return jsonify({"added":True,
-                            "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())
+                            "remaining_space":int(stats["maxmemory"]) - int(stats["used_memory"])
             })
             
         @self.app.route("/operations", methods=['POST'])
@@ -280,7 +290,7 @@ class CacheManagerServer:
             
             stats = self.cache.getStats()[0][1]
             return jsonify({"added":True,
-                            "remaining_space":int(stats["limit_maxbytes"].decode()) - int(stats["bytes"].decode())
+                            "remaining_space":int(stats["maxmemory"]) - int(stats["used_memory"])
             })
 
         @self.app.route('/shutdown', methods=['POST'])

@@ -132,7 +132,7 @@ if True:
                 )
                 p.command(
                     task_name = "installing python libs",
-                    cmd = "pip3 install pandas pylibmc numpy sockets PyYAML Flask pymemcache"
+                    cmd = "pip3 install pandas pylibmc numpy sockets PyYAML Flask pymemcache redis"
                 )
             
             
