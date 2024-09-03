@@ -71,13 +71,13 @@ class ReplicaManager:
         sum_cost = 0
         process = None
         if not self.nodes_infos:
-            self.writeOutput("no infos \n")
+            #self.writeOutput("no infos \n")
             return False
         
         #process = self.startThread()
         traces = pd.read_csv(self.traces_path)
         
-        self.writeOutput(f"{str(self.nodes_infos)}\n")
+        #self.writeOutput(f"{str(self.nodes_infos)}\n")
 
         
         for index, row in traces.iterrows():
@@ -97,28 +97,34 @@ class ReplicaManager:
             if response["sendData"]:
                 #is_eviction = True if self.nodes_infos[task.id_node]["remaining_space"] < (task.ds_size*1024*1024+65) else False
                 if ENABEL_MIGRATION and response["eviction"]:
-                    self.writeOutput(f"Eviction demandée {response}\n")
+                    #self.writeOutput(f"Eviction demandée {response}\n")
                     
-                    for condidate in reversed(self.nodes_infos["keys"]): #enlever reversed pour que l'exp soit la meme avec celle de hier
-                        #self.writeOutput(f"condidate {condidate}\n")
+                    for condidate in reversed(self.nodes_infos[task.id_node]["keys"]): #enlever reversed pour que l'exp soit la meme avec celle de hier
+                        ##self.writeOutput(f"condidate {condidate}\n")
                         if (task.ds_size*1024) + 1024 > self.nodes_infos[task.id_node]["remaining_space"]:
 
                             r_eviction = self.serachReplicaDistination(task.id_node, condidate, self.data_sizes[condidate])
-                            self.writeOutput(f"{r_eviction}\n")
+                            #self.writeOutput(f"{r_eviction}\n")
                             #TODO erreur sponed with dataset
                             if r_eviction["send"]: 
                                 id_dst_node = r_eviction["id_dst_node"]
                                 self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=self.data_sizes[condidate])
+                                self.writeOutput(f"delete {condidate} from {task.id_node}\n")
+                                self.writeOutput(f"{self.nodes_infos[task.id_node]['keys']}\n")
                                 self.deleteDataFromTable(task.id_node, condidate)
+                                self.writeOutput(f"{self.nodes_infos[task.id_node]['keys']}\n")
                                 self.addDataToTable(id_dst_node, condidate)
                                 #if r2 : self.notifyNode(self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , condidate)
                             else:
+                                self.writeOutput(f"delete {condidate} from {task.id_node}\n")
+                                self.writeOutput(f"{self.nodes_infos[task.id_node]['keys']}\n")
                                 self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
+                                self.writeOutput(f"{self.nodes_infos[task.id_node]['keys']}\n")
                                 self.deleteDataFromTable(task.id_node, condidate)
                                 self.data[condidate].updateNbReplica(add=False)
                                 
                 elif not ENABEL_MIGRATION and response["eviction"]:
-                        for data in reversed(self.nodes_infos["keys"]):
+                        for data in reversed(self.nodes_infos[task.id_node]["keys"]):
                             if (task.ds_size*1024) + 1024 > self.nodes_infos[task.id_node]["remaining_space"]:
                                 self.deleteFromCache(task.id_node, node_ip, node_port, data)
                                 self.deleteDataFromTable(task.id_node, data)
@@ -171,7 +177,7 @@ class ReplicaManager:
         #process.terminate()
         #process.join()
         self.writeOutput(f"nb_transfert {self.nb_data_trasnfert}\n")
-        self.writeOutput(f"nb transfert avoided: {self.nb_data_trasnfert_avoided}")
+        #self.writeOutput(f"nb transfert avoided: {self.nb_data_trasnfert_avoided}")
         print(sum_cost)
         return True
     
@@ -192,8 +198,8 @@ class ReplicaManager:
             for id_ds in self.nodes_infos[key]["keys"]:
                 self.addToLocationTable(key, id_ds)
             #print(f"received data from {key}, {self.nodes_infos[key]}")
-        self.writeOutput(f"{self.nodes_infos}")
-        self.writeOutput("finishing collecting data from actors\n")
+        ##self.writeOutput(f"{self.nodes_infos}")
+        ##self.writeOutput("finishing collecting data from actors\n")
         
         return True, self.nodes_infos
     
@@ -228,14 +234,14 @@ class ReplicaManager:
         if self.isNeighbors(task.id_node):
             
             response = requests.post(url, json=data)
-            self.writeOutput(f"task {task.id_task} sended to {task.id_node}\n")
+            ##self.writeOutput(f"task {task.id_task} sended to {task.id_node}\n")
 
             return response.json(), self.graphe_infos[self.id][task.id_node]
         
         else:
             path, cost =  dijkstra(self.graphe_infos, self.id, task.id_node)
             
-            self.writeOutput(f'{path}')
+            ##self.writeOutput(f'{path}')
             n = path.pop(0)
             next_dst = path.pop(0)
             ip_n = self.nodes_infos[int(next_dst)]["node_ip"]
@@ -251,7 +257,7 @@ class ReplicaManager:
                 }
              
             url2 = f'http://{ip_n}:{port_n}/process'
-            self.writeOutput(url2)
+            ##self.writeOutput(url2)
             response = requests.post(url2, json=data_to_send)
             print(response.text)
             return response.json(), cost
@@ -333,17 +339,17 @@ class ReplicaManager:
     def migrate(self, task:Task, condidates):
         
         operations = []
-        self.writeOutput(f"Eviction demandée\n")  
+        ##self.writeOutput(f"Eviction demandée\n")  
 
         for condidate in reversed(condidates): #enlever reversed pour que l'exp soit la meme avec celle de hier
             
-            self.writeOutput(f"condidate {condidate}\n")
+            ##self.writeOutput(f"condidate {condidate}\n")
             space_availabel = self.nodes_infos[task.id_node]["remaining_space"]
             if (task.ds_size*1024) + 1024 > space_availabel:
 
                 r_eviction = self.manageEvictionV1(task.id_node, condidate, self.data_sizes[condidate],space_availabel)
 
-                self.writeOutput(f"{r_eviction}\n")
+                ##self.writeOutput(f"{r_eviction}\n")
                 if r_eviction["send"]:
                     id_dst_node = r_eviction["id_dst_node"]
                     operations.append(("migrate", condidate,id_dst_node))
@@ -430,11 +436,11 @@ class ReplicaManager:
             'ip_dst_node': self.nodes_infos[id_dst_node]["node_ip"],
             'port_dst_node':self.nodes_infos[id_dst_node]["node_port"]
         })
-        self.writeOutput("migration declanchée\n")
-        self.writeOutput(f"{response.text}\n")
+        ##self.writeOutput("migration declanchée\n")
+        ##self.writeOutput(f"{response.text}\n")
         if response.json()["sended"]:
             cost = self.transfertCost(self.graphe_infos[int(id_src_node)][int(id_dst_node)],ds_size)
-            self.writeTransfert(f"null,{id_dataset},{id_src_node},{ds_size},{id_dst_node},{cost},migration\n")
+            #self.writeTransfert(f"null,{id_dataset},{id_src_node},{ds_size},{id_dst_node},{cost},migration\n")
             self.nodes_infos[id_src_node]['remaining_space'] = response.json()['remaining_space']
             self.location_table[id_dataset].append(id_dst_node)
             self.location_table[id_dataset].remove(id_src_node)
@@ -450,7 +456,7 @@ class ReplicaManager:
             'id_dataset':id_dataset,
         })
         print(response.text)
-        self.writeOutput(f"{response.text}")
+        ##self.writeOutput(f"{response.text}")
         self.nodes_infos[node_id]["remaining_space"] = response.json()["remaining_space"]
         while node_id in self.location_table[id_dataset]: self.location_table[id_dataset].remove(node_id)
         self.deleteFromLocationTable(node_id, id_dataset)
@@ -604,19 +610,19 @@ class ReplicaManager:
             self.nodes_infos[id_node]['keys'] = []
         if id_dataset not in self.nodes_infos[id_node]['keys']:
             self.nodes_infos[id_node]['keys'].append(id_dataset)
-            self.writeOutput(f'{self.nodes_infos[id_node]['keys']}')
+            #self.writeOutput(f'{self.nodes_infos[id_node]['keys']}')
             return True
         else:
             self.nodes_infos[id_node]['keys'].remove(id_dataset)
             self.nodes_infos[id_node]['keys'].append(id_dataset)
-            self.writeOutput(f'{self.nodes_infos[id_node]['keys']}')
+            #self.writeOutput(f'{self.nodes_infos[id_node]['keys']}')
             return True
         return False
 
     def deleteDataFromTable(self, id_node, id_dataset):
         if id_dataset in self.nodes_infos[id_node]['keys']:
             self.nodes_infos[id_node]['keys'].remove(id_dataset)
-            self.writeOutput(f'{self.nodes_infos[id_node]['keys']}')
+            #self.writeOutput(f'{self.nodes_infos[id_node]['keys']}')
             return True
         
         
