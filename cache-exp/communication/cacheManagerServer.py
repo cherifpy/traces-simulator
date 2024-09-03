@@ -89,7 +89,7 @@ class CacheManagerServer:
 
                 #TODO:this function have a probleme
                 self.cache.addData(task.id_dataset, task.ds_size)
-                self.cache.memory_used += (task.ds_size*1024 + 100)
+                self.cache.memory_used += (task.ds_size*1024)
 
             self.writeOutput(f"task recieved {str(task)} asking th controller to send the data:{not b1}\n")
 

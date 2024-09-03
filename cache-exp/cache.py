@@ -93,14 +93,14 @@ class Cache:
     
     def predictEviction(self,ds_size):
 
-        ds_size_bytes = (int(ds_size)*1024)+65
+        ds_size_bytes = ((int(ds_size)+100)*1024)
         
         cache_size_bytes = self.cache_size
         stats = self.getStats()[0][1]
         self.memory_used = int(stats["bytes"].decode())
         used_memory = stats["bytes"].decode()
         
-        if int(used_memory)+ds_size_bytes > (cache_size_bytes - 10*1024):
+        if int(used_memory)+ds_size_bytes > (cache_size_bytes):
             return True, self.last_recently_used_item
         
         return False, None
