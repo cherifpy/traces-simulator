@@ -109,18 +109,18 @@ class ReplicaManager:
                             if r_eviction["send"]: 
                                 id_dst_node = r_eviction["id_dst_node"]
                                 self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=self.data_sizes[condidate])
-                                self.writeOutput(f"delete {condidate} from {task.id_node}\n")
+                                self.writeOutput(f"delete {condidate} from {task.id_node} la\n")
                                 self.writeOutput(f"{self.nodes_infos[task.id_node]['keys']}\n")
                                 self.deleteDataFromTable(task.id_node, condidate)
                                 self.writeOutput(f"{self.nodes_infos[task.id_node]['keys']}\n")
                                 self.addDataToTable(id_dst_node, condidate)
                                 #if r2 : self.notifyNode(self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , condidate)
                             else:
-                                self.writeOutput(f"delete {condidate} from {task.id_node}\n")
+                                self.writeOutput(f"delete {condidate} from {task.id_node} ici\n")
                                 self.writeOutput(f"{self.nodes_infos[task.id_node]['keys']}\n")
                                 self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
-                                self.writeOutput(f"{self.nodes_infos[task.id_node]['keys']}\n")
                                 self.deleteDataFromTable(task.id_node, condidate)
+                                self.writeOutput(f"{self.nodes_infos[task.id_node]['keys']}\n")
                                 self.data[condidate].updateNbReplica(add=False)
                                 
                 elif not ENABEL_MIGRATION and response["eviction"]:
