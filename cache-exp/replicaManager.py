@@ -126,7 +126,7 @@ class ReplicaManager:
                 elif not ENABEL_MIGRATION and response["eviction"]:
                         for data in reversed(self.nodes_infos[task.id_node]["keys"]):
                             if (task.ds_size*1024) + 1024 > self.nodes_infos[task.id_node]["remaining_space"]:
-                                self.writeOutput(f"delete {condidate} from {task.id_node}\n")
+                                self.writeOutput(f"delete {data} from {task.id_node}\n")
                                 self.writeOutput(f"{self.nodes_infos[task.id_node]['keys']}\n")
                                 self.deleteFromCache(task.id_node, node_ip, node_port, data)
                                 self.deleteDataFromTable(task.id_node, data)

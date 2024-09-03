@@ -6,5 +6,5 @@ EXECUTION_LOCAL = False
 PATH_TO_TASKS = "/Users/cherif/Documents/Traveaux/traces-simulator/cache-exp/exp/traces/random_subset2.csv" if EXECUTION_LOCAL else "/home/csimohammed/exp/cache-exp/exp/traces/random_subset.csv" 
 PATH_TO_CONFIG_FILE = "/Users/cherif/Documents/Traveaux/traces-simulator/cache-exp/configurations/conf.yaml" if EXECUTION_LOCAL else "/home/csimohammed/exp/cache-exp/configurations/conf.yaml" #
 BANDWIDTH = 1024
-ENABEL_MIGRATION = False
+ENABEL_MIGRATION = True
 TTL_MIN = 3 #Un ttl qui peut etre mi a jour a chaque fois que la donnée est dans l'infra (on peu le minimiser selon l'infrastructure a partire des données de l'infrastructure)*
