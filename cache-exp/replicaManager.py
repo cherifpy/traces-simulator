@@ -1,7 +1,11 @@
 #here i have to manage replica
+import copy
+from gc import enable
 from math import cos
 from platform import node
 from urllib import response
+
+from jinja2 import pass_environment
 from exp.params import  (
     NB_NODES, 
     SERVER_REPLICA_MANAGER_PORT, 
@@ -184,6 +188,70 @@ class ReplicaManager:
         print(sum_cost)
         return True
     
+
+    def startV2(self):
+        if not self.nodes_infos:
+            return False
+        traces = pd.read_csv(self.traces_path)
+        
+        for index, row in traces.iterrows():
+            #self.writeOutput(f"{str(self.nodes_infos)}\n")
+            b, self.nodes_infos = self.collecteData()
+            task_infos = {'time' : row["time_compute (s)"],  'application_type': row["application_type"]}
+            task = Task(id_task=row["id_task"],id_node= row["node_id"],infos= task_infos,id_dataset= row["dataset"],ds_size=row["dataset_size"])
+
+            self.data_sizes[task.id_dataset] = task.ds_size
+            
+            if task.id_dataset not in self.data.keys(): 
+                self.data[task.id_dataset] = Data(id_dataset=task.id_dataset, size=task.ds_size, replicas_location=None)
+            
+            node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
+            node_port = self.nodes_infos[int(task.id_node)]["node_port"]
+            response, latency = self.sendTask(task,node_port, node_ip)
+            eviction = True  
+
+            if response["sendData"]:
+                eviction = self.sendDataToTask(task=task, latency=latency)
+                if eviction and ENABEL_MIGRATION:
+                    i = 0
+                    condidates = copy.deepcopy(reversed(self.nodes_infos[task.id_node]["keys"]))
+                    while eviction:
+                        condidate = condidates[i] 
+
+                        r_eviction = self.serachReplicaDistination(task.id_node, condidate, self.data_sizes[condidate])
+
+                        if r_eviction["send"]: 
+                            id_dst_node = r_eviction["id_dst_node"]
+                            self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=self.data_sizes[condidate])
+                            self.writeOutput(f"delete {condidate} from {task.id_node} and sended to {id_dst_node}\n")
+                            self.deleteDataFromTable(task.id_node, condidate)
+                            self.addDataToTable(id_dst_node, condidate)
+                            self.writeOutput(f"{self.nodes_infos[task.id_node]['keys']}\n")
+                        else:
+                            self.writeOutput(f"delete {condidate} from {task.id_node}\n")
+                            self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
+                            self.deleteDataFromTable(task.id_node, condidate)
+                            self.data[condidate].updateNbReplica(add=False)
+                            self.writeOutput(f"{self.nodes_infos[task.id_node]['keys']}\n")
+                        eviction, src = self.sendDataToTask(task=task, latency=latency)
+
+                elif eviction and not ENABEL_MIGRATION:
+                    i = 0
+                    condidates = copy.deepcopy(reversed(self.nodes_infos[task.id_node]["keys"]))
+                    while eviction:
+                        condidate = condidates[i] 
+
+            else:
+                self.writeTransfert(f"{task.id_task},{task.id_dataset},-1,{task.ds_size},{task.id_node},0,NoTransfert\n")       
+
+        """itteration sur ca jusqua ce que la donnée pass_environment
+        donc on auras une double 
+        while evition:
+            senddata()
+        
+        je sauvegarde dans mes fichier"""
+
+
     #used a copie
     def collecteData(self):
         if len(self.nodes_infos.keys()) == 0:
@@ -207,6 +275,7 @@ class ReplicaManager:
         return True, self.nodes_infos
     
     #used
+    #TODO aussi
     def searchForDataOnNeighbors(self, id_node, dataset):
         """
             need to change this to select from where to get th data
@@ -227,7 +296,40 @@ class ReplicaManager:
         return latency[i_min], locations[i_min]
     
     
-
+    def sendDataToTask(self, task, latency):
+        node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
+        node_port = self.nodes_infos[int(task.id_node)]["node_port"]
+        _,l = self.searchForDataOnNeighbors(id_node=task.id_node, dataset=task.id_dataset)
+        id_src_node = None
+        t = False
+        if l:
+            #TODO verifier ca je dois gere l'eviction la
+            eviction = self.askForATransfert( 
+                src= l,
+                dst=task.id_node,
+                id_dataset=task.id_dataset,
+                size_ds=task.ds_size
+            )
+            if not eviction: 
+                self.data[task.id_dataset].updateNbReplica(add=True)
+                cost = self.transfertCost(latency, task.ds_size)
+                self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
+                self.addDataToTable(task.id_node, task.id_dataset)
+                self.nb_data_trasnfert +=1
+                self.writeTransfert(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost},transfert2\n")
+                
+        if not l or not t:
+            eviction = self.sendDataSet(id_node=task.id_node,ip_node=node_ip, id_ds=task.id_dataset, ds_size=task.ds_size) 
+            
+            if not eviction:
+                self.data[task.id_dataset].updateNbReplica(add=True)
+                self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
+                self.addDataToTable(task.id_node, task.id_dataset)
+                self.nb_data_trasnfert +=1
+                cost = self.transfertCost(latency, task.ds_size)
+                self.writeTransfert(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost},transfert1\n")
+                
+        return eviction
     
     #used a copie
     def sendTask(self, task:Task, port, ip="localhost"):
@@ -360,7 +462,6 @@ class ReplicaManager:
         #if r: self.location_table[id_ds].append()
         self.last_node_recieved = None
 
-        
         return r 
     
     def accessData(self, id_node, id_dataset, ip="localhost"):
@@ -451,7 +552,7 @@ class ReplicaManager:
     def deleteAndSendOnThread(self, id_src_node, id_dst_node, id_dataset, ds_size):
         
         sending_process = threading.Thread(target=self.deleteAndSend, args=(id_src_node,id_dst_node, id_dataset, id_dataset,ds_size))
-        #sending_process = multiprocessing.Process(target=self.sendDataSet, args=[ip_node, id_dataset, ds_size])
+        #sending_process = multiprocessing.Process(target=self.sendDaaSet, args=[ip_node, id_dataset, ds_size])
         sending_process.start()
 
         return sending_process
@@ -646,4 +747,4 @@ if __name__ == "__main__":
     
     
     task_manager.nodes_infos = data["infos"]
-    task_manager.start()
+    task_manager.startV2()
