@@ -514,7 +514,11 @@ class ReplicaManager:
         self.last_node_recieved = ip_node
 
         #TODO Check if the data is sended and ask the client to access id to set the LRU
-        r = client.set(id_ds, content)
+        try:
+            r = client.set(id_ds, content)
+            return True
+        except:
+            return False
         #if r: self.location_table[id_ds].append()
         self.last_node_recieved = None
 

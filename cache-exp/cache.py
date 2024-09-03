@@ -41,8 +41,12 @@ class Cache:
         #client_tmp = pylibmc.Client(servers, binary=True, behaviors={"tcp_nodelay": True})
         #r = client_tmp.set(id_dataset, content)
         r = redis.Redis(host=ip_dst, port=MEMCACHED_LISTENING_PORT, db=0)
-        reponse = r.set(id_dataset, content)
-        return reponse 
+
+        try:
+            r.set(id_dataset, content)
+            return True
+        except:
+            return False
     
     def sendDataSetToOnthread(self, ip_dst, id_dataset,size_ds):
         sending_process = threading.Thread(target=self.sendDataSetTo, args=(ip_dst,id_dataset,size_ds))
