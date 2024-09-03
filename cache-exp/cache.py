@@ -1,7 +1,7 @@
 import time
 import numpy as np
-if not EXECUTION_LOCAL: import pylibmc
 from exp.params import MEMCACHED_LISTENING_PORT, EXECUTION_LOCAL
+if not EXECUTION_LOCAL: import pylibmc
 import os
 import copy 
 from pymemcache.client.base import Client
