@@ -265,7 +265,7 @@ class ReplicaManager:
                     
                 elif not ENABEL_MIGRATION and response["eviction"]:
                         for data in reversed(self.nodes_infos[task.id_node]["keys"]):
-                            if ((task.ds_size+5120)*1024) > self.nodes_infos[task.id_node]["remaining_space"]:
+                            if ((task.ds_size)*1024) > self.nodes_infos[task.id_node]["remaining_space"]:
                                 self.deleteFromCache(task.id_node, node_ip, node_port, data)
                                 self.deleteDataFromTable(task.id_node, data)
                                 self.data[data].updateNbReplica(add=False)       
@@ -510,7 +510,7 @@ class ReplicaManager:
         servers = [f"{ip_node}:{MEMCACHED_LISTENING_PORT}"]  # Adresse du serveur Memcached
         
         #client = pylibmc.Client(servers, binary=True, behaviors={"tcp_nodelay": True})
-        client = redis.Redis(host='0.0.0.0', port=MEMCACHED_LISTENING_PORT, db=0)
+        client = redis.Redis(host=ip_node, port=MEMCACHED_LISTENING_PORT, db=0, decode_responses=True)
         self.last_node_recieved = ip_node
 
         #TODO Check if the data is sended and ask the client to access id to set the LRU

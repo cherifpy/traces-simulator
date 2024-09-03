@@ -1,6 +1,5 @@
 import time
 import numpy as np
-import redis.client
 from exp.params import MEMCACHED_LISTENING_PORT, EXECUTION_LOCAL
 if not EXECUTION_LOCAL: import pylibmc
 import redis
