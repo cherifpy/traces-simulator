@@ -68,7 +68,8 @@ if True:
     #netem = config.setNetworkConstraintes()
 
     ## deplot memcached
-    config.deployMemcached(port=MEMCACHED_LISTENING_PORT)
+    #config.deployMemcached(port=MEMCACHED_LISTENING_PORT)
+    config.deployRedis(port=MEMCACHED_LISTENING_PORT)
 
     NB_NODES = config.nb_sites
     CONFIG_GRAPHE = config.getGraphe()
