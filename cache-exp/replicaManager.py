@@ -321,9 +321,9 @@ class ReplicaManager:
             self.nodes_infos[key]["keys"] = response['keys']
             self.nodes_infos[key]["popularities"] = response["popularities"]
 
-            if 'keys' in self.nodes_infos[key].keys():
+            """if 'keys' in self.nodes_infos[key].keys():
                 for id_ds in self.nodes_infos[key]["keys"]:
-                    self.addToLocationTable(key, id_ds)
+                    self.addToLocationTable(key, id_ds)"""
             #print(f"received data from {key}, {self.nodes_infos[key]}")
         ##self.writeOutput(f"{self.nodes_infos}")
         ##self.writeOutput("finishing collecting data from actors\n")
@@ -801,4 +801,4 @@ if __name__ == "__main__":
     
     
     task_manager.nodes_infos = data["infos"]
-    task_manager.startV2()
+    task_manager.startV3()
