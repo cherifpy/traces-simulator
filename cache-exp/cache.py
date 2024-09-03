@@ -93,7 +93,7 @@ class Cache:
     
     def predictEviction(self,ds_size):
 
-        ds_size_bytes = ((int(ds_size)+100)*1024)
+        ds_size_bytes = ((int(ds_size)+2048)*1024)
         
         cache_size_bytes = self.cache_size
         stats = self.getStats()[0][1]
@@ -127,7 +127,7 @@ class Cache:
             
             stats = self.getStats()[0][1]
             self.memory_used = int(stats["bytes"].decode())
-            response = {"sended":t, "remaining_space":int(stats["limit_maxbytes"].decode()) - (int(stats["bytes"].decode()))- (10*1024)}
+            response = {"sended":t, "remaining_space":int(stats["limit_maxbytes"].decode()) - (int(stats["bytes"].decode()))}
         else:
             response = {"sended":b}
         

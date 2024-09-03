@@ -101,7 +101,7 @@ class ReplicaManager:
                     
                     for condidate in reversed(self.nodes_infos[task.id_node]["keys"]): #enlever reversed pour que l'exp soit la meme avec celle de hier
                         ##self.writeOutput(f"condidate {condidate}\n")
-                        if ((task.ds_size+20)*1024)> self.nodes_infos[task.id_node]["remaining_space"]:
+                        if ((task.ds_size+2049)*1024)> self.nodes_infos[task.id_node]["remaining_space"]:
 
                             r_eviction = self.serachReplicaDistination(task.id_node, condidate, self.data_sizes[condidate])
                             #self.writeOutput(f"{r_eviction}\n")
@@ -125,7 +125,7 @@ class ReplicaManager:
                                 
                 elif not ENABEL_MIGRATION and response["eviction"]:
                         for data in reversed(self.nodes_infos[task.id_node]["keys"]):
-                            if ((task.ds_size+20)*1024) > self.nodes_infos[task.id_node]["remaining_space"]:
+                            if ((task.ds_size+2048)*1024) > self.nodes_infos[task.id_node]["remaining_space"]:
                                 self.writeOutput(f"delete {data} from {task.id_node}\n")
                                 self.writeOutput(f"{self.nodes_infos[task.id_node]['keys']}\n")
                                 self.deleteFromCache(task.id_node, node_ip, node_port, data)
@@ -282,7 +282,7 @@ class ReplicaManager:
             node = None
 
             for id_neighbors in range(self.nb_nodes):
-                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and self.nodes_infos[id_neighbors]["remaining_space"] > (((ds_size+10)*1024)):
+                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and self.nodes_infos[id_neighbors]["remaining_space"] > (((ds_size+2048)*1024)):
                     cost = self.transfertCost(self.graphe_infos[int(id_node)][id_neighbors], ds_size) 
                     if cost <= min_access_and_transfet_time:
                         min_access_and_transfet_time = cost
@@ -306,7 +306,7 @@ class ReplicaManager:
             node = None
 
             for id_neighbors in range(self.nb_nodes):
-                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and space_availabel > (((ds_size+10)*1024)):
+                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and space_availabel > (((ds_size+2048)*1024)):
                     cost = self.transfertCost(self.graphe_infos[int(id_node)][id_neighbors], ds_size) 
                     if cost <= min_access_and_transfet_time:
                         min_access_and_transfet_time = cost
@@ -330,7 +330,7 @@ class ReplicaManager:
             node = None
 
             for id_neighbors in range(self.nb_nodes):
-                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and self.nodes_infos[id_neighbors]["remaining_space"] > (((ds_size+10)*1024)):
+                if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and self.nodes_infos[id_neighbors]["remaining_space"] > (((ds_size+2048)*1024)):
                     cost = self.transfertCost(self.graphe_infos[int(id_node)][id_neighbors], ds_size) 
                     if cost <= min_access_and_transfet_time:
                         min_access_and_transfet_time = cost
@@ -489,7 +489,7 @@ class ReplicaManager:
 
         for id_neighbors in range(self.nb_nodes):
             space_availabel = self.nodes_infos[id_neighbors]["remaining_space"]
-            if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and space_availabel > (((ds_size+10)*1024)):
+            if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and (space_availabel > (((ds_size+2048)*1024))):
                 popularity = 0 if id_ds not in self.nodes_infos[id_neighbors]['popularities'].keys() else self.nodes_infos[id_neighbors]['popularities'][id_ds]
                 cost =  transefrtWithGain(
                     b=BANDWIDTH,
