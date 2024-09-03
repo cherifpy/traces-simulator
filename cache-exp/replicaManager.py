@@ -218,12 +218,10 @@ class ReplicaManager:
                         condidates = copy.deepcopy(reversed(self.nodes_infos[task.id_node]["keys"]))
                     else:
                         condidates = []
-
-                    while not eviction:
+                    
+                    while not eviction and len(condidates) > 0:
                         condidate = condidates[i] 
-
                         r_eviction = self.serachReplicaDistination(task.id_node, condidate, self.data_sizes[condidate])
-
                         if r_eviction["send"]: 
                             id_dst_node = r_eviction["id_dst_node"]
                             self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=self.data_sizes[condidate])
@@ -237,7 +235,7 @@ class ReplicaManager:
                             self.deleteDataFromTable(task.id_node, condidate)
                             self.data[condidate].updateNbReplica(add=False)
                             self.writeOutput(f"{self.nodes_infos[task.id_node]['keys']}\n")
-                        eviction, src = self.sendDataToTask(task=task, latency=latency)
+                        eviction = self.sendDataToTask(task=task, latency=latency)
 
                 elif eviction and not ENABEL_MIGRATION:
                     i = 0
@@ -317,8 +315,6 @@ class ReplicaManager:
             if not eviction: 
                 self.data[task.id_dataset].updateNbReplica(add=True)
                 cost = self.transfertCost(latency, task.ds_size)
-                self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
-                self.addDataToTable(task.id_node, task.id_dataset)
                 self.nb_data_trasnfert +=1
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost},transfert2\n")
                 
@@ -466,7 +462,7 @@ class ReplicaManager:
         #if r: self.location_table[id_ds].append()
         self.last_node_recieved = None
 
-        return r 
+        return not r 
     
     def accessData(self, id_node, id_dataset, ip="localhost"):
 
@@ -497,7 +493,7 @@ class ReplicaManager:
 
         response = requests.post(url, json=data)
         #print(response.json()["response"])
-        return response.json()["response"]
+        return not response.json()["response"]
     
     def deleteAndSend(self, id_src_node, id_dst_node, id_dataset, ds_size):
         url = f'http://{self.nodes_infos[id_src_node]["node_ip"]}:{self.nodes_infos[id_src_node]["node_port"]}/send-and-delete'
@@ -512,7 +508,7 @@ class ReplicaManager:
         ##self.writeOutput(f"{response.text}\n")
         if response.json()["sended"]:
             cost = self.transfertCost(self.graphe_infos[int(id_src_node)][int(id_dst_node)],ds_size)
-            #self.writeTransfert(f"null,{id_dataset},{id_src_node},{ds_size},{id_dst_node},{cost},migration\n")
+            self.writeTransfert(f"null,{id_dataset},{id_src_node},{ds_size},{id_dst_node},{cost},migration\n")
             self.nodes_infos[id_src_node]['remaining_space'] = response.json()['remaining_space']
             self.location_table[id_dataset].append(id_dst_node)
             self.location_table[id_dataset].remove(id_src_node)
