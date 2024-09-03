@@ -197,7 +197,7 @@ class ReplicaManager:
             self.nodes_infos[key]["remaining_space"] = response["remaining_space"]
             #self.nodes_infos[key]["keys"] = [] #response['keys']
             self.nodes_infos[key]["popularities"] = response["popularities"]
-            if id_ds in self.nodes_infos[key].keys():
+            if 'keys' in self.nodes_infos[key].keys():
                 for id_ds in self.nodes_infos[key]["keys"]:
                     self.addToLocationTable(key, id_ds)
             #print(f"received data from {key}, {self.nodes_infos[key]}")
