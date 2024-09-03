@@ -101,7 +101,7 @@ class ReplicaManager:
                     
                     for condidate in reversed(self.nodes_infos[task.id_node]["keys"]): #enlever reversed pour que l'exp soit la meme avec celle de hier
                         ##self.writeOutput(f"condidate {condidate}\n")
-                        if (task.ds_size*1024) + 1024 > self.nodes_infos[task.id_node]["remaining_space"]:
+                        if ((task.ds_size+20)*1024)> self.nodes_infos[task.id_node]["remaining_space"]:
 
                             r_eviction = self.serachReplicaDistination(task.id_node, condidate, self.data_sizes[condidate])
                             #self.writeOutput(f"{r_eviction}\n")
@@ -125,7 +125,7 @@ class ReplicaManager:
                                 
                 elif not ENABEL_MIGRATION and response["eviction"]:
                         for data in reversed(self.nodes_infos[task.id_node]["keys"]):
-                            if (task.ds_size*1024) + 1024 > self.nodes_infos[task.id_node]["remaining_space"]:
+                            if ((task.ds_size+20)*1024) > self.nodes_infos[task.id_node]["remaining_space"]:
                                 self.writeOutput(f"delete {data} from {task.id_node}\n")
                                 self.writeOutput(f"{self.nodes_infos[task.id_node]['keys']}\n")
                                 self.deleteFromCache(task.id_node, node_ip, node_port, data)
@@ -337,42 +337,6 @@ class ReplicaManager:
                         node = id_neighbors
 
             return {"delete":True, "send": True if not node is None else False, "id_dst_node":node}
-        
-
-    def migrate(self, task:Task, condidates):
-        
-        operations = []
-        ##self.writeOutput(f"Eviction demandée\n")  
-
-        for condidate in reversed(condidates): #enlever reversed pour que l'exp soit la meme avec celle de hier
-            
-            ##self.writeOutput(f"condidate {condidate}\n")
-            space_availabel = self.nodes_infos[task.id_node]["remaining_space"]
-            if ((task.ds_size+10)*1024) > space_availabel:
-
-                r_eviction = self.manageEvictionV1(task.id_node, condidate, self.data_sizes[condidate],space_availabel)
-
-                ##self.writeOutput(f"{r_eviction}\n")
-                if r_eviction["send"]:
-                    id_dst_node = r_eviction["id_dst_node"]
-                    operations.append(("migrate", condidate,id_dst_node))
-                    #self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=self.data_sizes[condidate])
-                else:
-                    space_availabel += (task.ds_size*1024) + 1024
-                    operations.append("delete", condidate, task.id_node)
-                    #self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
-        
-        node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
-        node_port = self.nodes_infos[int(task.id_node)]["node_port"]
-        
-        url = f'http://{node_ip}:{node_port}/operations'
-
-        response = requests.post(url, json={
-            "operations": operations
-        })
-
-        return response.json()
-
         
     def sendDataSet(self,id_node, ip_node, id_ds,ds_size):
         if EXECUTION_LOCAL:
