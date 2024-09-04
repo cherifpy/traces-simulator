@@ -340,7 +340,7 @@ class ReplicaManager:
                 if eviction and ENABEL_MIGRATION:
                     i = 0
                     if 'keys' in self.nodes_infos[task.id_node].keys():
-                        condidates = copy.deepcopy(reversed(self.nodes_infos[task.id_node]["keys"]))
+                        condidates = copy.deepcopy(self.nodes_infos[task.id_node]["keys"])
                     else:
                         condidates = []
                     
@@ -365,6 +365,7 @@ class ReplicaManager:
                             ##self.writeOutput(f"{self.nodes_infos[task.id_node]['keys']}\n")
                         b, self.nodes_infos = self.collecteData()
                         eviction = self.sendDataToTask(task=task, latency=latency)
+                        i+=1
                     self.writeOutput(f"resultats de l'envoi de la donnée {not eviction}")   
             else:
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},-1,{task.ds_size},{task.id_node},0,NoTransfert\n")
@@ -646,7 +647,7 @@ class ReplicaManager:
         response = requests.get(url,params={
             'id_dataset':id_dataset,
         })
-        print(response.text)
+        #print(response.text)
         ##self.writeOutput(f"{response.text}")
         self.nodes_infos[node_id]["remaining_space"] = response.json()["remaining_space"]
         #while node_id in self.location_table[id_dataset]: self.location_table[id_dataset].remove(node_id)
