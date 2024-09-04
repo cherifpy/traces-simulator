@@ -114,7 +114,7 @@ class ReplicaManager:
 
                     if 'keys' in self.nodes_infos[task.id_node].keys(): condidates = copy.deepcopy(self.nodes_infos[task.id_node]["keys"])
                     else: condidates = []
-                    
+                    print(f"task {task.id_task}")
                     while eviction and len(condidates) > 0:
                         condidate = condidates[i] 
                         self.writeOutput(f"delete {condidate} from {task.id_node}\n")
