@@ -868,4 +868,4 @@ if __name__ == "__main__":
     
     
     task_manager.nodes_infos = data["infos"]
-    task_manager.startV3()
+    task_manager.startV4()
