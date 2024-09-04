@@ -120,7 +120,6 @@ class ReplicaManager:
                         self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
                         #self.deleteDataFromTable(task.id_node, condidate)
                         self.data[condidate].updateNbReplica(add=False)
-                        ##self.writeOutput(f"{self.nodes_infos[task.id_node]['keys']}\n")
                         b, self.nodes_infos = self.collecteData()
                         eviction = self.sendDataToTask(task=task, latency=latency)
                         i+=1
@@ -177,14 +176,15 @@ class ReplicaManager:
                 dst=task.id_node,
                 id_dataset=task.id_dataset,
                 size_ds=task.ds_size
-            )['response']
+            )
             if eviction: 
                 self.data[task.id_dataset].updateNbReplica(add=True)
                 cost = self.transfertCost(latency, task.ds_size)
                 self.nb_data_trasnfert +=1
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},{l},{task.id_node},{task.ds_size},{cost},transfert2\n")
+                return not eviction
             
-        if not l or not eviction:
+        else:
             eviction = self.sendDataSet(id_node=task.id_node,ip_node=node_ip, id_ds=task.id_dataset, ds_size=task.ds_size) 
             if eviction:
                 self.data[task.id_dataset].updateNbReplica(add=True)
@@ -381,7 +381,7 @@ class ReplicaManager:
         if response.json()['reponse']:
             self.writeOutput(f"{id_dataset} deleted from {node_id}\n")
         self.writeOutput(f"resulta de sup de {id_dataset} = {response.json()}\n")
-        return response.json()
+        return response.json()['reponse']
 
     def notifyNode(self, id_node,ip_node, port_node, id_dataset, add):
         url = f'http://{ip_node}:{port_node}/notify'
