@@ -65,6 +65,7 @@ class ReplicaManager:
         traces = pd.read_csv(self.traces_path)
         
         for index, row in traces.iterrows():
+            
             #self.writeOutput(f"{str(self.nodes_infos)}\n")
             b, self.nodes_infos = self.collecteData()
             task_infos = {'time' : row["time_compute (s)"],  'application_type': row["application_type"]}
@@ -79,7 +80,7 @@ class ReplicaManager:
             node_port = self.nodes_infos[int(task.id_node)]["node_port"]
             response, latency = self.sendTask(task,node_port, node_ip)
             eviction = True  
-
+            self.writeOutput(f"==============================Task {index} {task.id_task}\n")
             if response["sendData"]:
                 eviction = self.sendDataToTask(task=task, latency=latency)
                 
@@ -105,7 +106,7 @@ class ReplicaManager:
                         b, self.nodes_infos = self.collecteData()
                         eviction = self.sendDataToTask(task=task, latency=latency)
                         i+=1
-                    self.writeOutput(f"resultats de l'envoi de la donnée {not eviction}")   
+                    self.writeOutput(f"resultats de l'envoi de la donnée {not eviction}\n")   
                 
                 if eviction and not ENABEL_MIGRATION:
                     i = 0
