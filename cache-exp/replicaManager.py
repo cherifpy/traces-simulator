@@ -430,7 +430,7 @@ class ReplicaManager:
                 id_dataset=task.id_dataset,
                 size_ds=task.ds_size
             )
-            if not eviction: 
+            if eviction: 
                 self.data[task.id_dataset].updateNbReplica(add=True)
                 cost = self.transfertCost(latency, task.ds_size)
                 self.nb_data_trasnfert +=1
@@ -439,7 +439,7 @@ class ReplicaManager:
         if not l or not t:
             eviction = self.sendDataSet(id_node=task.id_node,ip_node=node_ip, id_ds=task.id_dataset, ds_size=task.ds_size) 
             
-            if not eviction:
+            if eviction:
                 self.data[task.id_dataset].updateNbReplica(add=True)
                 #self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
                 #self.addDataToTable(task.id_node, task.id_dataset)
@@ -447,7 +447,7 @@ class ReplicaManager:
                 cost = self.transfertCost(latency, task.ds_size)
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost},transfert1\n")
         
-        return eviction
+        return not eviction
     
     #used a copie
     def sendTask(self, task:Task, port, ip="localhost"):
