@@ -3,3 +3,4 @@ other-tests/
 cache-exp/exp/traces/datasets/dataset.csv
 cache-exp/exp/traces/datasets/tracesV4_without_node_dataset.csv
 cache-exp/exp/outputs
+cache-exp/exp/trash
