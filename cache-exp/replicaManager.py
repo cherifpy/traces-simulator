@@ -170,8 +170,7 @@ class ReplicaManager:
         node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
         node_port = self.nodes_infos[int(task.id_node)]["node_port"]
         _,l = self.searchForDataOnNeighbors(id_node=task.id_node, dataset=task.id_dataset)
-        
-        t = False
+        added = False
         if l:
             added = self.askForATransfert( 
                 src= l,
@@ -186,7 +185,7 @@ class ReplicaManager:
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},{l},{task.id_node},{task.ds_size},{cost},transfert2\n")
                 return not added
             
-        else:
+        if not added:
             added = self.sendDataSet(id_node=task.id_node,ip_node=node_ip, id_ds=task.id_dataset, ds_size=task.ds_size) 
             if added:
                 self.data[task.id_dataset].updateNbReplica(add=True)
@@ -297,11 +296,7 @@ class ReplicaManager:
             return {"delete":True, "send": True if not node is None else False, "id_dst_node":node}
         
     def sendDataSet(self,id_node, ip_node, id_ds,ds_size):
-        if EXECUTION_LOCAL:
-            return True
-        
-        if self.local_execution:
-            return True
+
         file_name = '/tmp/tmp.bin'
         file_size_octet = int(ds_size)*1024
         with open(file_name, "wb") as p:
@@ -315,7 +310,7 @@ class ReplicaManager:
         self.last_node_recieved = ip_node
         try:
             r = client.set(id_ds, content)
-            print(f'zjouter {r}\n')
+            print(f'ajouter {r}\n')
             return True
         except:
             return False
@@ -350,7 +345,7 @@ class ReplicaManager:
         }
 
         response = requests.post(url, json=data)
-        return not response.json()["response"]
+        return response.json()["response"] #Todo this shit
     
     def deleteAndSend(self, id_src_node, id_dst_node, id_dataset, ds_size):
         url = f'http://{self.nodes_infos[id_src_node]["node_ip"]}:{self.nodes_infos[id_src_node]["node_port"]}/send-and-delete'
