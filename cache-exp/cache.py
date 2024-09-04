@@ -175,7 +175,7 @@ class Cache:
         try:
             
             #client = pylibmc.Client([f'0.0.0.0:{MEMCACHED_LISTENING_PORT}'], binary=True, behaviors={"tcp_nodelay": True})
-            client = redis.Redis(host='0.0.0.0', port=MEMCACHED_LISTENING_PORT, db=0)
+            client = redis.Redis(host='0.0.0.0', port=MEMCACHED_LISTENING_PORT, db=0,decode_responses=True)
             r = client.delete(key)
             #ca retourne une exption la 
             while key in self.last_recently_used_item: self.last_recently_used_item.remove(key)

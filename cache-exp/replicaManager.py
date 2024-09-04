@@ -81,6 +81,7 @@ class ReplicaManager:
             response, latency = self.sendTask(task,node_port, node_ip)
             eviction = True  
             self.writeOutput(f"==============================Task {index} {task.id_task}\n")
+            
             if response["sendData"]:
                 eviction = self.sendDataToTask(task=task, latency=latency)
                 
@@ -117,14 +118,15 @@ class ReplicaManager:
                     while eviction and len(condidates) > 0:
                         condidate = condidates[i] 
                         self.writeOutput(f"delete {condidate} from {task.id_node}\n")
-                        self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
+                        d = self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
+                        print(f"delete {d}\n")
                         #self.deleteDataFromTable(task.id_node, condidate)
                         self.data[condidate].updateNbReplica(add=False)
                         b, self.nodes_infos = self.collecteData()
                         eviction = self.sendDataToTask(task=task, latency=latency)
+                        print(eviction)
                         i+=1
                     self.writeOutput(f"resultats de l'envoi de la donnée {not eviction}")  
-
             else:
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},-1,{task.id_node},{task.ds_size},0,NoTransfert\n")
 
@@ -171,28 +173,28 @@ class ReplicaManager:
         
         t = False
         if l:
-            eviction = self.askForATransfert( 
+            added = self.askForATransfert( 
                 src= l,
                 dst=task.id_node,
                 id_dataset=task.id_dataset,
                 size_ds=task.ds_size
             )
-            if eviction: 
+            if added: 
                 self.data[task.id_dataset].updateNbReplica(add=True)
                 cost = self.transfertCost(latency, task.ds_size)
                 self.nb_data_trasnfert +=1
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},{l},{task.id_node},{task.ds_size},{cost},transfert2\n")
-                return not eviction
+                return not added
             
         else:
-            eviction = self.sendDataSet(id_node=task.id_node,ip_node=node_ip, id_ds=task.id_dataset, ds_size=task.ds_size) 
-            if eviction:
+            added = self.sendDataSet(id_node=task.id_node,ip_node=node_ip, id_ds=task.id_dataset, ds_size=task.ds_size) 
+            if added:
                 self.data[task.id_dataset].updateNbReplica(add=True)
                 self.nb_data_trasnfert +=1
                 cost = self.transfertCost(latency, task.ds_size)
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},{self.id},{task.id_node},{task.ds_size},{cost},transfert1\n")
         
-        return not eviction
+        return not added
     
     #used a copie
     def sendTask(self, task:Task, port, ip="localhost"):
@@ -313,7 +315,8 @@ class ReplicaManager:
         self.last_node_recieved = ip_node
         try:
             r = client.set(id_ds, content)
-            return r
+            print(f'zjouter {r}\n')
+            return True
         except:
             return False
 
@@ -378,10 +381,10 @@ class ReplicaManager:
         self.nodes_infos[node_id]["remaining_space"] = response.json()["remaining_space"]
 
         self.notifyNode(node_id,node_ip,node_port , id_dataset, add=False)
-        if response.json()['reponse']:
+        if response.json()['reponse'] == 1:
             self.writeOutput(f"{id_dataset} deleted from {node_id}\n")
         self.writeOutput(f"resulta de sup de {id_dataset} = {response.json()}\n")
-        return response.json()['reponse']
+        return True if response.json()['reponse'] == 1 else False
 
     def notifyNode(self, id_node,ip_node, port_node, id_dataset, add):
         url = f'http://{ip_node}:{port_node}/notify'
