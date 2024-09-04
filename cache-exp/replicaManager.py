@@ -242,7 +242,8 @@ class ReplicaManager:
             
             task_infos = {'time' : row["time_compute (s)"],  'application_type': row["application_type"]}
             task = Task(id_task=row["id_task"],id_node= row["node_id"],infos= task_infos,id_dataset= row["dataset"],ds_size=row["dataset_size"])
-            print(f"node:{task.id_node}\n")
+            
+            self.writeOutput(f"node:{task.id_node}\n")
             self.data_sizes[task.id_dataset] = task.ds_size
             
             if task.id_dataset not in self.data.keys(): 
@@ -251,10 +252,12 @@ class ReplicaManager:
             node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
             node_port = self.nodes_infos[int(task.id_node)]["node_port"]
             response, latency = self.sendTask(task,node_port, node_ip)
-            print(f"{response}\n")
+            self.writeOutput(f"{response}\n")
+
+
             if response["sendData"]:
                 if ENABEL_MIGRATION and response["eviction"]:
-                    for condidate in reversed(self.nodes_infos[task.id_node]["keys"]): #enlever reversed pour que l'exp soit la meme avec celle de hier
+                    for condidate in self.nodes_infos[task.id_node]["keys"]: #enlever reversed pour que l'exp soit la meme avec celle de hier
                         if ((task.ds_size)*1024)> self.nodes_infos[task.id_node]["remaining_space"]:
                             r_eviction = self.serachReplicaDistination(task.id_node, condidate, self.data_sizes[condidate])
                             if r_eviction["send"]: 
@@ -265,10 +268,10 @@ class ReplicaManager:
                     
                     
                 elif not ENABEL_MIGRATION and response["eviction"]:
-                        for data in reversed(self.nodes_infos[task.id_node]["keys"]):
+                        for data in self.nodes_infos[task.id_node]["keys"]:
                             if ((task.ds_size)*1024) > self.nodes_infos[task.id_node]["remaining_space"]:
                                 self.deleteFromCache(task.id_node, node_ip, node_port, data)
-                                self.deleteDataFromTable(task.id_node, data)
+                                #self.deleteDataFromTable(task.id_node, data)
                                 self.data[data].updateNbReplica(add=False)       
                 else:
                     pass
@@ -284,16 +287,18 @@ class ReplicaManager:
                         id_dataset=task.id_dataset,
                         size_ds=task.ds_size
                     )
+                    self.writeOutput(f"Resultat du transfert {t}")
                     if t: 
                         self.data[task.id_dataset].updateNbReplica(add=True)
                         cost = self.transfertCost(latency, task.ds_size)
-                        self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
+                        #self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
                         self.writeTransfert(f"{task.id_task},{task.id_dataset},{l},{task.ds_size},{task.id_node},{cost},transfert2\n")
     
                 if not l or not t:
-                    self.sendDataSet(id_node=task.id_node,ip_node=node_ip, id_ds=task.id_dataset, ds_size=task.ds_size)
+                    r = self.sendDataSet(id_node=task.id_node,ip_node=node_ip, id_ds=task.id_dataset, ds_size=task.ds_size)
+                    self.writeOutput(f"Resultat du transfert {r}")
                     self.data[task.id_dataset].updateNbReplica(add=True)
-                    self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
+                    #self.addToLocationTable(id_dataset=task.id_dataset,id_node=task.id_node)
                     cost = self.transfertCost(latency, task.ds_size)
                     self.writeTransfert(f"{task.id_task},{task.id_dataset},{self.id},{task.ds_size},{task.id_node},{cost},transfert1\n")
                    
@@ -301,7 +306,7 @@ class ReplicaManager:
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},-1,{task.ds_size},{task.id_node},0,NoTransfert\n")
                 self.nb_data_trasnfert_avoided+=1
 
-            self.accessData(task.id_node,task.id_dataset)
+            #self.accessData(task.id_node,task.id_dataset) #a ajouter juste quand je veux utiliser le cache hit et le cache miss
             self.data[task.id_dataset].addPopularityPeerNode(task.id_node)
 
 
@@ -517,7 +522,7 @@ class ReplicaManager:
         #TODO Check if the data is sended and ask the client to access id to set the LRU
         try:
             r = client.set(id_ds, content)
-            return True
+            return r
         except:
             return False
         #if r: self.location_table[id_ds].append()
@@ -641,14 +646,12 @@ class ReplicaManager:
         if self.data[id_ds].nb_replica >= TTL_MIN : return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
 
         if len(self.isOnNeighbords(id_node, id_ds)) != 0: return {"delete":True, "send":False} #demander au noeud de juste supprimer la données
-
         
         min_access_and_transfet_time = -1
         node = None
 
         for id_neighbors in range(self.nb_nodes):
             space_availabel = self.nodes_infos[id_neighbors]["remaining_space"]
-            #if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and (space_availabel > (((ds_size+5120)*1024))):
             if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and (space_availabel > (((ds_size)*1024))):
                 popularity = 0 if id_ds not in self.nodes_infos[id_neighbors]['popularities'].keys() else self.nodes_infos[id_neighbors]['popularities'][id_ds]
                 cost =  transefrtWithGain(
