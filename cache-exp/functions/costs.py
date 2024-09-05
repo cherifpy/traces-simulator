@@ -18,3 +18,10 @@ def transefrtWithGain(b, l, s, n):
     transfert_cost = 1/(bandwith_in_bits/(bandwith_in_bits*latency_in_s + size_in_bits))
     gain = n * latency_in_s
     return transfert_cost + gain
+
+def transfertTime(b, l, s):
+    bandwith_in_bits = b*1024*1024*8
+    size_in_bits = s*1024*8
+    latency_in_s = l/1000
+
+    return latency_in_s + (size_in_bits/bandwith_in_bits)

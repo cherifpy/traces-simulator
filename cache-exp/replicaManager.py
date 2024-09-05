@@ -21,7 +21,7 @@ from exp.params import  (
 from communication.send_data import recieveObject
 from communication.messages import Task
 from communication.replicaManagerServer import ReplicaManagerServer
-from functions.costs import transefrtWithGain
+from functions.costs import transefrtWithGain, transfertTime
 from classes.data import Data
 from classes.djikstra import dijkstra
 from typing import Optional, Dict
@@ -94,7 +94,7 @@ class ReplicaManager:
                     
                     while eviction and len(condidates) > 0:
                         condidate = condidates[i] 
-                        r_eviction = self.serachReplicaDistination(task.id_node, condidate, self.data_sizes[condidate])
+                        r_eviction = self.searchReplicaDistination(task.id_node, condidate, self.data_sizes[condidate])
                         if r_eviction["send"]: 
                             id_dst_node = r_eviction["id_dst_node"]
                             self.writeOutput(f"send {task.id_node} from {task.id_node} and send it to {id_dst_node}\n")
@@ -419,7 +419,7 @@ class ReplicaManager:
         
         return False
 
-    def serachReplicaDistination(self,id_node,id_ds, ds_size):
+    def searchReplicaDistination(self,id_node,id_ds, ds_size):
         """
             here i will use the TTL to decide if a had to migrate or send 
         """
@@ -429,21 +429,28 @@ class ReplicaManager:
 
         if len(self.isOnNeighbords(id_node, id_ds)) != 0: return {"delete":True, "send":False} #demander au noeud de juste supprimer la données
         
-        min_access_and_transfet_time = -1
+        #optimal_cost = -1
+        optimal_cost = float('inf')
         node = None
 
         for id_neighbors in range(self.nb_nodes):
             space_availabel = self.nodes_infos[id_neighbors]["remaining_space"]
             if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and (space_availabel > (((ds_size)*1024))):
                 popularity = 0 if id_ds not in self.nodes_infos[id_neighbors]['popularities'].keys() else self.nodes_infos[id_neighbors]['popularities'][id_ds]
-                cost =  transefrtWithGain(
+                """cost =  transefrtWithGain(
                     b=BANDWIDTH,
                     l=self.graphe_infos[int(id_node)][id_neighbors],
                     s=ds_size,
                     n=popularity, 
+                )"""
+
+                cost = transfertTime(
+                    b=BANDWIDTH,
+                    l=self.graphe_infos[int(id_node)][id_neighbors],
+                    s=ds_size,
                 )
-                if cost > min_access_and_transfet_time:
-                    min_access_and_transfet_time = cost
+                if cost < optimal_cost:
+                    optimal_cost = cost
                     node = id_neighbors
 
         return {"delete":True, "send": True if not node is None else False, "id_dst_node":node}

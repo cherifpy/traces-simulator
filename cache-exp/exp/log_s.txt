@@ -1,0 +1,659 @@
+{'IP_ADDRESS': '172.16.52.4', 'graphe_infos': array([[-1.,  1., 10., 10., 10., 60.],
+       [-1., -1.,  8., 30., 10., 60.],
+       [10.,  8., -1., 30., 10., 50.],
+       [10., 30., -1., -1., 10., 50.],
+       [10., 10., 10., 10., -1., 60.],
+       [60., 60., 50., 50., 60., -1.]]), 'IPs_ADDRESS': ['172.16.52.15', '172.16.52.18', '172.16.52.19', '172.16.52.21', '172.16.52.22', '172.16.52.4'], 'infos': {0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884}}}{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884}}
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}}finishing collecting data from actors
+task 850898 sended to 4
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 1777601, 'keys': ['ds42']}}finishing collecting data from actors
+task 1340447 sended to 3
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1836994, 'keys': ['ds4']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 1777601, 'keys': ['ds42']}}finishing collecting data from actors
+task 601185 sended to 4
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1836994, 'keys': ['ds4']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 1629058, 'keys': ['ds42', 'ds45']}}finishing collecting data from actors
+task 668483 sended to 1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 1847234, 'keys': ['ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1836994, 'keys': ['ds4']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 1629058, 'keys': ['ds42', 'ds45']}}finishing collecting data from actors
+task 1608800 sended to 2
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 1847234, 'keys': ['ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 1585089, 'keys': ['ds37']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1836994, 'keys': ['ds4']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 1629058, 'keys': ['ds42', 'ds45']}}finishing collecting data from actors
+task 1132727 sended to 4
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 1847234, 'keys': ['ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 1585089, 'keys': ['ds37']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1836994, 'keys': ['ds4']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 1366852, 'keys': ['ds42', 'ds45', 'ds1']}}finishing collecting data from actors
+task 564146 sended to 2
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 1847234, 'keys': ['ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 1216387, 'keys': ['ds37', 'ds6']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1836994, 'keys': ['ds4']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 1366852, 'keys': ['ds42', 'ds45', 'ds1']}}finishing collecting data from actors
+task 3087781 sended to 2
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 1847234, 'keys': ['ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 849732, 'keys': ['ds37', 'ds6', 'ds91']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1836994, 'keys': ['ds4']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 1366852, 'keys': ['ds42', 'ds45', 'ds1']}}finishing collecting data from actors
+task 2394011 sended to 2
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 1847234, 'keys': ['ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 900931, 'keys': ['ds37', 'ds6', 'ds91', 'ds68']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1836994, 'keys': ['ds4']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 1366852, 'keys': ['ds42', 'ds45', 'ds1']}}finishing collecting data from actors
+task 352801 sended to 4
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 1847234, 'keys': ['ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 900931, 'keys': ['ds37', 'ds6', 'ds91', 'ds68']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1836994, 'keys': ['ds4']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 1116934, 'keys': ['ds42', 'ds45', 'ds1', 'ds2']}}finishing collecting data from actors
+task 2960475 sended to 4
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 1847234, 'keys': ['ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 900931, 'keys': ['ds37', 'ds6', 'ds91', 'ds68']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1836994, 'keys': ['ds4']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 1116934, 'keys': ['ds42', 'ds45', 'ds2', 'ds1']}}finishing collecting data from actors
+task 3136847 sended to 2
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 1847234, 'keys': ['ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 433925, 'keys': ['ds37', 'ds6', 'ds91', 'ds68', 'ds3']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1836994, 'keys': ['ds4']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 1116934, 'keys': ['ds42', 'ds45', 'ds2', 'ds1']}}finishing collecting data from actors
+task 3258897 sended to 4
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 2097152, 'keys': []}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 1847234, 'keys': ['ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 433925, 'keys': ['ds37', 'ds6', 'ds91', 'ds68', 'ds3']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1836994, 'keys': ['ds4']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 657095, 'keys': ['ds42', 'ds45', 'ds2', 'ds1', 'ds11']}}finishing collecting data from actors
+task 1422507 sended to 0
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1834946, 'keys': ['ds1']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 1847234, 'keys': ['ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 433925, 'keys': ['ds37', 'ds6', 'ds91', 'ds68', 'ds3']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1836994, 'keys': ['ds4']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 657095, 'keys': ['ds42', 'ds45', 'ds2', 'ds1', 'ds11']}}finishing collecting data from actors
+task 666173 sended to 2
+Eviction demandée {'condidates': ['ds37', 'ds6', 'ds91', 'ds68', 'ds3'], 'eviction': True, 'sendData': True}
+condidate ds37
+{'delete': True, 'send': True, 'id_dst_node': 1}
+migration declanchée
+{"remaining_space":945988,"sended":true}
+condidate ds6
+condidate ds91
+condidate ds68
+condidate ds3
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1834946, 'keys': ['ds1']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 1335171, 'keys': ['ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 457477, 'keys': ['ds6', 'ds91', 'ds68', 'ds3', 'ds32']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1836994, 'keys': ['ds4']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 657095, 'keys': ['ds42', 'ds45', 'ds2', 'ds1', 'ds11']}}finishing collecting data from actors
+task 1620415 sended to 3
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1834946, 'keys': ['ds1']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 1335171, 'keys': ['ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 457477, 'keys': ['ds6', 'ds91', 'ds68', 'ds3', 'ds32']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1540996, 'keys': ['ds4', 'ds5']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 657095, 'keys': ['ds42', 'ds45', 'ds2', 'ds1', 'ds11']}}finishing collecting data from actors
+task 623276 sended to 1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1834946, 'keys': ['ds1']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 1012548, 'keys': ['ds2', 'ds28']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 457477, 'keys': ['ds6', 'ds91', 'ds68', 'ds3', 'ds32']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1540996, 'keys': ['ds4', 'ds5']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 657095, 'keys': ['ds42', 'ds45', 'ds2', 'ds1', 'ds11']}}finishing collecting data from actors
+task 386534 sended to 4
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1834946, 'keys': ['ds1']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 1012548, 'keys': ['ds2', 'ds28']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 457477, 'keys': ['ds6', 'ds91', 'ds68', 'ds3', 'ds32']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1540996, 'keys': ['ds4', 'ds5']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 657095, 'keys': ['ds42', 'ds45', 'ds2', 'ds1', 'ds11']}}finishing collecting data from actors
+task 650553 sended to 0
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1571715, 'keys': ['ds1', 'ds81']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 1012548, 'keys': ['ds2', 'ds28']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 457477, 'keys': ['ds6', 'ds91', 'ds68', 'ds3', 'ds32']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1540996, 'keys': ['ds4', 'ds5']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 657095, 'keys': ['ds42', 'ds45', 'ds2', 'ds1', 'ds11']}}finishing collecting data from actors
+task 1689398 sended to 3
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1571715, 'keys': ['ds1', 'ds81']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 1012548, 'keys': ['ds2', 'ds28']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 457477, 'keys': ['ds6', 'ds91', 'ds68', 'ds3', 'ds32']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1168197, 'keys': ['ds4', 'ds5', 'ds47']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 657095, 'keys': ['ds42', 'ds45', 'ds2', 'ds1', 'ds11']}}finishing collecting data from actors
+task 2289197 sended to 2
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1571715, 'keys': ['ds1', 'ds81']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 1012548, 'keys': ['ds2', 'ds28']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 351942, 'keys': ['ds6', 'ds91', 'ds68', 'ds3', 'ds32', 'ds89']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1168197, 'keys': ['ds4', 'ds5', 'ds47']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 657095, 'keys': ['ds42', 'ds45', 'ds2', 'ds1', 'ds11']}}finishing collecting data from actors
+task 1095234 sended to 0
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1311557, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 1012548, 'keys': ['ds2', 'ds28']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 351942, 'keys': ['ds6', 'ds91', 'ds68', 'ds3', 'ds32', 'ds89']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 1168197, 'keys': ['ds4', 'ds5', 'ds47']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 657095, 'keys': ['ds42', 'ds45', 'ds2', 'ds1', 'ds11']}}finishing collecting data from actors
+task 310481 sended to 3
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1311557, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 1012548, 'keys': ['ds2', 'ds28']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 351942, 'keys': ['ds6', 'ds91', 'ds68', 'ds3', 'ds32', 'ds89']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 701191, 'keys': ['ds4', 'ds5', 'ds47', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 657095, 'keys': ['ds42', 'ds45', 'ds2', 'ds1', 'ds11']}}finishing collecting data from actors
+task 2628965 sended to 2
+Eviction demandée {'condidates': ['ds6', 'ds91', 'ds68', 'ds3', 'ds32', 'ds89'], 'eviction': True, 'sendData': True}
+condidate ds6
+{'delete': True, 'send': True, 'id_dst_node': 1}
+migration declanchée
+{"sended":false}
+condidate ds91
+{'delete': True, 'send': True, 'id_dst_node': 1}
+migration declanchée
+{"remaining_space":718597,"sended":true}
+condidate ds68
+condidate ds3
+condidate ds32
+condidate ds89
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1311557, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 645893, 'keys': ['ds2', 'ds28']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 669444, 'keys': ['ds68', 'ds3', 'ds32', 'ds89', 'ds52']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 701191, 'keys': ['ds4', 'ds5', 'ds47', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 657095, 'keys': ['ds42', 'ds45', 'ds2', 'ds1', 'ds11']}}finishing collecting data from actors
+task 1329684 sended to 4
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1311557, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 645893, 'keys': ['ds2', 'ds28']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 669444, 'keys': ['ds68', 'ds3', 'ds32', 'ds89', 'ds52']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 701191, 'keys': ['ds4', 'ds5', 'ds47', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 657095, 'keys': ['ds42', 'ds45', 'ds1', 'ds11', 'ds2']}}finishing collecting data from actors
+task 3597846 sended to 4
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1311557, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 645893, 'keys': ['ds2', 'ds28']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 669444, 'keys': ['ds68', 'ds3', 'ds32', 'ds89', 'ds52']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 701191, 'keys': ['ds4', 'ds5', 'ds47', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 511624, 'keys': ['ds42', 'ds45', 'ds1', 'ds11', 'ds2', 'ds63']}}finishing collecting data from actors
+task 2670215 sended to 2
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1311557, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 645893, 'keys': ['ds2', 'ds28']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 407238, 'keys': ['ds68', 'ds3', 'ds32', 'ds89', 'ds52', 'ds1']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 701191, 'keys': ['ds4', 'ds5', 'ds47', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 511624, 'keys': ['ds42', 'ds45', 'ds1', 'ds11', 'ds2', 'ds63']}}finishing collecting data from actors
+task 2698926 sended to 2
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1311557, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 645893, 'keys': ['ds2', 'ds28']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 288391, 'keys': ['ds68', 'ds3', 'ds32', 'ds89', 'ds52', 'ds1', 'ds84']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 701191, 'keys': ['ds4', 'ds5', 'ds47', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 511624, 'keys': ['ds42', 'ds45', 'ds1', 'ds11', 'ds2', 'ds63']}}finishing collecting data from actors
+task 304548 sended to 1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1311557, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 448198, 'keys': ['ds2', 'ds28', 'ds21']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 288391, 'keys': ['ds68', 'ds3', 'ds32', 'ds89', 'ds52', 'ds1', 'ds84']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 701191, 'keys': ['ds4', 'ds5', 'ds47', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 511624, 'keys': ['ds42', 'ds45', 'ds1', 'ds11', 'ds2', 'ds63']}}finishing collecting data from actors
+task 852237 sended to 3
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1311557, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 448198, 'keys': ['ds2', 'ds28', 'ds21']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 288391, 'keys': ['ds68', 'ds3', 'ds32', 'ds89', 'ds52', 'ds1', 'ds84']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 265929, 'keys': ['ds4', 'ds5', 'ds47', 'ds3', 'ds7']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 511624, 'keys': ['ds42', 'ds45', 'ds1', 'ds11', 'ds2', 'ds63']}}finishing collecting data from actors
+task 3452384 sended to 2
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1311557, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 448198, 'keys': ['ds2', 'ds28', 'ds21']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 288391, 'keys': ['ds68', 'ds3', 'ds32', 'ds89', 'ds52', 'ds84', 'ds1']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 265929, 'keys': ['ds4', 'ds5', 'ds47', 'ds3', 'ds7']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 511624, 'keys': ['ds42', 'ds45', 'ds1', 'ds11', 'ds2', 'ds63']}}finishing collecting data from actors
+task 1177630 sended to 2
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1311557, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 448198, 'keys': ['ds2', 'ds28', 'ds21']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds3', 'ds32', 'ds89', 'ds52', 'ds84', 'ds1', 'ds2']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 265929, 'keys': ['ds4', 'ds5', 'ds47', 'ds3', 'ds7']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 511624, 'keys': ['ds42', 'ds45', 'ds1', 'ds11', 'ds2', 'ds63']}}finishing collecting data from actors
+task 2679883 sended to 1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1311557, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 310920, 'keys': ['ds2', 'ds28', 'ds21', 'ds9']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds3', 'ds32', 'ds89', 'ds52', 'ds84', 'ds1', 'ds2']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 265929, 'keys': ['ds4', 'ds5', 'ds47', 'ds3', 'ds7']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 511624, 'keys': ['ds42', 'ds45', 'ds1', 'ds11', 'ds2', 'ds63']}}finishing collecting data from actors
+task 2486554 sended to 4
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1311557, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 310920, 'keys': ['ds2', 'ds28', 'ds21', 'ds9']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds3', 'ds32', 'ds89', 'ds52', 'ds84', 'ds1', 'ds2']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 265929, 'keys': ['ds4', 'ds5', 'ds47', 'ds3', 'ds7']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 154185, 'keys': ['ds42', 'ds45', 'ds1', 'ds11', 'ds2', 'ds63', 'ds40']}}finishing collecting data from actors
+task 604991 sended to 3
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 1311557, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 310920, 'keys': ['ds2', 'ds28', 'ds21', 'ds9']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds3', 'ds32', 'ds89', 'ds52', 'ds84', 'ds1', 'ds2']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 16011, 'keys': ['ds4', 'ds5', 'ds47', 'ds3', 'ds7', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 154185, 'keys': ['ds42', 'ds45', 'ds1', 'ds11', 'ds2', 'ds63', 'ds40']}}finishing collecting data from actors
+task 114469 sended to 4
+Eviction demandée {'condidates': ['ds42', 'ds45', 'ds1', 'ds11', 'ds2', 'ds63', 'ds40'], 'eviction': True, 'sendData': True}
+condidate ds42
+{'delete': True, 'send': True, 'id_dst_node': 0}
+migration declanchée
+{"remaining_space":473736,"sended":true}
+condidate ds45
+condidate ds1
+condidate ds11
+condidate ds2
+condidate ds63
+condidate ds40
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 992006, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 310920, 'keys': ['ds2', 'ds28', 'ds21', 'ds9']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds3', 'ds32', 'ds89', 'ds52', 'ds84', 'ds1', 'ds2']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 16011, 'keys': ['ds4', 'ds5', 'ds47', 'ds3', 'ds7', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 177738, 'keys': ['ds45', 'ds1', 'ds11', 'ds2', 'ds63', 'ds40', 'ds5']}}finishing collecting data from actors
+task 1888580 sended to 2
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 992006, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 310920, 'keys': ['ds2', 'ds28', 'ds21', 'ds9']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds32', 'ds89', 'ds52', 'ds84', 'ds1', 'ds2']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 16011, 'keys': ['ds4', 'ds5', 'ds47', 'ds3', 'ds7', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 177738, 'keys': ['ds45', 'ds1', 'ds11', 'ds2', 'ds63', 'ds40', 'ds5']}}finishing collecting data from actors
+task 3534698 sended to 3
+Eviction demandée {'condidates': ['ds4', 'ds5', 'ds47', 'ds3', 'ds7', 'ds2'], 'eviction': True, 'sendData': True}
+condidate ds4
+{'delete': True, 'send': False}
+{"remaining_space":276169,"reponse":true}
+ds4 deleted from 3
+condidate ds5
+{'delete': True, 'send': False}
+{"remaining_space":572167,"reponse":true}
+ds5 deleted from 3
+condidate ds47
+condidate ds3
+condidate ds7
+condidate ds2
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 992006, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 310920, 'keys': ['ds2', 'ds28', 'ds21', 'ds9']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds32', 'ds89', 'ds52', 'ds84', 'ds1', 'ds2']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 213704, 'keys': ['ds47', 'ds3', 'ds7', 'ds2', 'ds34']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 177738, 'keys': ['ds45', 'ds1', 'ds11', 'ds2', 'ds63', 'ds40', 'ds5']}}finishing collecting data from actors
+task 653319 sended to 1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 992006, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 50762, 'keys': ['ds2', 'ds28', 'ds21', 'ds9', 'ds4']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds32', 'ds89', 'ds52', 'ds84', 'ds1', 'ds2']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 213704, 'keys': ['ds47', 'ds3', 'ds7', 'ds2', 'ds34']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 177738, 'keys': ['ds45', 'ds1', 'ds11', 'ds2', 'ds63', 'ds40', 'ds5']}}finishing collecting data from actors
+task 2092727 sended to 3
+Eviction demandée {'condidates': ['ds47', 'ds3', 'ds7', 'ds2', 'ds34'], 'eviction': True, 'sendData': True}
+condidate ds47
+{'delete': True, 'send': True, 'id_dst_node': 0}
+migration declanchée
+{"remaining_space":586503,"sended":true}
+condidate ds3
+condidate ds7
+condidate ds2
+condidate ds34
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 619207, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 50762, 'keys': ['ds2', 'ds28', 'ds21', 'ds9', 'ds4']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds32', 'ds89', 'ds52', 'ds84', 'ds1', 'ds2']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 193224, 'keys': ['ds3', 'ds7', 'ds2', 'ds34', 'ds74']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 177738, 'keys': ['ds45', 'ds1', 'ds11', 'ds2', 'ds63', 'ds40', 'ds5']}}finishing collecting data from actors
+task 613679 sended to 3
+Eviction demandée {'condidates': ['ds3', 'ds7', 'ds2', 'ds34', 'ds74'], 'eviction': True, 'sendData': True}
+condidate ds3
+{'delete': True, 'send': True, 'id_dst_node': 0}
+migration declanchée
+{"remaining_space":660230,"sended":true}
+condidate ds7
+condidate ds2
+condidate ds34
+condidate ds74
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 152201, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 50762, 'keys': ['ds2', 'ds28', 'ds21', 'ds9', 'ds4']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds32', 'ds89', 'ds52', 'ds84', 'ds1', 'ds2']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 398024, 'keys': ['ds7', 'ds2', 'ds34', 'ds74', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 177738, 'keys': ['ds45', 'ds1', 'ds11', 'ds2', 'ds63', 'ds40', 'ds5']}}finishing collecting data from actors
+task 2169347 sended to 4
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 152201, 'keys': ['ds1', 'ds81', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 50762, 'keys': ['ds2', 'ds28', 'ds21', 'ds9', 'ds4']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds32', 'ds89', 'ds52', 'ds84', 'ds1', 'ds2']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 398024, 'keys': ['ds7', 'ds2', 'ds34', 'ds74', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 177738, 'keys': ['ds45', 'ds1', 'ds2', 'ds63', 'ds40', 'ds5', 'ds11']}}finishing collecting data from actors
+task 996530 sended to 0
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 152201, 'keys': ['ds81', 'ds4', 'ds1']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 50762, 'keys': ['ds2', 'ds28', 'ds21', 'ds9', 'ds4']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds32', 'ds89', 'ds52', 'ds84', 'ds1', 'ds2']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 398024, 'keys': ['ds7', 'ds2', 'ds34', 'ds74', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 177738, 'keys': ['ds45', 'ds1', 'ds2', 'ds63', 'ds40', 'ds5', 'ds11']}}finishing collecting data from actors
+task 573221 sended to 1
+Eviction demandée {'condidates': ['ds2', 'ds28', 'ds21', 'ds9', 'ds4'], 'eviction': True, 'sendData': True}
+condidate ds2
+{'delete': True, 'send': False}
+{"remaining_space":300680,"reponse":true}
+ds2 deleted from 1
+condidate ds28
+{'delete': True, 'send': True, 'id_dst_node': 3}
+migration declanchée
+{"remaining_space":623303,"sended":true}
+condidate ds21
+condidate ds9
+condidate ds4
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 152201, 'keys': ['ds81', 'ds4', 'ds1']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 188041, 'keys': ['ds21', 'ds9', 'ds4', 'ds7']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds32', 'ds89', 'ds52', 'ds84', 'ds1', 'ds2']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 433864, 'keys': ['ds7', 'ds2', 'ds34', 'ds74', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 177738, 'keys': ['ds45', 'ds1', 'ds2', 'ds63', 'ds40', 'ds5', 'ds11']}}finishing collecting data from actors
+task 114607 sended to 1
+Eviction demandée {'condidates': ['ds21', 'ds9', 'ds4', 'ds7'], 'eviction': True, 'sendData': True}
+condidate ds21
+{'delete': True, 'send': True, 'id_dst_node': 3}
+migration declanchée
+{"remaining_space":385736,"sended":true}
+condidate ds9
+condidate ds4
+condidate ds7
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 152201, 'keys': ['ds81', 'ds4', 'ds1']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 113289, 'keys': ['ds9', 'ds4', 'ds7', 'ds78']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds32', 'ds89', 'ds52', 'ds84', 'ds1', 'ds2']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 236169, 'keys': ['ds7', 'ds2', 'ds34', 'ds74', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 177738, 'keys': ['ds45', 'ds1', 'ds2', 'ds63', 'ds40', 'ds5', 'ds11']}}finishing collecting data from actors
+task 124244 sended to 1
+Eviction demandée {'condidates': ['ds9', 'ds4', 'ds7', 'ds78'], 'eviction': True, 'sendData': True}
+condidate ds9
+{'delete': True, 'send': True, 'id_dst_node': 4}
+migration declanchée
+{"remaining_space":250567,"sended":true}
+condidate ds4
+{'delete': True, 'send': False}
+{"remaining_space":510725,"reponse":true}
+ds4 deleted from 1
+condidate ds7
+condidate ds78
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 152201, 'keys': ['ds81', 'ds4', 'ds1']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 248519, 'keys': ['ds7', 'ds78', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds32', 'ds89', 'ds52', 'ds84', 'ds1', 'ds2']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 236169, 'keys': ['ds7', 'ds2', 'ds34', 'ds74', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 40460, 'keys': ['ds45', 'ds1', 'ds2', 'ds63', 'ds40', 'ds5', 'ds11']}}finishing collecting data from actors
+task 1329765 sended to 4
+Eviction demandée {'condidates': ['ds45', 'ds1', 'ds2', 'ds63', 'ds40', 'ds5', 'ds11'], 'eviction': True, 'sendData': True}
+condidate ds45
+{'delete': True, 'send': True, 'id_dst_node': 3}
+migration declanchée
+{"remaining_space":189003,"sended":true}
+condidate ds1
+{'delete': True, 'send': False}
+{"remaining_space":451209,"reponse":true}
+ds1 deleted from 4
+condidate ds2
+condidate ds63
+condidate ds40
+condidate ds5
+condidate ds11
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 152201, 'keys': ['ds81', 'ds4', 'ds1']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 248519, 'keys': ['ds7', 'ds78', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds32', 'ds89', 'ds52', 'ds84', 'ds1', 'ds2']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 87626, 'keys': ['ds7', 'ds2', 'ds34', 'ds74', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 74314, 'keys': ['ds2', 'ds63', 'ds40', 'ds5', 'ds11', 'ds30']}}finishing collecting data from actors
+task 2687911 sended to 2
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 152201, 'keys': ['ds81', 'ds4', 'ds1']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 248519, 'keys': ['ds7', 'ds78', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds32', 'ds89', 'ds52', 'ds84', 'ds2', 'ds1']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 87626, 'keys': ['ds7', 'ds2', 'ds34', 'ds74', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 74314, 'keys': ['ds2', 'ds63', 'ds40', 'ds5', 'ds11', 'ds30']}}finishing collecting data from actors
+task 3251798 sended to 4
+Eviction demandée {'condidates': ['ds2', 'ds63', 'ds40', 'ds5', 'ds11', 'ds30'], 'eviction': True, 'sendData': True}
+condidate ds2
+{'delete': True, 'send': False}
+{"remaining_space":324232,"reponse":true}
+ds2 deleted from 4
+condidate ds63
+{'delete': True, 'send': True, 'id_dst_node': 1}
+migration declanchée
+{"remaining_space":469703,"sended":true}
+condidate ds40
+condidate ds5
+condidate ds11
+condidate ds30
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 152201, 'keys': ['ds81', 'ds4', 'ds1']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 103048, 'keys': ['ds7', 'ds78', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds32', 'ds89', 'ds52', 'ds84', 'ds2', 'ds1']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 87626, 'keys': ['ds7', 'ds2', 'ds34', 'ds74', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 2697, 'keys': ['ds40', 'ds5', 'ds11', 'ds30', 'ds3']}}finishing collecting data from actors
+task 1716966 sended to 0
+Eviction demandée {'condidates': ['ds81', 'ds4', 'ds1'], 'eviction': True, 'sendData': True}
+condidate ds81
+{'delete': True, 'send': False, 'id_dst_node': None}
+{"remaining_space":415432,"reponse":true}
+ds81 deleted from 0
+condidate ds4
+condidate ds1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 165514, 'keys': ['ds4', 'ds1', 'ds2']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 103048, 'keys': ['ds7', 'ds78', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds32', 'ds89', 'ds52', 'ds84', 'ds2', 'ds1']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 87626, 'keys': ['ds7', 'ds2', 'ds34', 'ds74', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 2697, 'keys': ['ds40', 'ds5', 'ds11', 'ds30', 'ds3']}}finishing collecting data from actors
+task 2829779 sended to 4
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 165514, 'keys': ['ds4', 'ds1', 'ds2']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 103048, 'keys': ['ds7', 'ds78', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds32', 'ds89', 'ds52', 'ds84', 'ds2', 'ds1']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 87626, 'keys': ['ds7', 'ds2', 'ds34', 'ds74', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 2697, 'keys': ['ds40', 'ds5', 'ds11', 'ds30', 'ds3']}}finishing collecting data from actors
+task 1076904 sended to 0
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 165514, 'keys': ['ds1', 'ds2', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 103048, 'keys': ['ds7', 'ds78', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds32', 'ds89', 'ds52', 'ds84', 'ds2', 'ds1']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 87626, 'keys': ['ds7', 'ds2', 'ds34', 'ds74', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 2697, 'keys': ['ds40', 'ds5', 'ds11', 'ds30', 'ds3']}}finishing collecting data from actors
+task 188806 sended to 1
+Eviction demandée {'condidates': ['ds7', 'ds78', 'ds1'], 'eviction': True, 'sendData': True}
+condidate ds7
+{'delete': True, 'send': False}
+{"remaining_space":538310,"reponse":true}
+ds7 deleted from 1
+condidate ds78
+condidate ds1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 165514, 'keys': ['ds1', 'ds2', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 288392, 'keys': ['ds78', 'ds1', 'ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 38473, 'keys': ['ds68', 'ds32', 'ds89', 'ds52', 'ds84', 'ds2', 'ds1']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 87626, 'keys': ['ds7', 'ds2', 'ds34', 'ds74', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 2697, 'keys': ['ds40', 'ds5', 'ds11', 'ds30', 'ds3']}}finishing collecting data from actors
+task 167209 sended to 2
+Eviction demandée {'condidates': ['ds68', 'ds32', 'ds89', 'ds52', 'ds84', 'ds2', 'ds1'], 'eviction': True, 'sendData': True}
+condidate ds68
+{'delete': True, 'send': False, 'id_dst_node': None}
+{"remaining_space":355976,"reponse":true}
+ds68 deleted from 2
+condidate ds32
+condidate ds89
+condidate ds52
+condidate ds84
+condidate ds2
+condidate ds1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 165514, 'keys': ['ds1', 'ds2', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 288392, 'keys': ['ds78', 'ds1', 'ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 193097, 'keys': ['ds32', 'ds89', 'ds52', 'ds84', 'ds2', 'ds1', 'ds93']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 87626, 'keys': ['ds7', 'ds2', 'ds34', 'ds74', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 2697, 'keys': ['ds40', 'ds5', 'ds11', 'ds30', 'ds3']}}finishing collecting data from actors
+task 3416767 sended to 3
+Eviction demandée {'condidates': ['ds7', 'ds2', 'ds34', 'ds74', 'ds1'], 'eviction': True, 'sendData': True}
+condidate ds7
+{'delete': True, 'send': False, 'id_dst_node': None}
+{"remaining_space":522888,"reponse":true}
+ds7 deleted from 3
+condidate ds2
+condidate ds34
+condidate ds74
+condidate ds1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 165514, 'keys': ['ds1', 'ds2', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 288392, 'keys': ['ds78', 'ds1', 'ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 193097, 'keys': ['ds32', 'ds89', 'ds52', 'ds84', 'ds2', 'ds1', 'ds93']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 352841, 'keys': ['ds2', 'ds34', 'ds74', 'ds1', 'ds15']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 2697, 'keys': ['ds40', 'ds5', 'ds11', 'ds30', 'ds3']}}finishing collecting data from actors
+task 1194136 sended to 4
+Eviction demandée {'condidates': ['ds40', 'ds5', 'ds11', 'ds30', 'ds3'], 'eviction': True, 'sendData': True}
+condidate ds40
+{'delete': True, 'send': False, 'id_dst_node': None}
+{"remaining_space":360136,"reponse":true}
+ds40 deleted from 4
+condidate ds5
+condidate ds11
+condidate ds30
+condidate ds3
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 165514, 'keys': ['ds1', 'ds2', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 288392, 'keys': ['ds78', 'ds1', 'ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 193097, 'keys': ['ds32', 'ds89', 'ds52', 'ds84', 'ds2', 'ds1', 'ds93']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 352841, 'keys': ['ds2', 'ds34', 'ds74', 'ds1', 'ds15']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 88713, 'keys': ['ds5', 'ds11', 'ds30', 'ds3', 'ds16']}}finishing collecting data from actors
+task 2983281 sended to 2
+Eviction demandée {'condidates': ['ds32', 'ds89', 'ds52', 'ds84', 'ds2', 'ds1', 'ds93'], 'eviction': True, 'sendData': True}
+condidate ds32
+{'delete': True, 'send': False, 'id_dst_node': None}
+{"remaining_space":681608,"reponse":true}
+ds32 deleted from 2
+condidate ds89
+condidate ds52
+condidate ds84
+condidate ds2
+condidate ds1
+condidate ds93
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 165514, 'keys': ['ds1', 'ds2', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 288392, 'keys': ['ds78', 'ds1', 'ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 482889, 'keys': ['ds89', 'ds52', 'ds84', 'ds2', 'ds1', 'ds93', 'ds20']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 352841, 'keys': ['ds2', 'ds34', 'ds74', 'ds1', 'ds15']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 88713, 'keys': ['ds5', 'ds11', 'ds30', 'ds3', 'ds16']}}finishing collecting data from actors
+task 3056896 sended to 4
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 165514, 'keys': ['ds1', 'ds2', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 288392, 'keys': ['ds78', 'ds1', 'ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 482889, 'keys': ['ds89', 'ds52', 'ds84', 'ds2', 'ds1', 'ds93', 'ds20']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 352841, 'keys': ['ds2', 'ds34', 'ds74', 'ds1', 'ds15']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 88713, 'keys': ['ds5', 'ds11', 'ds30', 'ds3', 'ds16', 'ds9']}}finishing collecting data from actors
+task 3580136 sended to 1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 165514, 'keys': ['ds1', 'ds2', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 288392, 'keys': ['ds78', 'ds1', 'ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 482889, 'keys': ['ds89', 'ds52', 'ds84', 'ds2', 'ds1', 'ds93', 'ds20']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 352841, 'keys': ['ds2', 'ds34', 'ds74', 'ds1', 'ds15']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 88713, 'keys': ['ds5', 'ds11', 'ds30', 'ds3', 'ds16', 'ds9']}}finishing collecting data from actors
+task 1204846 sended to 3
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 165514, 'keys': ['ds1', 'ds2', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 288392, 'keys': ['ds78', 'ds1', 'ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 482889, 'keys': ['ds89', 'ds52', 'ds84', 'ds2', 'ds1', 'ds93', 'ds20']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 352841, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 88713, 'keys': ['ds5', 'ds11', 'ds30', 'ds3', 'ds16', 'ds9']}}finishing collecting data from actors
+task 2151974 sended to 4
+Eviction demandée {'condidates': ['ds5', 'ds11', 'ds30', 'ds3', 'ds16', 'ds9'], 'eviction': True, 'sendData': True}
+condidate ds5
+{'delete': True, 'send': True, 'id_dst_node': 3}
+migration declanchée
+{"remaining_space":384711,"sended":true}
+condidate ds11
+condidate ds30
+condidate ds3
+condidate ds16
+condidate ds9
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 165514, 'keys': ['ds1', 'ds2', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 288392, 'keys': ['ds78', 'ds1', 'ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 482889, 'keys': ['ds89', 'ds52', 'ds84', 'ds2', 'ds1', 'ds93', 'ds20']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 122505, 'keys': ['ds11', 'ds30', 'ds3', 'ds16', 'ds9', 'ds1']}}finishing collecting data from actors
+task 390259 sended to 2
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 165514, 'keys': ['ds1', 'ds2', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 288392, 'keys': ['ds78', 'ds1', 'ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 193034, 'keys': ['ds89', 'ds52', 'ds84', 'ds2', 'ds1', 'ds93', 'ds20', 'ds36']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 122505, 'keys': ['ds11', 'ds30', 'ds3', 'ds16', 'ds9', 'ds1']}}finishing collecting data from actors
+task 1417996 sended to 0
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 165514, 'keys': ['ds2', 'ds4', 'ds1']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 288392, 'keys': ['ds78', 'ds1', 'ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 193034, 'keys': ['ds89', 'ds52', 'ds84', 'ds2', 'ds1', 'ds93', 'ds20', 'ds36']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 122505, 'keys': ['ds11', 'ds30', 'ds3', 'ds16', 'ds9', 'ds1']}}finishing collecting data from actors
+task 613792 sended to 0
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 165514, 'keys': ['ds2', 'ds4', 'ds1']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 288392, 'keys': ['ds78', 'ds1', 'ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 193034, 'keys': ['ds89', 'ds52', 'ds84', 'ds2', 'ds1', 'ds93', 'ds20', 'ds36']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 122505, 'keys': ['ds11', 'ds30', 'ds3', 'ds16', 'ds9', 'ds1']}}finishing collecting data from actors
+task 344169 sended to 0
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 165514, 'keys': ['ds4', 'ds1', 'ds2']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 288392, 'keys': ['ds78', 'ds1', 'ds2']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 193034, 'keys': ['ds89', 'ds52', 'ds84', 'ds2', 'ds1', 'ds93', 'ds20', 'ds36']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 122505, 'keys': ['ds11', 'ds30', 'ds3', 'ds16', 'ds9', 'ds1']}}finishing collecting data from actors
+task 3548304 sended to 1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 165514, 'keys': ['ds4', 'ds1', 'ds2']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 288392, 'keys': ['ds78', 'ds2', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 193034, 'keys': ['ds89', 'ds52', 'ds84', 'ds2', 'ds1', 'ds93', 'ds20', 'ds36']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 122505, 'keys': ['ds11', 'ds30', 'ds3', 'ds16', 'ds9', 'ds1']}}finishing collecting data from actors
+task 1820564 sended to 0
+Eviction demandée {'condidates': ['ds4', 'ds1', 'ds2'], 'eviction': True, 'sendData': True}
+condidate ds4
+{'delete': True, 'send': True, 'id_dst_node': 1}
+migration declanchée
+{"remaining_space":425672,"sended":true}
+condidate ds1
+condidate ds2
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 391881, 'keys': ['ds1', 'ds2', 'ds8']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 28234, 'keys': ['ds78', 'ds2', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 193034, 'keys': ['ds89', 'ds52', 'ds84', 'ds2', 'ds1', 'ds93', 'ds20', 'ds36']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 122505, 'keys': ['ds11', 'ds30', 'ds3', 'ds16', 'ds9', 'ds1']}}finishing collecting data from actors
+task 3176174 sended to 2
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 391881, 'keys': ['ds1', 'ds2', 'ds8']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 28234, 'keys': ['ds78', 'ds2', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 63947, 'keys': ['ds89', 'ds52', 'ds84', 'ds2', 'ds1', 'ds93', 'ds20', 'ds36', 'ds55']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 122505, 'keys': ['ds11', 'ds30', 'ds3', 'ds16', 'ds9', 'ds1']}}finishing collecting data from actors
+task 3587677 sended to 2
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 391881, 'keys': ['ds1', 'ds2', 'ds8']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 28234, 'keys': ['ds78', 'ds2', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 63947, 'keys': ['ds89', 'ds52', 'ds84', 'ds2', 'ds93', 'ds20', 'ds36', 'ds55', 'ds1']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 122505, 'keys': ['ds11', 'ds30', 'ds3', 'ds16', 'ds9', 'ds1']}}finishing collecting data from actors
+task 360391 sended to 4
+Eviction demandée {'condidates': ['ds11', 'ds30', 'ds3', 'ds16', 'ds9', 'ds1'], 'eviction': True, 'sendData': True}
+condidate ds11
+{'delete': True, 'send': False, 'id_dst_node': None}
+{"remaining_space":582344,"reponse":true}
+ds11 deleted from 4
+condidate ds30
+condidate ds3
+condidate ds16
+condidate ds9
+condidate ds1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 391881, 'keys': ['ds1', 'ds2', 'ds8']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 28234, 'keys': ['ds78', 'ds2', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 63947, 'keys': ['ds89', 'ds52', 'ds84', 'ds2', 'ds93', 'ds20', 'ds36', 'ds55', 'ds1']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 332426, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 1510798 sended to 2
+Eviction demandée {'condidates': ['ds89', 'ds52', 'ds84', 'ds2', 'ds93', 'ds20', 'ds36', 'ds55', 'ds1'], 'eviction': True, 'sendData': True}
+condidate ds89
+{'delete': True, 'send': True, 'id_dst_node': 4}
+migration declanchée
+{"remaining_space":169482,"sended":true}
+condidate ds52
+condidate ds84
+condidate ds2
+condidate ds93
+condidate ds20
+condidate ds36
+condidate ds55
+condidate ds1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 391881, 'keys': ['ds1', 'ds2', 'ds8']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 28234, 'keys': ['ds78', 'ds2', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 20939, 'keys': ['ds52', 'ds84', 'ds2', 'ds93', 'ds20', 'ds36', 'ds55', 'ds1', 'ds45']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 226891, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 2343352 sended to 2
+Eviction demandée {'condidates': ['ds52', 'ds84', 'ds2', 'ds93', 'ds20', 'ds36', 'ds55', 'ds1', 'ds45'], 'eviction': True, 'sendData': True}
+condidate ds52
+{'delete': True, 'send': False, 'id_dst_node': None}
+{"remaining_space":537098,"reponse":true}
+ds52 deleted from 2
+condidate ds84
+condidate ds2
+condidate ds93
+condidate ds20
+condidate ds36
+condidate ds55
+condidate ds1
+condidate ds45
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 391881, 'keys': ['ds1', 'ds2', 'ds8']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 28234, 'keys': ['ds78', 'ds2', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 70092, 'keys': ['ds84', 'ds2', 'ds93', 'ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 226891, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 1817281 sended to 1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 391881, 'keys': ['ds1', 'ds2', 'ds8']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 28234, 'keys': ['ds78', 'ds2', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 70092, 'keys': ['ds84', 'ds2', 'ds93', 'ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 226891, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 614156 sended to 0
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 131723, 'keys': ['ds1', 'ds2', 'ds8', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 28234, 'keys': ['ds78', 'ds2', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 70092, 'keys': ['ds84', 'ds2', 'ds93', 'ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 226891, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 908337 sended to 1
+Eviction demandée {'condidates': ['ds78', 'ds2', 'ds1'], 'eviction': True, 'sendData': True}
+condidate ds78
+{'delete': True, 'send': False, 'id_dst_node': None}
+{"remaining_space":300681,"reponse":true}
+ds78 deleted from 1
+condidate ds2
+{'delete': True, 'send': False}
+{"remaining_space":550599,"reponse":true}
+ds2 deleted from 1
+condidate ds1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 131723, 'keys': ['ds1', 'ds2', 'ds8', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 79496, 'keys': ['ds1', 'ds65']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 70092, 'keys': ['ds84', 'ds2', 'ds93', 'ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 226891, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 349965 sended to 1
+Eviction demandée {'condidates': ['ds1', 'ds65'], 'eviction': True, 'sendData': True}
+condidate ds1
+{'delete': True, 'send': False}
+{"remaining_space":341702,"reponse":true}
+ds1 deleted from 1
+condidate ds65
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 131723, 'keys': ['ds1', 'ds2', 'ds8', 'ds4']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 172679, 'keys': ['ds65', 'ds70']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 70092, 'keys': ['ds84', 'ds2', 'ds93', 'ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 226891, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 2093613 sended to 0
+Eviction demandée {'condidates': ['ds1', 'ds2', 'ds8', 'ds4'], 'eviction': True, 'sendData': True}
+condidate ds1
+{'delete': True, 'send': False}
+{"remaining_space":393929,"reponse":true}
+ds1 deleted from 0
+condidate ds2
+{'delete': True, 'send': False}
+{"remaining_space":643847,"reponse":true}
+ds2 deleted from 0
+condidate ds8
+condidate ds4
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 161480, 'keys': ['ds8', 'ds4', 'ds59']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 172679, 'keys': ['ds65', 'ds70']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 70092, 'keys': ['ds84', 'ds2', 'ds93', 'ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 226891, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 700968 sended to 2
+Eviction demandée {'condidates': ['ds84', 'ds2', 'ds93', 'ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3'], 'eviction': True, 'sendData': True}
+condidate ds84
+{'delete': True, 'send': True, 'id_dst_node': 1}
+migration declanchée
+{"remaining_space":188939,"sended":true}
+condidate ds2
+{'delete': True, 'send': False}
+{"remaining_space":438857,"reponse":true}
+ds2 deleted from 2
+condidate ds93
+condidate ds20
+condidate ds36
+condidate ds55
+condidate ds1
+condidate ds45
+condidate ds3
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 161480, 'keys': ['ds8', 'ds4', 'ds59']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 53832, 'keys': ['ds65', 'ds70']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 178699, 'keys': ['ds93', 'ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3', 'ds4']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 226891, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 379161 sended to 1
+Eviction demandée {'condidates': ['ds65', 'ds70'], 'eviction': True, 'sendData': True}
+condidate ds65
+{'delete': True, 'send': False, 'id_dst_node': None}
+{"remaining_space":524935,"reponse":true}
+ds65 deleted from 1
+condidate ds70
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 161480, 'keys': ['ds8', 'ds4', 'ds59']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 156233, 'keys': ['ds70', 'ds6']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 178699, 'keys': ['ds93', 'ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3', 'ds4']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 226891, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 1546201 sended to 1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 161480, 'keys': ['ds8', 'ds4', 'ds59']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 156233, 'keys': ['ds70', 'ds6', 'ds4']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 178699, 'keys': ['ds93', 'ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3', 'ds4']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 226891, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 1384568 sended to 0
+Eviction demandée {'condidates': ['ds8', 'ds4', 'ds59'], 'eviction': True, 'sendData': True}
+condidate ds8
+{'delete': True, 'send': False, 'id_dst_node': None}
+{"remaining_space":514822,"reponse":true}
+ds8 deleted from 0
+condidate ds4
+condidate ds59
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 198343, 'keys': ['ds4', 'ds59', 'ds18']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 156233, 'keys': ['ds70', 'ds6', 'ds4']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 178699, 'keys': ['ds93', 'ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3', 'ds4']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds1', 'ds15', 'ds2']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 226891, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 171180 sended to 3
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 198343, 'keys': ['ds4', 'ds59', 'ds18']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 156233, 'keys': ['ds70', 'ds6', 'ds4']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 178699, 'keys': ['ds93', 'ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3', 'ds4']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds15', 'ds2', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 226891, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 3262270 sended to 2
+Eviction demandée {'condidates': ['ds93', 'ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3', 'ds4'], 'eviction': True, 'sendData': True}
+condidate ds93
+{'delete': True, 'send': True, 'id_dst_node': 4}
+migration declanchée
+{"remaining_space":341578,"sended":true}
+condidate ds20
+condidate ds36
+condidate ds55
+condidate ds1
+condidate ds45
+condidate ds3
+condidate ds4
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 198343, 'keys': ['ds4', 'ds59', 'ds18']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 156233, 'keys': ['ds70', 'ds6', 'ds4']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 25099, 'keys': ['ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3', 'ds4', 'ds18']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds15', 'ds2', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 64012, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 611383 sended to 1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 198343, 'keys': ['ds4', 'ds59', 'ds18']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 33290, 'keys': ['ds70', 'ds6', 'ds4', 'ds29']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 25099, 'keys': ['ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3', 'ds4', 'ds18']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds15', 'ds2', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 64012, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 610710 sended to 0
+Eviction demandée {'condidates': ['ds4', 'ds59', 'ds18'], 'eviction': True, 'sendData': True}
+condidate ds4
+{'delete': True, 'send': False}
+{"remaining_space":458501,"reponse":true}
+ds4 deleted from 0
+condidate ds59
+condidate ds18
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 521988, 'keys': ['ds59', 'ds18', 'ds24']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 33290, 'keys': ['ds70', 'ds6', 'ds4', 'ds29']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 25099, 'keys': ['ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3', 'ds4', 'ds18']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds15', 'ds2', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 64012, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 3571758 sended to 0
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 403141, 'keys': ['ds59', 'ds18', 'ds24', 'ds84']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 33290, 'keys': ['ds70', 'ds6', 'ds4', 'ds29']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 25099, 'keys': ['ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3', 'ds4', 'ds18']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds15', 'ds2', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 64012, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 1700128 sended to 1
+Eviction demandée {'condidates': ['ds70', 'ds6', 'ds4', 'ds29'], 'eviction': True, 'sendData': True}
+condidate ds70
+{'delete': True, 'send': False, 'id_dst_node': None}
+{"remaining_space":202313,"reponse":true}
+ds70 deleted from 1
+condidate ds6
+{'delete': True, 'send': False, 'id_dst_node': None}
+{"remaining_space":571015,"reponse":true}
+ds6 deleted from 1
+condidate ds4
+condidate ds29
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 403141, 'keys': ['ds59', 'ds18', 'ds24', 'ds84']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 308809, 'keys': ['ds4', 'ds29', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 25099, 'keys': ['ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3', 'ds4', 'ds18']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds15', 'ds2', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 64012, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 1515987 sended to 1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 403141, 'keys': ['ds59', 'ds18', 'ds24', 'ds84']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 171531, 'keys': ['ds4', 'ds29', 'ds1', 'ds9']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 25099, 'keys': ['ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3', 'ds4', 'ds18']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 56843, 'keys': ['ds34', 'ds74', 'ds15', 'ds2', 'ds1']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 64012, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 1129248 sended to 3
+Eviction demandée {'condidates': ['ds34', 'ds74', 'ds15', 'ds2', 'ds1'], 'eviction': True, 'sendData': True}
+condidate ds34
+{'delete': True, 'send': True, 'id_dst_node': 0}
+migration declanchée
+{"sended":false}
+condidate ds74
+{'delete': True, 'send': True, 'id_dst_node': 0}
+migration declanchée
+{"remaining_space":450122,"sended":true}
+condidate ds15
+{'delete': True, 'send': True, 'id_dst_node': 0}
+migration declanchée
+{"remaining_space":620169,"sended":true}
+condidate ds2
+condidate ds1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 212614, 'keys': ['ds59', 'ds18', 'ds24', 'ds84']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 171531, 'keys': ['ds4', 'ds29', 'ds1', 'ds9']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 25099, 'keys': ['ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3', 'ds4', 'ds18']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 153163, 'keys': ['ds2', 'ds1', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 64012, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 1479154 sended to 1
+Eviction demandée {'condidates': ['ds4', 'ds29', 'ds1', 'ds9'], 'eviction': True, 'sendData': True}
+condidate ds4
+{'delete': True, 'send': False}
+{"remaining_space":431689,"reponse":true}
+ds4 deleted from 1
+condidate ds29
+condidate ds1
+condidate ds9
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 212614, 'keys': ['ds59', 'ds18', 'ds24', 'ds84']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 149002, 'keys': ['ds29', 'ds1', 'ds9', 'ds10']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 25099, 'keys': ['ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3', 'ds4', 'ds18']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 153163, 'keys': ['ds2', 'ds1', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 64012, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 2905976 sended to 0
+Eviction demandée {'condidates': ['ds59', 'ds18', 'ds24', 'ds84'], 'eviction': True, 'sendData': True}
+condidate ds59
+{'delete': True, 'send': False, 'id_dst_node': None}
+{"remaining_space":694981,"reponse":true}
+ds59 deleted from 0
+condidate ds18
+condidate ds24
+condidate ds84
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 398983, 'keys': ['ds18', 'ds24', 'ds84', 'ds5']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 149002, 'keys': ['ds29', 'ds1', 'ds9', 'ds10']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 25099, 'keys': ['ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3', 'ds4', 'ds18']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 153163, 'keys': ['ds2', 'ds1', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 64012, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 1577862 sended to 2
+Eviction demandée {'condidates': ['ds20', 'ds36', 'ds55', 'ds1', 'ds45', 'ds3', 'ds4', 'ds18'], 'eviction': True, 'sendData': True}
+condidate ds20
+{'delete': True, 'send': True, 'id_dst_node': 0}
+migration declanchée
+{"remaining_space":223818,"sended":true}
+condidate ds36
+{'delete': True, 'send': True, 'id_dst_node': 0}
+migration declanchée
+{"remaining_space":513673,"sended":true}
+condidate ds55
+condidate ds1
+condidate ds45
+condidate ds3
+condidate ds4
+condidate ds18
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': -89591, 'keys': ['ds18', 'ds24', 'ds84', 'ds5']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 149002, 'keys': ['ds29', 'ds1', 'ds9', 'ds10']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 11851, 'keys': ['ds55', 'ds1', 'ds45', 'ds3', 'ds4', 'ds18', 'ds0']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 153163, 'keys': ['ds2', 'ds1', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 64012, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 3606905 sended to 2
+Eviction demandée {'condidates': ['ds55', 'ds1', 'ds45', 'ds3', 'ds4', 'ds18', 'ds0'], 'eviction': True, 'sendData': True}
+condidate ds55
+{'delete': True, 'send': True, 'id_dst_node': 1}
+migration declanchée
+{"remaining_space":140938,"sended":true}
+condidate ds1
+{'delete': True, 'send': False}
+{"remaining_space":403144,"reponse":true}
+ds1 deleted from 2
+condidate ds45
+condidate ds3
+condidate ds4
+condidate ds18
+condidate ds0
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': -89591, 'keys': ['ds18', 'ds24', 'ds84', 'ds5']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 19915, 'keys': ['ds29', 'ds1', 'ds9', 'ds10']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 44681, 'keys': ['ds45', 'ds3', 'ds4', 'ds18', 'ds0', 'ds34']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 153163, 'keys': ['ds2', 'ds1', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 64012, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 3590476 sended to 0
+Eviction demandée {'condidates': ['ds18', 'ds24', 'ds84', 'ds5'], 'eviction': True, 'sendData': True}
+condidate ds18
+{'delete': True, 'send': False}
+{"remaining_space":226888,"reponse":true}
+ds18 deleted from 0
+condidate ds24
+{'delete': True, 'send': False, 'id_dst_node': None}
+{"remaining_space":630407,"reponse":true}
+ds24 deleted from 0
+condidate ds84
+condidate ds5
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 145992, 'keys': ['ds84', 'ds5', 'ds14']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 19915, 'keys': ['ds29', 'ds1', 'ds9', 'ds10']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 44681, 'keys': ['ds45', 'ds3', 'ds4', 'ds18', 'ds0', 'ds34']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 153163, 'keys': ['ds2', 'ds1', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 64012, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 1103364 sended to 0
+Eviction demandée {'condidates': ['ds84', 'ds5', 'ds14'], 'eviction': True, 'sendData': True}
+condidate ds84
+{'delete': True, 'send': True, 'id_dst_node': 3}
+migration declanchée
+{"remaining_space":264839,"sended":true}
+condidate ds5
+condidate ds14
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 67144, 'keys': ['ds5', 'ds14', 'ds21']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 19915, 'keys': ['ds29', 'ds1', 'ds9', 'ds10']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 44681, 'keys': ['ds45', 'ds3', 'ds4', 'ds18', 'ds0', 'ds34']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 34316, 'keys': ['ds2', 'ds1', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 64012, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds1', 'ds2']}}finishing collecting data from actors
+task 1415917 sended to 4
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 67144, 'keys': ['ds5', 'ds14', 'ds21']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 19915, 'keys': ['ds29', 'ds1', 'ds9', 'ds10']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 44681, 'keys': ['ds45', 'ds3', 'ds4', 'ds18', 'ds0', 'ds34']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 34316, 'keys': ['ds2', 'ds1', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 64012, 'keys': ['ds30', 'ds3', 'ds16', 'ds9', 'ds2', 'ds1']}}finishing collecting data from actors
+task 620099 sended to 4
+Eviction demandée {'condidates': ['ds30', 'ds3', 'ds16', 'ds9', 'ds2', 'ds1'], 'eviction': True, 'sendData': True}
+condidate ds30
+{'delete': True, 'send': False, 'id_dst_node': None}
+{"remaining_space":440907,"reponse":true}
+ds30 deleted from 4
+condidate ds3
+condidate ds16
+condidate ds9
+condidate ds2
+condidate ds1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 67144, 'keys': ['ds5', 'ds14', 'ds21']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 19915, 'keys': ['ds29', 'ds1', 'ds9', 'ds10']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 44681, 'keys': ['ds45', 'ds3', 'ds4', 'ds18', 'ds0', 'ds34']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 34316, 'keys': ['ds2', 'ds1', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 44556, 'keys': ['ds3', 'ds16', 'ds9', 'ds2', 'ds1', 'ds98']}}finishing collecting data from actors
+task 3421392 sended to 0
+Eviction demandée {'condidates': ['ds5', 'ds14', 'ds21'], 'eviction': True, 'sendData': True}
+condidate ds5
+{'delete': True, 'send': False, 'id_dst_node': None}
+{"remaining_space":363142,"reponse":true}
+ds5 deleted from 0
+condidate ds14
+{'delete': True, 'send': False, 'id_dst_node': None}
+{"remaining_space":847557,"reponse":true}
+ds14 deleted from 0
+condidate ds21
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 470662, 'keys': ['ds21', 'ds87']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 19915, 'keys': ['ds29', 'ds1', 'ds9', 'ds10']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 44681, 'keys': ['ds45', 'ds3', 'ds4', 'ds18', 'ds0', 'ds34']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 34316, 'keys': ['ds2', 'ds1', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 44556, 'keys': ['ds3', 'ds16', 'ds9', 'ds2', 'ds1', 'ds98']}}finishing collecting data from actors
+task 245833 sended to 1
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 470662, 'keys': ['ds21', 'ds87']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 19915, 'keys': ['ds29', 'ds9', 'ds10', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 44681, 'keys': ['ds45', 'ds3', 'ds4', 'ds18', 'ds0', 'ds34']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 34316, 'keys': ['ds2', 'ds1', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 44556, 'keys': ['ds3', 'ds16', 'ds9', 'ds2', 'ds1', 'ds98']}}finishing collecting data from actors
+task 847742 sended to 0
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 35400, 'keys': ['ds21', 'ds87', 'ds7']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 19915, 'keys': ['ds29', 'ds9', 'ds10', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 44681, 'keys': ['ds45', 'ds3', 'ds4', 'ds18', 'ds0', 'ds34']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 34316, 'keys': ['ds2', 'ds1', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 44556, 'keys': ['ds3', 'ds16', 'ds9', 'ds2', 'ds1', 'ds98']}}finishing collecting data from actors
+task 903158 sended to 2
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 35400, 'keys': ['ds21', 'ds87', 'ds7']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 19915, 'keys': ['ds29', 'ds9', 'ds10', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 44681, 'keys': ['ds45', 'ds4', 'ds18', 'ds0', 'ds34', 'ds3']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 34316, 'keys': ['ds2', 'ds1', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 44556, 'keys': ['ds3', 'ds16', 'ds9', 'ds2', 'ds1', 'ds98']}}finishing collecting data from actors
+task 1918879 sended to 2
+Eviction demandée {'condidates': ['ds45', 'ds4', 'ds18', 'ds0', 'ds34', 'ds3'], 'eviction': True, 'sendData': True}
+condidate ds45
+{'delete': True, 'send': False, 'id_dst_node': None}
+{"remaining_space":193224,"reponse":true}
+ds45 deleted from 2
+condidate ds4
+{'delete': True, 'send': False, 'id_dst_node': None}
+{"remaining_space":453382,"reponse":true}
+ds4 deleted from 2
+condidate ds18
+condidate ds0
+condidate ds34
+condidate ds3
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 35400, 'keys': ['ds21', 'ds87', 'ds7']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 19915, 'keys': ['ds29', 'ds9', 'ds10', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 191176, 'keys': ['ds18', 'ds0', 'ds34', 'ds3', 'ds1']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 34316, 'keys': ['ds2', 'ds1', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 44556, 'keys': ['ds3', 'ds16', 'ds9', 'ds2', 'ds1', 'ds98']}}finishing collecting data from actors
+task 537951 sended to 0
+Eviction demandée {'condidates': ['ds21', 'ds87', 'ds7'], 'eviction': True, 'sendData': True}
+condidate ds21
+{'delete': True, 'send': False, 'id_dst_node': None}
+{"remaining_space":233095,"reponse":true}
+ds21 deleted from 0
+condidate ds87
+condidate ds7
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 49736, 'keys': ['ds87', 'ds7', 'ds66']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 19915, 'keys': ['ds29', 'ds9', 'ds10', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 191176, 'keys': ['ds18', 'ds0', 'ds34', 'ds3', 'ds1']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 34316, 'keys': ['ds2', 'ds1', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 44556, 'keys': ['ds3', 'ds16', 'ds9', 'ds2', 'ds1', 'ds98']}}finishing collecting data from actors
+task 2448715 sended to 3
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 49736, 'keys': ['ds87', 'ds7', 'ds66']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 19915, 'keys': ['ds29', 'ds9', 'ds10', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 191176, 'keys': ['ds18', 'ds0', 'ds34', 'ds3', 'ds1']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 34316, 'keys': ['ds2', 'ds1', 'ds3']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 44556, 'keys': ['ds3', 'ds16', 'ds9', 'ds2', 'ds1', 'ds98']}}finishing collecting data from actors
+task 2364790 sended to 3
+{0: {'latency': 60.0, 'id': 0, 'node_ip': '172.16.52.15', 'node_port': 8880, 'storage_space': 2097152, 'remaining_space': 49736, 'keys': ['ds87', 'ds7', 'ds66']}, 1: {'latency': 60.0, 'id': 1, 'node_ip': '172.16.52.18', 'node_port': 8881, 'storage_space': 2097152, 'remaining_space': 19915, 'keys': ['ds29', 'ds9', 'ds10', 'ds1']}, 2: {'latency': 50.0, 'id': 2, 'node_ip': '172.16.52.19', 'node_port': 8882, 'storage_space': 2097152, 'remaining_space': 191176, 'keys': ['ds18', 'ds0', 'ds34', 'ds3', 'ds1']}, 3: {'latency': 50.0, 'id': 3, 'node_ip': '172.16.52.21', 'node_port': 8883, 'storage_space': 2097152, 'remaining_space': 34316, 'keys': ['ds2', 'ds1', 'ds3', 'ds5']}, 4: {'latency': 60.0, 'id': 4, 'node_ip': '172.16.52.22', 'node_port': 8884, 'storage_space': 2097152, 'remaining_space': 44556, 'keys': ['ds3', 'ds16', 'ds9', 'ds2', 'ds1', 'ds98']}}finishing collecting data from actors
+task 2351572 sended to 3
+Eviction demandée {'condidates': ['ds2', 'ds1', 'ds3', 'ds5'], 'eviction': True, 'sendData': True}
+condidate ds2
+{'delete': True, 'send': False}
+{"remaining_space":284234,"reponse":true}
+ds2 deleted from 3
+condidate ds1
+condidate ds3
+condidate ds5
