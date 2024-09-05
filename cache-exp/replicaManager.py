@@ -108,7 +108,7 @@ class ReplicaManager:
                         eviction = self.sendDataToTask(task=task, latency=latency)
                         i+=1
                     self.writeOutput(f"resultats de l'envoi de la donnée {not eviction}\n")   
-                
+                  
                 if eviction and not ENABEL_MIGRATION:
                     i = 0
 
@@ -117,7 +117,7 @@ class ReplicaManager:
                     print(f"task {task.id_task}")
                     while eviction and len(condidates) > 0:
                         condidate = condidates[i] 
-                        self.writeOutput(f"delete {condidate} from {task.id_node}\n")
+                        self.writeOutput(f"delete {condidate} from {task.id_node}\n") 
                         d = self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
                         print(f"delete {d}\n")
                         #self.deleteDataFromTable(task.id_node, condidate)
@@ -435,7 +435,7 @@ class ReplicaManager:
 
         for id_neighbors in range(self.nb_nodes):
             space_availabel = self.nodes_infos[id_neighbors]["remaining_space"]
-            if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and (space_availabel > (((ds_size)*1024))):
+            if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and (space_availabel > (((ds_size)*1024) + 1000)):
                 popularity = 0 if id_ds not in self.nodes_infos[id_neighbors]['popularities'].keys() else self.nodes_infos[id_neighbors]['popularities'][id_ds]
                 """cost =  transefrtWithGain(
                     b=BANDWIDTH,

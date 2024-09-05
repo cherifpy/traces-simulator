@@ -40,7 +40,7 @@ class Cache:
         #TODO Check if the data is sended and ask the client to access id to set the LRU
         #client_tmp = pylibmc.Client(servers, binary=True, behaviors={"tcp_nodelay": True})
         #r = client_tmp.set(id_dataset, content)
-        r = redis.Redis(host=ip_dst, port=MEMCACHED_LISTENING_PORT, db=0)
+        r = redis.Redis(host=ip_dst, port=MEMCACHED_LISTENING_PORT, db=0, decode_responses=True)
 
         try:
             r.set(id_dataset, content)
