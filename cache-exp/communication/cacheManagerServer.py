@@ -182,12 +182,13 @@ class CacheManagerServer:
             b = self.cache.deleteFromCache(id_ds, ds_size=ds_size)
             self.writeOutput(b)
             if b:
-                t = self.cache.sendDataSetTo(
+                t,e = self.cache.sendDataSetTo(
                     ip_dst=ip_dst_node,
                     id_dataset=id_ds,
                     size_ds=ds_size
                     )
-                
+                if not e is None:
+                    self.writeOutput(f"{e}")
                 stats = self.cache.getStats()[0][1]
                 self.cache.memory_used = int(stats["used_memory"])
                 response = {"sended":t, "remaining_space":int(stats["maxmemory"]) - int(stats["used_memory"])}

@@ -43,10 +43,12 @@ class Cache:
         r = redis.Redis(host=ip_dst, port=MEMCACHED_LISTENING_PORT, db=0, decode_responses=True)
 
         try:
-            r.set(id_dataset, content)
+            s = r.set(id_dataset, content)
+
+            return s,None
             return True
-        except:
-            return False
+        except Exception as e:
+            return False, e
     
     def sendDataSetToOnthread(self, ip_dst, id_dataset,size_ds):
         sending_process = threading.Thread(target=self.sendDataSetTo, args=(ip_dst,id_dataset,size_ds))
