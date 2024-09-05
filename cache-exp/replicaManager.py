@@ -97,7 +97,7 @@ class ReplicaManager:
                         r_eviction = self.searchReplicaDistination(task.id_node, condidate, self.data_sizes[condidate])
                         if r_eviction["send"]: 
                             id_dst_node = r_eviction["id_dst_node"]
-                            self.writeOutput(f"send {task.id_dataset} from {task.id_node} and send it to {id_dst_node}\n")
+                            self.writeOutput(f"send {condidate} from {task.id_node} and send it to {id_dst_node}\n")
                             self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=self.data_sizes[condidate])
 
                         else:
@@ -392,7 +392,7 @@ class ReplicaManager:
         response = requests.post(url, json=data)
         self.nodes_infos[id_node]['remaining_space'] = response.json()['remaining_space']
         #print(response.json()["response"]),
-        self.writeOutput(f"resultat du transfert {response.json()}\n")
+        #self.writeOutput(f"resultat du transfert {response.json()}\n")
         return response.json()
     
     def deleteAndSendOnThread(self, id_src_node, id_dst_node, id_dataset, ds_size):
@@ -436,6 +436,7 @@ class ReplicaManager:
         for id_neighbors in range(self.nb_nodes):
             space_availabel = self.nodes_infos[id_neighbors]["remaining_space"]
             if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and (space_availabel > (((ds_size+100)*1024))):
+                self.writeOutput(f"why not to send {id_ds} from {id_node} to {id_neighbors} {self.graphe_infos[int(id_node)][id_neighbors]}\n")
                 popularity = 0 if id_ds not in self.nodes_infos[id_neighbors]['popularities'].keys() else self.nodes_infos[id_neighbors]['popularities'][id_ds]
                 """cost =  transefrtWithGain(
                     b=BANDWIDTH,
