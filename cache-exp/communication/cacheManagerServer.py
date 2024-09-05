@@ -173,7 +173,7 @@ class CacheManagerServer:
         
         #TODO
         @self.app.route('/send-and-deleteCopie', methods=["GET"])
-        def sendAndDelete():
+        def sendAndDelete2():
             id_ds = request.args.get("id_dataset")
             ip_dst_node = request.args.get("ip_dst_node")
             ds_size = request.args.get("ds_size")
@@ -203,6 +203,7 @@ class CacheManagerServer:
             ip_dst_node = request.args.get("ip_dst_node")
             ds_size = request.args.get("ds_size")
             port_dst = request.args.get("port_dst_node")
+
             t,e = self.cache.sendDataSetTo(
                     ip_dst=ip_dst_node,
                     id_dataset=id_ds,
@@ -211,7 +212,6 @@ class CacheManagerServer:
             if not e is None:
                 self.writeOutput(f"{e}")
 
-            
             if t:
                 b = self.cache.deleteFromCache(id_ds, ds_size=ds_size)
                 self.writeOutput(b)
