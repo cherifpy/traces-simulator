@@ -172,7 +172,7 @@ class CacheManagerServer:
             return jsonify(processed_data)
         
         #TODO
-        @self.app.route('/send-and-delete', methods=["GET"])
+        @self.app.route('/send-and-deleteCopie', methods=["GET"])
         def sendAndDelete():
             id_ds = request.args.get("id_dataset")
             ip_dst_node = request.args.get("ip_dst_node")
@@ -196,14 +196,39 @@ class CacheManagerServer:
                 response = {"sended":b}
 
             return jsonify(response)
+        
+        @self.app.route('/send-and-delete', methods=["GET"])
+        def sendAndDelete():
+            id_ds = request.args.get("id_dataset")
+            ip_dst_node = request.args.get("ip_dst_node")
+            ds_size = request.args.get("ds_size")
+            port_dst = request.args.get("port_dst_node")
+            t,e = self.cache.sendDataSetTo(
+                    ip_dst=ip_dst_node,
+                    id_dataset=id_ds,
+                    size_ds=ds_size
+                    )
+            if not e is None:
+                self.writeOutput(f"{e}")
 
+            
+            if t:
+                b = self.cache.deleteFromCache(id_ds, ds_size=ds_size)
+                self.writeOutput(b)
+                stats = self.cache.getStats()[0][1]
+                self.cache.memory_used = int(stats["used_memory"])
+                response = {"sended":b, "remaining_space":int(stats["maxmemory"]) - int(stats["used_memory"])}
+            else:
+                response = {"sended":t}
+
+            return jsonify(response)
         #TODO
         @self.app.route("/send-to", methods=["POST"])
         def transertTo():
             data = request.json
             path = data["path"]
             
-            r = self.cache.sendDataSetTo(
+            r,_ = self.cache.sendDataSetTo(
                 ip_dst=data["dst_ip"],
                 id_dataset=data["id_dataset"],
                 size_ds=data["size_ds"],
@@ -215,7 +240,7 @@ class CacheManagerServer:
 
             elif n == self.cache.id_node and len(path) == 1:
                 #ici si il reste que le distinataire donc envoyer vers le memcached
-                r = self.cache.sendDataSetTo(
+                r,_ = self.cache.sendDataSetTo(
                     ip_dst=self.neighbors[n]["ip"],
                     id_dataset=data["id_dataset"],
                     size_ds=data["size_ds"],

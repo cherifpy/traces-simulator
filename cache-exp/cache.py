@@ -25,7 +25,7 @@ class Cache:
 
     def sendDataSetTo(self, ip_dst, id_dataset,size_ds):
         if EXECUTION_LOCAL:
-            return True
+            return True, None
 
         file_name = '/tmp/tmp.bin'
         file_size_octet = int(size_ds)*1024

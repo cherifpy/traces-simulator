@@ -98,9 +98,10 @@ class ReplicaManager:
                         if r_eviction["send"]: 
                             id_dst_node = r_eviction["id_dst_node"]
                             self.writeOutput(f"send {condidate} from {task.id_node} and send it to {id_dst_node}\n")
-                            self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=self.data_sizes[condidate])
+                            r = False
+                            r = self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=self.data_sizes[condidate])
 
-                        else:
+                        if not r_eviction["send"] or not r:
                             self.writeOutput(f"delete {condidate} from {task.id_node}\n")
                             self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
                             self.data[condidate].updateNbReplica(add=False)
@@ -364,7 +365,7 @@ class ReplicaManager:
             self.notifyNode(id_dst_node,self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , id_dataset, add=True)
 
         self.writeOutput(f"resultat du transfert {response.json()}\n")
-        return response.json()
+        return response.json()["sended"]
     
     def deleteFromCache(self,node_id, node_ip, node_port, id_dataset):
         url = f'http://{node_ip}:{node_port}/delete-data'
@@ -435,7 +436,7 @@ class ReplicaManager:
 
         for id_neighbors in range(self.nb_nodes):
             space_availabel = self.nodes_infos[id_neighbors]["remaining_space"]
-            if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and (space_availabel > (((ds_size+100)*1024))):
+            if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and (space_availabel > (((ds_size+1000)*1024))):
                 self.writeOutput(f"why not to send {id_ds} from {id_node} to {id_neighbors} {self.graphe_infos[int(id_node)][id_neighbors]}\n")
                 popularity = 0 if id_ds not in self.nodes_infos[id_neighbors]['popularities'].keys() else self.nodes_infos[id_neighbors]['popularities'][id_ds]
                 """cost =  transefrtWithGain(
