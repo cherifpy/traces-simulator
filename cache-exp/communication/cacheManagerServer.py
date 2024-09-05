@@ -162,7 +162,7 @@ class CacheManagerServer:
         def transfert():
             data = request.json
             
-            r = self.cache.sendDataSetTo(
+            r,e = self.cache.sendDataSetTo(
                 ip_dst=data["dst_ip"],
                 id_dataset=data["id_dataset"],
                 size_ds=data["size_ds"]

@@ -45,8 +45,7 @@ class Cache:
         try:
             s = r.set(id_dataset, content)
 
-            return s,None
-            return True
+            return True,None
         except Exception as e:
             return False, e
     
