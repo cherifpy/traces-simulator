@@ -4,6 +4,7 @@ from gc import enable
 from math import cos
 from platform import node
 from urllib import response
+from networkx import neighbors
 import redis
 from jinja2 import pass_environment
 from exp.params import  (
@@ -60,7 +61,7 @@ class ReplicaManager:
         self.replicas = {}
            
     def startV4(self):
-
+        previous_stats = []
         if not self.nodes_infos:
             return False
         traces = pd.read_csv(self.traces_path)
@@ -76,7 +77,9 @@ class ReplicaManager:
             
             if task.id_dataset not in self.data.keys(): 
                 self.data[task.id_dataset] = Data(id_dataset=task.id_dataset, size=task.ds_size, replicas_location=None)
-            self.data[task.id_dataset].updateNBrequests()
+            
+            self.data[task.id_dataset].updateDataState()
+            
             node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
             node_port = self.nodes_infos[int(task.id_node)]["node_port"]
             response, latency = self.sendTask(task,node_port, node_ip)
@@ -132,7 +135,7 @@ class ReplicaManager:
             else:
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},-1,{task.id_node},{task.ds_size},0,NoTransfert\n")
             if time == TIME_SLOT:
-                self.data = Data.iniTDataTTL(copy.deepcopy(self.data))
+                self.data, self.previous_stats = Data.iniTDataTTL(self.data)
                 time = 0
             else:
                 time+=1
@@ -160,10 +163,30 @@ class ReplicaManager:
         """
         locations = []
         latency = []
-        for node, c in enumerate(self.graphe_infos[id_node]):
+        for node, c in enumerate(self.graphe_infos[id_node][:-1]):
             if c > 0 and c < self.graphe_infos[self.id][node] and dataset in self.nodes_infos[node]["keys"]:
                 locations.append(node)                
                 latency.append(c)
+            
+        if len(locations) == 0:
+            return None, None
+        
+        i_min = np.argmin(latency)
+
+        return latency[i_min], locations[i_min]
+    
+    def searchOnAllNetwork(self, id_node, dataset):
+        """
+            need to change this to select from where to get th data
+        """
+        locations = []
+        latency = []
+        for node, c in enumerate(self.graphe_infos[id_node][:-1]):
+            if dataset in self.nodes_infos[node]["keys"]:
+                _, cost =  dijkstra(self.graphe_infos, id_node, node)
+                if cost < self.graphe_infos[self.id][node]:
+                    locations.append(node)                
+                    latency.append(c)
             
         if len(locations) == 0:
             return None, None
@@ -192,7 +215,7 @@ class ReplicaManager:
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},{l},{task.id_node},{task.ds_size},{cost},transfert2\n")
                 return not added
             
-        if not added:
+        if not added :
             added = self.sendDataSet(id_node=task.id_node,ip_node=node_ip, id_ds=task.id_dataset, ds_size=task.ds_size) 
             if added:
                 self.data[task.id_dataset].updateNbReplica(add=True)
@@ -416,7 +439,6 @@ class ReplicaManager:
         for id_node, infos in self.nodes_infos.items():
             if self.graphe_infos[int(id_node)][int(node)] > 0 and id_ds in infos["keys"]:
                 n.append(id_node)
-        
         return n
     
 
@@ -431,10 +453,14 @@ class ReplicaManager:
             here i will use the TTL to decide if a had to migrate or send 
             And this also serach for the distination node form here
         """
+
+        #partie TTL
         data = self.data[id_ds]
+        p = 0 if id_node not in self.data[id_ds].popularity_peer_noed.keys() else self.data[id_ds].popularity_peer_noed[id_node]
+        if p == 0 : return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
 
-        if self.data[id_ds].nb_requests == 0 : return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
 
+        #partie ENVOI
         if len(self.isOnNeighbords(id_node, id_ds)) != 0: return {"delete":True, "send":False} #demander au noeud de juste supprimer la données
         
         optimal_cost = -1
@@ -445,12 +471,13 @@ class ReplicaManager:
             space_availabel = self.nodes_infos[id_neighbors]["remaining_space"]
             if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and (space_availabel > (((ds_size+1024)*1024))):
                 self.writeOutput(f"why not to send {id_ds} from {id_node} to {id_neighbors} {self.graphe_infos[int(id_node)][id_neighbors]}\n")
-                popularity = 0 if id_ds not in self.nodes_infos[id_neighbors]['popularities'].keys() else self.nodes_infos[id_neighbors]['popularities'][id_ds]
+                popularity = 0 if id_node not in self.data[id_ds].popularity_peer_noed.keys() else self.data[id_ds].popularity_peer_noed[id_neighbors]
+
                 cost =  transefrtWithGain(
                     b=BANDWIDTH,
                     l=self.graphe_infos[int(id_node)][id_neighbors],
                     s=ds_size,
-                    n=popularity, 
+                    n=p, 
                 )
                 """
                 cost = transfertTime(
@@ -552,7 +579,26 @@ class ReplicaManager:
             self.nodes_infos[id_node]['keys'].remove(id_dataset)
             #self.writeOutput(f'{self.nodes_infos[id_node]['keys']}')
             return True
+    
+    def managerAvectionM1(self,id_node,id_data):
+
+        #partie TTL
+        data = self.data[id_data]
+        p = 0 if id_node not in self.data[id_data].popularity_peer_noed.keys() else self.data[id_ds].popularity_peer_noed[id_node]
+        if p == 0 : return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
+
+        data = self.data[id_data]
+        neighbors = []
+        storage_on_node = []
+        for n in range(len(self.graphe_infos)-1):
+            if self.graphe_infos[id_node][n] > 0 and self.nodes_infos[n]["remaining_space"] > (((data.size+1024)*1024)):
+                neighbors.append((n, self.nodes_infos[n]["remaining_space"]))
         
+        sorted_neighbors_by_space = sorted(neighbors, key=lambda x: x[1], reverse=True)
+
+        #je suis arrivé la je continu le choix du noeud comme dicuté
+
+                
         
 
     def deleteFromLocationTable(self,id_node, id_dataset):

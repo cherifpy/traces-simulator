@@ -20,8 +20,20 @@ def transefrtWithGain(b, l, s, n):
     return transfert_cost + gain
 
 def transfertTime(b, l, s):
+    """
+        params:
+            b = bandwidth
+            l = latency
+            s = dataset size
+
+        this cost fonction try to minimise the transfert cost
+    """
+
     bandwith_in_bits = b*1024*1024*8
     size_in_bits = s*1024*8
     latency_in_s = l/1000
 
     return latency_in_s + (size_in_bits/bandwith_in_bits)
+
+def energieAndTransfertCost(b,l,s):
+    pass
