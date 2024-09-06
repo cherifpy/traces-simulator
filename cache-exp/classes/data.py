@@ -11,6 +11,10 @@ class Data(object):
         self.nb_replica = 0
         self.replicas_location = replicas_location
         self.popularity_peer_noed = {}
+        self.nb_requests = 0
+
+    def updateNBrequtes(self):
+        self.nb_requests +=1
 
     def updatePopularity(self):
         self.popularity +=1
@@ -24,3 +28,10 @@ class Data(object):
         if id_node in self.popularity_peer_noed:
             self.popularity_peer_noed[id_node]+=1
         else: self.popularity_peer_noed[id_node] = 1
+
+    @classmethod
+    def iniTDataTTL(data_list):
+        for d in data_list:
+            d.nb_requests = 0
+            
+        return data_list

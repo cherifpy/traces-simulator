@@ -14,6 +14,7 @@ from exp.params import  (
     MEMCACHED_LISTENING_PORT,
     BANDWIDTH,
     ENABEL_MIGRATION,
+    TIME_SLOT,
     TTL_MIN,
     EXECUTION_LOCAL
 )
@@ -63,7 +64,7 @@ class ReplicaManager:
         if not self.nodes_infos:
             return False
         traces = pd.read_csv(self.traces_path)
-        
+        time = 0
         for index, row in traces.iterrows():
             
             #self.writeOutput(f"{str(self.nodes_infos)}\n")
@@ -94,12 +95,12 @@ class ReplicaManager:
                     
                     while eviction and len(condidates) > 0:
                         condidate = condidates[i] 
-                        r_eviction = self.searchReplicaDistination(task.id_node, condidate, self.data_sizes[condidate])
+                        r_eviction = self.searchReplicaDistination(task.id_node, condidate, self.data[condidate].size)
                         if r_eviction["send"]: 
                             id_dst_node = r_eviction["id_dst_node"]
                             self.writeOutput(f"send {condidate} from {task.id_node} and send it to {id_dst_node}\n")
                             r = False
-                            r = self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=self.data_sizes[condidate])
+                            r = self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=self.data[condidate].size)
 
                         if not r_eviction["send"] or not r:
                             self.writeOutput(f"delete {condidate} from {task.id_node}\n")
@@ -130,7 +131,12 @@ class ReplicaManager:
                     self.writeOutput(f"resultats de l'envoi de la donnée {not eviction}")  
             else:
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},-1,{task.id_node},{task.ds_size},0,NoTransfert\n")
-
+            if time == TIME_SLOT:
+                self.data = Data.iniTDataTTL(copy.deepcopy(self.data))
+                time = 0
+            else:
+                time+=1
+        return True
     #used a copie
     def collecteData(self):
         if len(self.nodes_infos.keys()) == 0:
@@ -423,35 +429,36 @@ class ReplicaManager:
     def searchReplicaDistination(self,id_node,id_ds, ds_size):
         """
             here i will use the TTL to decide if a had to migrate or send 
+            And this also serach for the distination node form here
         """
         data = self.data[id_ds]
 
-        if self.data[id_ds].nb_replica >= TTL_MIN : return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
+        if self.data[id_ds].nb_requests == 0 : return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
 
         if len(self.isOnNeighbords(id_node, id_ds)) != 0: return {"delete":True, "send":False} #demander au noeud de juste supprimer la données
         
-        #optimal_cost = -1
-        optimal_cost = float('inf')
+        optimal_cost = -1
+        #optimal_cost = float('inf')
         node = None
 
         for id_neighbors in range(self.nb_nodes):
             space_availabel = self.nodes_infos[id_neighbors]["remaining_space"]
-            if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and (space_availabel > (((ds_size+1000)*1024))):
+            if  self.graphe_infos[int(id_node)][id_neighbors] > 0 and (space_availabel > (((ds_size+1024)*1024))):
                 self.writeOutput(f"why not to send {id_ds} from {id_node} to {id_neighbors} {self.graphe_infos[int(id_node)][id_neighbors]}\n")
                 popularity = 0 if id_ds not in self.nodes_infos[id_neighbors]['popularities'].keys() else self.nodes_infos[id_neighbors]['popularities'][id_ds]
-                """cost =  transefrtWithGain(
+                cost =  transefrtWithGain(
                     b=BANDWIDTH,
                     l=self.graphe_infos[int(id_node)][id_neighbors],
                     s=ds_size,
                     n=popularity, 
-                )"""
-
+                )
+                """
                 cost = transfertTime(
                     b=BANDWIDTH,
                     l=self.graphe_infos[int(id_node)][id_neighbors],
                     s=ds_size,
-                )
-                if cost < optimal_cost:
+                )"""
+                if cost > optimal_cost:
                     optimal_cost = cost
                     node = id_neighbors
 
