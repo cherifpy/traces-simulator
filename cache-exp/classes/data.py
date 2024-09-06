@@ -13,7 +13,7 @@ class Data(object):
         self.popularity_peer_noed = {}
         self.nb_requests = 0
 
-    def updateNBrequtes(self):
+    def updateNBrequests(self):
         self.nb_requests +=1
 
     def updatePopularity(self):
@@ -31,7 +31,7 @@ class Data(object):
 
     @classmethod
     def iniTDataTTL(data_list):
-        for d in data_list:
-            d.nb_requests = 0
+        for d in data_list.keys():
+            data_list[d].nb_requests = 0
             
         return data_list

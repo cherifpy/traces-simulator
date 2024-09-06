@@ -76,7 +76,7 @@ class ReplicaManager:
             
             if task.id_dataset not in self.data.keys(): 
                 self.data[task.id_dataset] = Data(id_dataset=task.id_dataset, size=task.ds_size, replicas_location=None)
-            
+            self.data[task.id_dataset].updateNBrequests()
             node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
             node_port = self.nodes_infos[int(task.id_node)]["node_port"]
             response, latency = self.sendTask(task,node_port, node_ip)
