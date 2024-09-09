@@ -13,10 +13,11 @@ class Data(object):
         self.popularity_peer_noed = {}
         self.nb_requests = 0
         self.nb_transfert_between_node = {}
+        
 
     def updateDataState(self, id_node):
         self.nb_requests +=1
-        if id_node in self.popularity_peer_noed.keys():self.popularity_peer_noed[id_node] -=1
+        if id_node in self.popularity_peer_noed.keys():self.popularity_peer_noed[id_node] +=1
         else:self.popularity_peer_noed[id_node] = 1
 
     def updateNBrequests(self):

@@ -77,6 +77,8 @@ class ReplicaManager:
             
             if task.id_dataset not in self.data.keys(): 
                 self.data[task.id_dataset] = Data(id_dataset=task.id_dataset, size=task.ds_size, replicas_location=None)
+                if task.id_dataset not in self.previous_stats:
+                    self.previous_stats[task.id_dataset] = Data(id_dataset=task.id_dataset, size=task.ds_size, replicas_location=None)
             
             self.data[task.id_dataset].updateDataState()
             
@@ -580,14 +582,15 @@ class ReplicaManager:
             #self.writeOutput(f'{self.nodes_infos[id_node]['keys']}')
             return True
     
-    def managerAvectionM1(self,id_node,id_data):
+    def managerAvectionM1(self,id_node,id_ds):
 
         #partie TTL
-        data = self.data[id_data]
-        p = 0 if id_node not in self.data[id_data].popularity_peer_noed.keys() else self.data[id_ds].popularity_peer_noed[id_node]
+        data_item = self.data[id_ds]
+        #p = 0 if id_node not in self.previous_stats[id_ds].popularity_peer_noed.keys() else self.previous_stats[id_ds].popularity_peer_noed[id_node]
+        p =  self.previous_stats[id_ds].nb_requests
         if p == 0 : return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
 
-        data = self.data[id_data]
+        data_item = self.data[id_ds]
         neighbors = []
         storage_on_node = []
         for n in range(len(self.graphe_infos)-1):
@@ -596,6 +599,30 @@ class ReplicaManager:
         
         sorted_neighbors_by_space = sorted(neighbors, key=lambda x: x[1], reverse=True)
 
+        for id_n, _ in sorted_neighbors_by_space:
+            space_availabel = self.nodes_infos[id_n]["remaining_space"]
+            if  self.graphe_infos[int(id_node)][id_n] > 0 and (space_availabel > (((data.size+1024)*1024))):
+                self.writeOutput(f"why not to send {id_n} from {id_node} to {id_n} {self.graphe_infos[int(id_node)][id_n]}\n")
+                popularity = 0 if id_node not in self.data_item[id_ds].popularity_peer_noed.keys() else self.data_item[id_ds].popularity_peer_noed[id_n]
+
+                """cost =  transefrtWithGain(
+                    b=BANDWIDTH,
+                    l=self.graphe_infos[int(id_node)][id_n],
+                    s=data.size,
+                    n=p, 
+                )
+                """
+                cost = transfertTime(
+                    b=BANDWIDTH,
+                    l=self.graphe_infos[int(id_node)][id_n],
+                    s=data.size,
+                )
+                if cost < optimal_cost:
+                    optimal_cost = cost
+                    node = id_n
+
+        return {"delete":True, "send": True if not node is None else False, "id_dst_node":node}
+            
         #je suis arrivé la je continu le choix du noeud comme dicuté
 
                 
