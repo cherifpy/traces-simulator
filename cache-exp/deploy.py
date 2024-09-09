@@ -8,6 +8,7 @@ from exp.params import (
     PATH_TO_CONFIG_FILE, 
     SERVER_REPLICA_MANAGER_PORT,
     MEMCACHED_LISTENING_PORT,
+    STORAGE_SPACE
 )
 
 def run_command(command):
@@ -69,7 +70,7 @@ if True:
 
     ## deplot memcached
     #config.deployMemcached(port=MEMCACHED_LISTENING_PORT)
-    config.deployRedis(port=MEMCACHED_LISTENING_PORT)
+    config.deployRedis(port=MEMCACHED_LISTENING_PORT, storage= STORAGE_SPACE)
 
     NB_NODES = config.nb_sites
     CONFIG_GRAPHE = config.getGraphe()

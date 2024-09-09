@@ -113,7 +113,7 @@ class Configuration:
                 
 
                 #
-    def deployRedis(self, port=5555):
+    def deployRedis(self, port=5555, storage=90):
         if self.execution_local:
             return False
 
@@ -122,7 +122,7 @@ class Configuration:
             p.apt(name=['redis-server'],state="present",)
             p.command(
                     task_name="Start redis with a pecifique config",
-                    cmd=f"redis-server --bind 0.0.0.0 --protected-mode no --maxmemory {40}mb --port {self.memcached_listening_port}", 
+                    cmd=f"redis-server --bind 0.0.0.0 --protected-mode no --maxmemory {storage}mb --port {self.memcached_listening_port}", 
                     background=True
                 )
         return True

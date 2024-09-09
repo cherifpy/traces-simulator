@@ -9,3 +9,4 @@ BANDWIDTH = 1024
 ENABEL_MIGRATION = False
 TTL_MIN = 2 #Un ttl qui peut etre mi a jour a chaque fois que la donnée est dans l'infra (on peu le minimiser selon l'infrastructure a partire des données de l'infrastructure)
 TIME_SLOT = 20
+STORAGE_SPACE = 90

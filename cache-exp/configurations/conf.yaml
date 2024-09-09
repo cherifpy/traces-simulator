@@ -8,39 +8,39 @@ machines:
   - cluster: paravance
     nodes: 1
     roles: [A]
-    storage: 40
+    storage: 90
   - cluster: paravance
     nodes: 1
     roles: [B]
-    storage: 40
+    storage: 90
   - cluster: paravance
     nodes: 1
     roles: [C]
-    storage: 40
+    storage: 90
   - cluster: paravance
     nodes: 1
     roles: [D]
-    storage: 40
+    storage: 90
   - cluster: paravance
     nodes: 1
     roles: [E]
-    storage: 40
+    storage: 90
   - cluster: paravance
     nodes: 1
     roles: [F]
-    storage: 40
+    storage: 90
   - cluster: paravance
     nodes: 1
     roles: [G]
-    storage: 40
+    storage: 90
   - cluster: paravance
     nodes: 1
     roles: [H]
-    storage: 40
+    storage: 90
   - cluster: paravance
     nodes: 1
     roles: [I]
-    storage: 40
+    storage: 90
 network_constraints:
   - default_delay: 20ms
     default_rate: 100mbit
@@ -74,7 +74,7 @@ network_constraints:
         delay: 40ms
         symmetric: True
       - src: B 
-        dst: F
+        dst: E
         delay: 80ms
         symmetric: True
       - src: E 
