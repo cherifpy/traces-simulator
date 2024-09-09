@@ -41,4 +41,4 @@ class Data(object):
         for d in data_list.keys():
             data_list[d].nb_requests = 0
             data_list[d].popularity_peer_noed = {}
-        return data_list, previous_data
+        return copy.deepcopy(data_list), previous_data

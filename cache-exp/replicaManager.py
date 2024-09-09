@@ -589,7 +589,9 @@ class ReplicaManager:
         data_item = self.data[id_ds]
         #p = 0 if id_node not in self.previous_stats[id_ds].popularity_peer_noed.keys() else self.previous_stats[id_ds].popularity_peer_noed[id_node]
         p =  self.previous_stats[id_ds].nb_requests
-        if p == 0 : return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
+        if p == 0 : 
+            print("deleted cause of TTL\n")
+            return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
 
         data_item = self.data[id_ds]
         neighbors = []
@@ -599,26 +601,26 @@ class ReplicaManager:
                 neighbors.append((n, self.nodes_infos[n]["remaining_space"]))
         
         sorted_neighbors_by_space = sorted(neighbors, key=lambda x: x[1], reverse=True)
-        optimal_cost = 100000
+        optimal_cost = float('inf')
         node = None
         for id_n, _ in sorted_neighbors_by_space:
             space_availabel = self.nodes_infos[id_n]["remaining_space"]
-            if  self.graphe_infos[int(id_node)][id_n] > 0 and (space_availabel > (((data_item.size+5120)*1024))):
+            if  self.graphe_infos[int(id_node)][id_n] > 0 and (space_availabel > (((data_item.size+1024)*1024))):
                 self.writeOutput(f"why not to send {id_n} from {id_node} to {id_n} {self.graphe_infos[int(id_node)][id_n]}\n")
                 #popularity = 0 if id_node not in self.data_item[id_ds].popularity_peer_noed.keys() else self.data_item[id_ds].popularity_peer_noed[id_n]
 
-                """cost =  transefrtWithGain(
+                cost =  transefrtWithGain(
                     b=BANDWIDTH,
                     l=self.graphe_infos[int(id_node)][id_n],
                     s=data_item.size,
                     n=p, 
                 )
-                """
-                cost = transfertTime(
+                
+                """cost = transfertTime(
                     b=BANDWIDTH,
                     l=self.graphe_infos[int(id_node)][id_n],
                     s=data_item.size,
-                )
+                )"""
                 if cost < optimal_cost:
                     optimal_cost = cost
                     node = id_n
