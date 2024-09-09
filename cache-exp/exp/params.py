@@ -8,5 +8,5 @@ PATH_TO_CONFIG_FILE = "/Users/cherif/Documents/Traveaux/traces-simulator/cache-e
 BANDWIDTH = 1024
 ENABEL_MIGRATION = True
 TTL_MIN = 2 #Un ttl qui peut etre mi a jour a chaque fois que la donnée est dans l'infra (on peu le minimiser selon l'infrastructure a partire des données de l'infrastructure)
-TIME_SLOT = 100
+TIME_SLOT = 20
 STORAGE_SPACE = 90

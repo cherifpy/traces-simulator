@@ -185,8 +185,8 @@ class ReplicaManager:
         locations = []
         latency = []
         for node, c in enumerate(self.graphe_infos[id_node][:-1]):
-            if dataset in self.nodes_infos[node]["keys"]:
-                _, cost =  dijkstra(self.graphe_infos, id_node, node)
+            if node in self.node_infos.keys() and dataset in self.nodes_infos[node]["keys"]:
+                _, cost =  dijkstra(self.graphe_infos, node, id_node)
                 if cost < self.graphe_infos[self.id][node]:
                     locations.append(node)                
                     latency.append(c)
@@ -199,12 +199,13 @@ class ReplicaManager:
         return latency[i_min], locations[i_min]
     
     
-    def sendDataToTask(self, task, latency):
+    def sendDataToTask(self, task, latency=None):
         node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
         node_port = self.nodes_infos[int(task.id_node)]["node_port"]
-        _,l = self.searchForDataOnNeighbors(id_node=task.id_node, dataset=task.id_dataset)
+        #_,l = self.searchForDataOnNeighbors(id_node=task.id_node, dataset=task.id_dataset)
+        lat, l = self.searchOnAllNetwork(id_node=task.id_node, dataset=task.id_dataset)
         added = False
-        if l:
+        if l != None:
             added = self.askForATransfert( 
                 src= l,
                 dst=task.id_node,
@@ -213,7 +214,7 @@ class ReplicaManager:
             )
             if added: 
                 self.data[task.id_dataset].updateNbReplica(add=True)
-                cost = self.transfertCost(latency, task.ds_size)
+                cost = self.transfertCost(lat, task.ds_size)
                 self.nb_data_trasnfert +=1
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},{l},{task.id_node},{task.ds_size},{cost},transfert2\n")
                 return not added
@@ -223,7 +224,7 @@ class ReplicaManager:
             if added:
                 self.data[task.id_dataset].updateNbReplica(add=True)
                 self.nb_data_trasnfert +=1
-                cost = self.transfertCost(latency, task.ds_size)
+                cost = self.transfertCost(self.graphe_infos[self.id][int(task.id_node)], task.ds_size)
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},{self.id},{task.id_node},{task.ds_size},{cost},transfert1\n")
         
         return not added
