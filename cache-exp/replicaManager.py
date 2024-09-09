@@ -59,6 +59,7 @@ class ReplicaManager:
         self.nb_data_trasnfert_avoided = 0
         self.data: Dict[str, Data] = {}
         self.replicas = {}
+        self.previous_stats: Dict[str, Data] = {}
            
     def startV4(self):
         previous_stats = []
@@ -80,7 +81,7 @@ class ReplicaManager:
                 if task.id_dataset not in self.previous_stats:
                     self.previous_stats[task.id_dataset] = Data(id_dataset=task.id_dataset, size=task.ds_size, replicas_location=None)
             
-            self.data[task.id_dataset].updateDataState()
+            self.data[task.id_dataset].updateDataState(task.id_node)
             
             node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
             node_port = self.nodes_infos[int(task.id_node)]["node_port"]
@@ -100,7 +101,7 @@ class ReplicaManager:
                     
                     while eviction and len(condidates) > 0:
                         condidate = condidates[i] 
-                        r_eviction = self.searchReplicaDistination(task.id_node, condidate, self.data[condidate].size)
+                        r_eviction = self.managerAvectionM1(task.id_node, condidate)#, self.data[condidate].size)
                         if r_eviction["send"]: 
                             id_dst_node = r_eviction["id_dst_node"]
                             self.writeOutput(f"send {condidate} from {task.id_node} and send it to {id_dst_node}\n")
