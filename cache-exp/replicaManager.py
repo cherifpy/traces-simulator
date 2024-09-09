@@ -185,11 +185,10 @@ class ReplicaManager:
         locations = []
         latency = []
         for node, c in enumerate(self.graphe_infos[id_node][:-1]):
-            if node in self.node_infos.keys() and dataset in self.nodes_infos[node]["keys"]:
+            if node!=id_node and node in self.nodes_infos.keys() and dataset in self.nodes_infos[node]["keys"]:
                 _, cost =  dijkstra(self.graphe_infos, node, id_node)
-                if cost < self.graphe_infos[self.id][node]:
-                    locations.append(node)                
-                    latency.append(c)
+                locations.append(node)                
+                latency.append(cost)
             
         if len(locations) == 0:
             return None, None
@@ -224,7 +223,7 @@ class ReplicaManager:
             if added:
                 self.data[task.id_dataset].updateNbReplica(add=True)
                 self.nb_data_trasnfert +=1
-                cost = self.transfertCost(self.graphe_infos[self.id][int(task.id_node)], task.ds_size)
+                cost = self.transfertCost(latency, task.ds_size)
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},{self.id},{task.id_node},{task.ds_size},{cost},transfert1\n")
         
         return not added
