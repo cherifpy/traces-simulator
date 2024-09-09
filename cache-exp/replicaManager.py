@@ -595,28 +595,29 @@ class ReplicaManager:
         neighbors = []
         storage_on_node = []
         for n in range(len(self.graphe_infos)-1):
-            if self.graphe_infos[id_node][n] > 0 and self.nodes_infos[n]["remaining_space"] > (((data.size+1024)*1024)):
+            if self.graphe_infos[id_node][n] > 0 and self.nodes_infos[n]["remaining_space"] > (((data_item.size+1024)*1024)):
                 neighbors.append((n, self.nodes_infos[n]["remaining_space"]))
         
         sorted_neighbors_by_space = sorted(neighbors, key=lambda x: x[1], reverse=True)
-
+        optimal_cost = 100000
+        node = None
         for id_n, _ in sorted_neighbors_by_space:
             space_availabel = self.nodes_infos[id_n]["remaining_space"]
-            if  self.graphe_infos[int(id_node)][id_n] > 0 and (space_availabel > (((data.size+1024)*1024))):
+            if  self.graphe_infos[int(id_node)][id_n] > 0 and (space_availabel > (((data_item.size+1024)*1024))):
                 self.writeOutput(f"why not to send {id_n} from {id_node} to {id_n} {self.graphe_infos[int(id_node)][id_n]}\n")
                 popularity = 0 if id_node not in self.data_item[id_ds].popularity_peer_noed.keys() else self.data_item[id_ds].popularity_peer_noed[id_n]
 
                 """cost =  transefrtWithGain(
                     b=BANDWIDTH,
                     l=self.graphe_infos[int(id_node)][id_n],
-                    s=data.size,
+                    s=data_item.size,
                     n=p, 
                 )
                 """
                 cost = transfertTime(
                     b=BANDWIDTH,
                     l=self.graphe_infos[int(id_node)][id_n],
-                    s=data.size,
+                    s=data_item.size,
                 )
                 if cost < optimal_cost:
                     optimal_cost = cost
