@@ -619,18 +619,19 @@ class ReplicaManager:
                 self.writeOutput(f"why not to send {id_n} from {id_node} to {id_n} {self.graphe_infos[int(id_node)][id_n]}\n")
                 #popularity = 0 if id_node not in self.data_item[id_ds].popularity_peer_noed.keys() else self.data_item[id_ds].popularity_peer_noed[id_n]
 
-                cost =  transefrtWithGain(
+                """cost =  transefrtWithGain(
                     b=BANDWIDTH,
                     l=self.graphe_infos[int(id_node)][id_n],
                     s=data_item.size,
                     n=p, 
                 )
                 
-                """cost = transfertTime(
+                """
+                cost = transfertTime(
                     b=BANDWIDTH,
                     l=self.graphe_infos[int(id_node)][id_n],
                     s=data_item.size,
-                )"""
+                )
                 if cost < optimal_cost:
                     optimal_cost = cost
                     node = id_n
