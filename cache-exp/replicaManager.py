@@ -393,6 +393,7 @@ class ReplicaManager:
         if response.json()["sended"]:
             cost = self.transfertCost(self.graphe_infos[int(id_src_node)][int(id_dst_node)],ds_size)
             self.writeTransfert(f"null,{id_dataset},{id_src_node},{id_dst_node},{ds_size},{cost},migration\n")
+            print("migration faire \n")
             self.nodes_infos[id_src_node]['remaining_space'] = response.json()['remaining_space']
             self.notifyNode(id_dst_node,self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , id_dataset, add=True)
 
@@ -588,12 +589,21 @@ class ReplicaManager:
         #partie TTL
         data_item = self.data[id_ds]
         #p = 0 if id_node not in self.previous_stats[id_ds].popularity_peer_noed.keys() else self.previous_stats[id_ds].popularity_peer_noed[id_node]
-        p =  self.previous_stats[id_ds].nb_requests
+        #Ca revien a l'exp 5
+        """p =  self.previous_stats[id_ds].nb_requests
         if p == 0 : 
             print("deleted cause of TTL\n")
             return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
+        print("TTL esquivé \n")"""
+
 
         data_item = self.data[id_ds]
+
+        if data_item.nb_replica > TTL_MIN:
+            print("deleted cause of TTL\n")
+            return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
+        print("TTL esquivé \n")
+        
         neighbors = []
         storage_on_node = []
         for n in range(len(self.graphe_infos)-1):
