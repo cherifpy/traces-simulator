@@ -605,7 +605,7 @@ class ReplicaManager:
             space_availabel = self.nodes_infos[id_n]["remaining_space"]
             if  self.graphe_infos[int(id_node)][id_n] > 0 and (space_availabel > (((data_item.size+1024)*1024))):
                 self.writeOutput(f"why not to send {id_n} from {id_node} to {id_n} {self.graphe_infos[int(id_node)][id_n]}\n")
-                popularity = 0 if id_node not in self.data_item[id_ds].popularity_peer_noed.keys() else self.data_item[id_ds].popularity_peer_noed[id_n]
+                #popularity = 0 if id_node not in self.data_item[id_ds].popularity_peer_noed.keys() else self.data_item[id_ds].popularity_peer_noed[id_n]
 
                 """cost =  transefrtWithGain(
                     b=BANDWIDTH,
