@@ -604,7 +604,7 @@ class ReplicaManager:
                 neighbors.append((n, self.nodes_infos[n]["remaining_space"]))
         
         sorted_neighbors_by_space = sorted(neighbors, key=lambda x: x[1], reverse=True)
-        optimal_cost = float('inf')
+        optimal_cost = 0
         node = None
         for id_n, _ in sorted_neighbors_by_space:
             space_availabel = self.nodes_infos[id_n]["remaining_space"]
