@@ -1,12 +1,6 @@
 #here i have to manage replica
 import copy
-from gc import enable
-from math import cos
-from platform import node
-from urllib import response
-from networkx import neighbors
 import redis
-from jinja2 import pass_environment
 from exp.params import  (
     NB_NODES, 
     SERVER_REPLICA_MANAGER_PORT, 
@@ -23,7 +17,7 @@ from exp.params import  (
 from communication.send_data import recieveObject
 from communication.messages import Task
 from communication.replicaManagerServer import ReplicaManagerServer
-from functions.costs import transefrtWithGain, transfertTime
+from functions.costs import transefrtWithGain, transfertTime,nodeImportance
 from classes.data import Data
 from classes.djikstra import dijkstra
 from typing import Optional, Dict
@@ -590,24 +584,23 @@ class ReplicaManager:
         data_item = self.data[id_ds]
         #p = 0 if id_node not in self.previous_stats[id_ds].popularity_peer_noed.keys() else self.previous_stats[id_ds].popularity_peer_noed[id_node]
         #Ca revien a l'exp 5
-        """p =  self.previous_stats[id_ds].nb_requests
+        p =  self.previous_stats[id_ds].nb_requests
         if p == 0 : 
             print("deleted cause of TTL\n")
             return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
-        print("TTL esquivé \n")"""
-
-
+        print("TTL esquivé \n")
+        """
         data_item = self.data[id_ds]
 
         if data_item.nb_replica > TTL_MIN:
             print("deleted cause of TTL\n")
             return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
-        print("TTL esquivé \n")
+        print("TTL esquivé \n")"""
         
         neighbors = []
         storage_on_node = []
         for n in range(len(self.graphe_infos)-1):
-            if self.graphe_infos[id_node][n] > 0 and self.nodes_infos[n]["remaining_space"] > (((data_item.size+1024)*1024)):
+            if self.graphe_infos[id_node][n] > 0 and self.nodes_infos[n]["remaining_space"] > (((data_item.size+1024)*1024)) and id_ds not in self.nodes_infos[n]['keys']:
                 neighbors.append((n, self.nodes_infos[n]["remaining_space"]))
         
         sorted_neighbors_by_space = sorted(neighbors, key=lambda x: x[1], reverse=True)
@@ -617,13 +610,13 @@ class ReplicaManager:
             space_availabel = self.nodes_infos[id_n]["remaining_space"]
             if  self.graphe_infos[int(id_node)][id_n] > 0 and (space_availabel > (((data_item.size+1024)*1024))):
                 self.writeOutput(f"why not to send {id_n} from {id_node} to {id_n} {self.graphe_infos[int(id_node)][id_n]}\n")
-                #popularity = 0 if id_node not in self.data_item[id_ds].popularity_peer_noed.keys() else self.data_item[id_ds].popularity_peer_noed[id_n]
+                p = 0 if id_node not in self.data[id_ds].popularity_peer_node.keys() else self.data[id_ds].popularity_peer_node[id_n]
 
-                """cost =  transefrtWithGain(
+                cost =  nodeImportance(
                     b=BANDWIDTH,
-                    l=self.graphe_infos[int(id_node)][id_n],
+                    graphe_infos=self.graphe_infos,
                     s=data_item.size,
-                    n=p, 
+                    id_node=id_n,
                 )
                 
                 """
@@ -631,8 +624,8 @@ class ReplicaManager:
                     b=BANDWIDTH,
                     l=self.graphe_infos[int(id_node)][id_n],
                     s=data_item.size,
-                )
-                if cost < optimal_cost:
+                )"""
+                if cost > optimal_cost:
                     optimal_cost = cost
                     node = id_n
 

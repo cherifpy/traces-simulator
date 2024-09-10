@@ -37,3 +37,26 @@ def transfertTime(b, l, s):
 
 def energieAndTransfertCost(b,l,s):
     pass
+
+
+def nodeImportance(id_node, b,s, graphe_infos):
+    """
+        - dans cette fonction je dois tenir en contre
+            - le nombre de voisin du noeud
+            - le nombre de voisin en commun avec la source
+            - l'espace de stockage
+
+    
+        - le nombre de demande passée par le noued
+        - aussi parler sur le truc de julia qui m'as donné un papier sur la conso energitique
+        selon la distance parcourue par la requet
+    """
+    sum = 0
+    for l in graphe_infos[id_node]:
+        sum += transfertTime(b,l,s)
+
+    return sum
+
+
+
+
