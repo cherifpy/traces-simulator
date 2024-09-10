@@ -53,7 +53,7 @@ def nodeImportance(id_node, b,s, graphe_infos):
     """
     sum = 0
     for l in graphe_infos[id_node]:
-        sum += transfertTime(b,l,s)
+        if l > 0: sum += transfertTime(b,l,s)
 
     return sum
 

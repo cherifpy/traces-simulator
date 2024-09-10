@@ -28,7 +28,7 @@ def recieveObject():
         #attendre une connexion
         conn, addr = s.accept()
         
-        data = conn.recv(2048)
+        data = conn.recv(5120)
         
         objet_recu = pickle.loads(data)
         
