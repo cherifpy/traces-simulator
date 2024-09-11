@@ -621,7 +621,7 @@ class ReplicaManager:
                     graphe_infos=self.graphe_infos,
                     s=data_item.size,
                     id_node=id_n,
-                    nb_requests=self.requests_processed[id_n]
+                    nb_requests= 1 if id_n not in self.requests_processed.keys() else self.requests_processed[id_n]
                 )
                 
                 """
