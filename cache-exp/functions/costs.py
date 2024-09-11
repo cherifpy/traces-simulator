@@ -39,7 +39,28 @@ def energieAndTransfertCost(b,l,s):
     pass
 
 
+def nodeImportanceV2(id_node, b, s, graphe_infos, nb_requests):
+    """
+        dans cette fonction je me base sur la fonction node importance en ajoutant le nombre de requete qui passe par ce noued
+        possible de saturé le noeud mais je dois voir commennt regler ce truc
+    """
+
+    sum = 0
+    for l in graphe_infos[id_node]:
+        if l > 0: sum += transfertTime(b,l,s)
+
+    return sum*nb_requests
+
 def nodeImportance(id_node, b,s, graphe_infos):
+
+    sum = 0
+    for l in graphe_infos[id_node]:
+        if l > 0: sum += transfertTime(b,l,s)
+
+    return sum
+
+
+def fobjectif():
     """
         - dans cette fonction je dois tenir en contre
             - le nombre de voisin du noeud
@@ -51,11 +72,7 @@ def nodeImportance(id_node, b,s, graphe_infos):
         - aussi parler sur le truc de julia qui m'as donné un papier sur la conso energitique
         selon la distance parcourue par la requet
     """
-    sum = 0
-    for l in graphe_infos[id_node]:
-        if l > 0: sum += transfertTime(b,l,s)
-
-    return sum
+    pass
 
 
 

@@ -17,7 +17,7 @@ from exp.params import  (
 from communication.send_data import recieveObject
 from communication.messages import Task
 from communication.replicaManagerServer import ReplicaManagerServer
-from functions.costs import transefrtWithGain, transfertTime,nodeImportance
+from functions.costs import nodeImportanceV2, transefrtWithGain, transfertTime,nodeImportance
 from classes.data import Data
 from classes.djikstra import dijkstra
 from typing import Optional, Dict
@@ -54,6 +54,7 @@ class ReplicaManager:
         self.data: Dict[str, Data] = {}
         self.replicas = {}
         self.previous_stats: Dict[str, Data] = {}
+        self.requests_processed = {}
            
     def startV4(self):
         previous_stats = []
@@ -133,6 +134,7 @@ class ReplicaManager:
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},-1,{task.id_node},{task.ds_size},0,NoTransfert\n")
             if time == TIME_SLOT:
                 self.data, self.previous_stats = Data.iniTDataTTL(self.data)
+                self.initNodeImportance()
                 time = 0
             else:
                 time+=1
@@ -237,7 +239,7 @@ class ReplicaManager:
             next_dst = path.pop(0)
             ip_n = self.nodes_infos[int(next_dst)]["node_ip"]
             port_n = self.nodes_infos[int(next_dst)]["node_port"] 
-
+            
             data_to_send = {
                     'data' : data,
                     'url':url,
@@ -246,9 +248,11 @@ class ReplicaManager:
                     'target':task.id_node, 
                     'id_ds':task.id_dataset
                 }
-             
+            
             url2 = f'http://{ip_n}:{port_n}/process'
+            
             response = requests.post(url2, json=data_to_send)
+            self.updateNodeImportance(path=path)
             return response.json(), cost
 
     #used a copie
@@ -612,11 +616,12 @@ class ReplicaManager:
                 self.writeOutput(f"why not to send {id_n} from {id_node} to {id_n} {self.graphe_infos[int(id_node)][id_n]}\n")
                 #p = 0 if id_node not in self.data[id_ds].popularity_peer_node.keys() else self.data[id_ds].popularity_peer_node[id_n]
 
-                cost =  nodeImportance(
+                cost =  nodeImportanceV2(
                     b=BANDWIDTH,
                     graphe_infos=self.graphe_infos,
                     s=data_item.size,
                     id_node=id_n,
+                    nb_requests=self.requests_processed[id_n]
                 )
                 
                 """
@@ -632,9 +637,6 @@ class ReplicaManager:
         return {"delete":True, "send": True if not node is None else False, "id_dst_node":node}
             
         #je suis arrivé la je continu le choix du noeud comme dicuté
-
-                
-        
 
     def deleteFromLocationTable(self,id_node, id_dataset):
         if id_dataset in self.location_table.keys():
@@ -671,6 +673,17 @@ class ReplicaManager:
         self.transfert = open(path,'a')
         self.transfert.write(str)
         self.transfert.close()
+    
+    def updateNodeImportance(self, path):
+        for n in path:
+            if n in self.requests_processed.keys():
+                self.requests_processed[n] +=1
+            else:
+                self.requests_processed[n] = 2
+
+    def initNodeImportance(self,):
+        for n in self.requests_processed.keys():
+            self.requests_processed[n] = 1
 
 if __name__ == "__main__":
 
