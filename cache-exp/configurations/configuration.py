@@ -1,5 +1,4 @@
 
-from errno import WSAEDQUOT
 import re
 import yaml
 import numpy as np
