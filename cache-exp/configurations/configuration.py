@@ -1,4 +1,5 @@
 
+from errno import WSAEDQUOT
 import re
 import yaml
 import numpy as np
@@ -119,11 +120,6 @@ class Configuration:
 
         print("storage restriction using memcached for All nodes ")
         with self.enoslib.actions(roles=self.roles) as p: 
-            p.command(
-                    task_name="Suppression de redis",
-                    cmd=f"sudo apt-get purge redis-server", 
-                    background=False
-                )
             p.apt(name=['redis-server'],state="present",)
             p.command(
                     task_name="Start redis with a pecifique config",
