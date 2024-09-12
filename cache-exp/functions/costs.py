@@ -113,7 +113,7 @@ def minimizingTimeTransfert(dataset, ds_size,id_src, id_dst, graphe_infos, key_p
     cost_with_ds_in_source = 0
     cost_with_ds_in_dst = 0
     for i in range(len(graphe_infos[id_src])-1):
-        latency, node = searchTheNearst(i, dataset,keys )
+        latency, node = searchTheNearst(i, dataset,graphe_infos,keys)
         cost_with_ds_in_source+= transfertTime(
             l=latency, 
             b=BANDWIDTH,
@@ -123,7 +123,7 @@ def minimizingTimeTransfert(dataset, ds_size,id_src, id_dst, graphe_infos, key_p
     keys[id_dst].append(dataset)
     
     for i in range(len(graphe_infos[id_src])-1):
-        latency, node = searchTheNearst(i, dataset,keys )
+        latency, node = searchTheNearst(i, dataset,graphe_infos,keys )
         cost_with_ds_in_dst+= transfertTime(
             l=latency, 
             b=BANDWIDTH,
