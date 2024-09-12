@@ -614,7 +614,7 @@ class ReplicaManager:
                 neighbors.append((n, self.nodes_infos[n]["remaining_space"]))
         
         sorted_neighbors_by_space = sorted(neighbors, key=lambda x: x[1], reverse=True)
-        optimal_cost = float('inf')
+        optimal_cost = 0 #float('inf')
         node = None
 
         keys_peer_node = {}
@@ -652,7 +652,7 @@ class ReplicaManager:
                     graphe_infos=self.graphe_infos
                 )
 
-                if cost < optimal_cost:
+                if cost > optimal_cost:
                     optimal_cost = cost
                     node = id_n
 

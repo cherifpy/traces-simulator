@@ -89,14 +89,18 @@ def searchTheNearst(id_node,dataset, graphe_infos, key_peer_node):
     latency = []
     if dataset in key_peer_node[id_node]:
         return id_node, 0
+    
     for node, c in enumerate(graphe_infos[id_node][:-1]):
-        if node!=id_node and node in key_peer_node.keys() and dataset in key_peer_node[node]:
+        if c > 0 and dataset in key_peer_node[node]:
+            locations.append(node)                
+            latency.append(c)
+        elif node!=id_node and node in key_peer_node.keys():
             _, cost =  djikstra(graphe_infos, node, id_node)
             locations.append(node)                
             latency.append(cost)
         
     if len(locations) == 0:
-        return None, None
+        return -1, 0
 
     i_min = np.argmin(latency)
 
