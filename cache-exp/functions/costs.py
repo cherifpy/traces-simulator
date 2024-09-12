@@ -1,3 +1,13 @@
+
+from calendar import day_abbr
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from classes.djikstra import djikstra
+from exp.params import BANDWIDTH
+import numpy as np
+import copy
+
 def transefrtWithGain(b, l, s, n):
     """
         params:
@@ -74,6 +84,45 @@ def fobjectif():
     """
     pass
 
+def searchTheNearst(id_node,dataset, graphe_infos, key_peer_node):
+    locations = []
+    latency = []
+    if dataset in key_peer_node[id_node]:
+        return id_node, 0
+    for node, c in enumerate(graphe_infos[id_node][:-1]):
+        if node!=id_node and node in key_peer_node.keys() and dataset in key_peer_node[node]:
+            _, cost =  djikstra(graphe_infos, node, id_node)
+            locations.append(node)                
+            latency.append(cost)
+        
+    if len(locations) == 0:
+        return None, None
+
+    i_min = np.argmin(latency)
+
+    return latency[i_min], locations[i_min]
 
 
-
+def minimizingTimeTransfert(dataset, ds_size,id_src, id_dst, graphe_infos, key_peer_node):
+    
+    keys = copy.deepcopy(key_peer_node)
+    cost_with_ds_in_source = 0
+    cost_with_ds_in_dst = 0
+    for i in range(len(graphe_infos-1)):
+        latency, node = searchTheNearst(i, dataset,keys )
+        cost_with_ds_in_source+= transfertTime(
+            l=latency, 
+            b=BANDWIDTH,
+            s=ds_size)
+    
+    keys[id_src].remove(dataset) 
+    keys[id_dst].append(dataset)
+    
+    for i in range(len(graphe_infos-1)):
+        latency, node = searchTheNearst(i, dataset,keys )
+        cost_with_ds_in_dst+= transfertTime(
+            l=latency, 
+            b=BANDWIDTH,
+            s=ds_size)
+        
+    return cost_with_ds_in_source - cost_with_ds_in_dst

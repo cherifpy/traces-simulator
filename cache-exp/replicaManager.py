@@ -17,9 +17,15 @@ from exp.params import  (
 from communication.send_data import recieveObject
 from communication.messages import Task
 from communication.replicaManagerServer import ReplicaManagerServer
-from functions.costs import nodeImportanceV2, transefrtWithGain, transfertTime,nodeImportance
+from functions.costs import (
+    nodeImportanceV2, 
+    transefrtWithGain, 
+    transfertTime,
+    nodeImportance,
+    minimizingTimeTransfert
+    )
 from classes.data import Data
-from classes.djikstra import dijkstra
+from classes.djikstra import djikstra
 from typing import Optional, Dict
 import multiprocessing 
 import pandas as pd
@@ -182,7 +188,7 @@ class ReplicaManager:
         latency = []
         for node, c in enumerate(self.graphe_infos[id_node][:-1]):
             if node!=id_node and node in self.nodes_infos.keys() and dataset in self.nodes_infos[node]["keys"]:
-                _, cost =  dijkstra(self.graphe_infos, node, id_node)
+                _, cost =  djikstra(self.graphe_infos, node, id_node)
                 locations.append(node)                
                 latency.append(cost)
             
@@ -234,7 +240,7 @@ class ReplicaManager:
             return response.json(), self.graphe_infos[self.id][task.id_node]
         
         else:
-            path, cost =  dijkstra(self.graphe_infos, self.id, task.id_node)
+            path, cost =  djikstra(self.graphe_infos, self.id, task.id_node)
             n = path.pop(0)
             next_dst = path.pop(0)
             ip_n = self.nodes_infos[int(next_dst)]["node_ip"]
@@ -608,29 +614,45 @@ class ReplicaManager:
                 neighbors.append((n, self.nodes_infos[n]["remaining_space"]))
         
         sorted_neighbors_by_space = sorted(neighbors, key=lambda x: x[1], reverse=True)
-        optimal_cost = 0
+        optimal_cost = float('inf')
         node = None
+
+        keys_peer_node = {}
+        for n in self.nodes_infos.keys():
+            keys_peer_node[n] = copy.deepcopy(self.nodes_infos[n]['keys'])
+
         for id_n, _ in sorted_neighbors_by_space:
             space_availabel = self.nodes_infos[id_n]["remaining_space"]
             if  self.graphe_infos[int(id_node)][id_n] > 0 and (space_availabel > (((data_item.size+1024)*1024))):
                 self.writeOutput(f"why not to send {id_n} from {id_node} to {id_n} {self.graphe_infos[int(id_node)][id_n]}\n")
                 #p = 0 if id_node not in self.data[id_ds].popularity_peer_node.keys() else self.data[id_ds].popularity_peer_node[id_n]
 
-                cost =  nodeImportanceV2(
+                """cost =  nodeImportanceV2(
                     b=BANDWIDTH,
                     graphe_infos=self.graphe_infos,
                     s=data_item.size,
                     id_node=id_n,
                     nb_requests= 1 if id_n not in self.requests_processed.keys() else self.requests_processed[id_n]
                 )
-                
-                """
+
+
                 cost = transfertTime(
                     b=BANDWIDTH,
                     l=self.graphe_infos[int(id_node)][id_n],
                     s=data_item.size,
                 )"""
-                if cost > optimal_cost:
+
+                
+                cost = minimizingTimeTransfert(
+                    dataset=id_ds,
+                    ds_size=data_item.size,
+                    id_src=id_node,
+                    id_dst=id_n,
+                    key_peer_node=keys_peer_node,
+                    graphe_infos=self.graphe_infos
+                )
+
+                if cost < optimal_cost:
                     optimal_cost = cost
                     node = id_n
 

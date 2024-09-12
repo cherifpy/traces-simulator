@@ -1,6 +1,6 @@
 import heapq
 
-def dijkstra(graph, start_node, end_node):
+def djikstra(graph, start_node, end_node):
     num_nodes = len(graph)
     distances = [float('inf')] * num_nodes
     distances[start_node] = 0
@@ -47,5 +47,5 @@ if __name__ == '__main__':
     # Exemples d'utilisation
     start_node = 0
     end_node = 4
-    path, cost = dijkstra(graph, start_node, end_node)
+    path, cost = djikstra(graph, start_node, end_node)
     print(f"Chemin le plus court: {path} avec un coût de {cost}")
