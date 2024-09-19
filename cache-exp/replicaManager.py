@@ -67,6 +67,8 @@ class ReplicaManager:
         if not self.nodes_infos:
             return False
         traces = pd.read_csv(self.traces_path)
+
+        popularities = self.getPopularities(traces)
         time = 0
         for index, row in traces.iterrows():
             
@@ -78,9 +80,9 @@ class ReplicaManager:
             self.data_sizes[task.id_dataset] = task.ds_size
             
             if task.id_dataset not in self.data.keys(): 
-                self.data[task.id_dataset] = Data(id_dataset=task.id_dataset, size=task.ds_size, replicas_location=None)
+                self.data[task.id_dataset] = Data(id_dataset=task.id_dataset, size=task.ds_size, replicas_location=None,nb_requests_on_traces=popularities[task.id_dataset])
                 if task.id_dataset not in self.previous_stats:
-                    self.previous_stats[task.id_dataset] = Data(id_dataset=task.id_dataset, size=task.ds_size, replicas_location=None)
+                    self.previous_stats[task.id_dataset] = Data(id_dataset=task.id_dataset, size=task.ds_size, replicas_location=None,nb_requests_on_traces=popularities[task.id_dataset])
             
             self.data[task.id_dataset].updateDataState(task.id_node)
             
@@ -138,12 +140,12 @@ class ReplicaManager:
                     self.writeOutput(f"resultats de l'envoi de la donnée {not eviction}")  
             else:
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},-1,{task.id_node},{task.ds_size},0,NoTransfert\n")
-            if time == TIME_SLOT:
+            """if time == TIME_SLOT:
                 self.data, self.previous_stats = Data.iniTDataTTL(self.data)
                 self.initNodeImportance()
                 time = 0
             else:
-                time+=1
+                time+=1"""
         return True
     #used a copie
     def collecteData(self):
@@ -594,12 +596,22 @@ class ReplicaManager:
         data_item = self.data[id_ds]
         #p = 0 if id_node not in self.previous_stats[id_ds].popularity_peer_noed.keys() else self.previous_stats[id_ds].popularity_peer_noed[id_node]
         #Ca revien a l'exp 5
+
+        if self.data[id_ds].nb_requests_on_traces == 0:
+            print("deleted cause of TTL\n")
+            return {"delete":True, "send":False}
+            
+        """p = self.previous_stats[id_ds].TTL
+        if p == -1:
+            print("deleted cause of TTL\n")
+            return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
+        
         p =  self.previous_stats[id_ds].nb_requests
         if p == 0 : 
             print("deleted cause of TTL\n")
             return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
         print("TTL esquivé \n")
-        """
+        
         data_item = self.data[id_ds]
 
         if data_item.nb_replica > TTL_MIN:
@@ -659,6 +671,14 @@ class ReplicaManager:
         return {"delete":True, "send": True if not node is None else False, "id_dst_node":node}
             
         #je suis arrivé la je continu le choix du noeud comme dicuté
+    def getPopularities(self, traces):
+        unique, count = np.unique(traces['dataset'], return_counts=True)
+
+        popularities = {}
+        for i, ds in enumerate(unique):
+            popularities[ds] = int(count[i])
+        
+        return popularities
 
     def deleteFromLocationTable(self,id_node, id_dataset):
         if id_dataset in self.location_table.keys():
