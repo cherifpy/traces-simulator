@@ -140,12 +140,12 @@ class ReplicaManager:
                     self.writeOutput(f"resultats de l'envoi de la donnée {not eviction}")  
             else:
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},-1,{task.id_node},{task.ds_size},0,NoTransfert\n")
-            """if time == TIME_SLOT:
+            if time == TIME_SLOT:
                 self.data, self.previous_stats = Data.iniTDataTTL(self.data)
                 self.initNodeImportance()
                 time = 0
             else:
-                time+=1"""
+                time+=1
         return True
     #used a copie
     def collecteData(self):
@@ -597,16 +597,17 @@ class ReplicaManager:
         #p = 0 if id_node not in self.previous_stats[id_ds].popularity_peer_noed.keys() else self.previous_stats[id_ds].popularity_peer_noed[id_node]
         #Ca revien a l'exp 5
 
-        if self.data[id_ds].nb_requests_on_traces == 0:
+        """if self.data[id_ds].nb_requests_on_traces == 0:
             print("deleted cause of TTL\n")
             return {"delete":True, "send":False}
             
-        """p = self.previous_stats[id_ds].TTL
+        """
+        p = self.data[id_ds].TTL
         if p == -1:
             print("deleted cause of TTL\n")
             return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
         
-        p =  self.previous_stats[id_ds].nb_requests
+        """p =  self.previous_stats[id_ds].nb_requests
         if p == 0 : 
             print("deleted cause of TTL\n")
             return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra

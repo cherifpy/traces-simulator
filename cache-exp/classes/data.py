@@ -18,14 +18,14 @@ class Data(object):
         
 
     def updateDataState(self, id_node):
-        
+
         self.nb_requests_on_traces-=1
 
-        """self.nb_requests +=1
+        self.nb_requests +=1
         if self.TTL != 1:
             self.TTL = 1
         if id_node in self.popularity_peer_noed.keys():self.popularity_peer_noed[id_node] +=1
-        else:self.popularity_peer_noed[id_node] = 1"""
+        else:self.popularity_peer_noed[id_node] = 1
 
     def updateNBrequests(self):
         self.nb_requests +=1
