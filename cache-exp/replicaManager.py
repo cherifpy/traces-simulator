@@ -626,7 +626,7 @@ class ReplicaManager:
                 neighbors.append((n, self.nodes_infos[n]["remaining_space"]))
         
         sorted_neighbors_by_space = sorted(neighbors, key=lambda x: x[1], reverse=True)
-        optimal_cost = 0 #float('inf')
+        optimal_cost = float('inf')
         node = None
 
         keys_peer_node = {}
@@ -639,7 +639,7 @@ class ReplicaManager:
                 self.writeOutput(f"why not to send {id_n} from {id_node} to {id_n} {self.graphe_infos[int(id_node)][id_n]}\n")
                 #p = 0 if id_node not in self.data[id_ds].popularity_peer_node.keys() else self.data[id_ds].popularity_peer_node[id_n]
 
-                cost =  nodeImportanceV2(
+                """cost =  nodeImportanceV2(
                     b=BANDWIDTH,
                     graphe_infos=self.graphe_infos,
                     s=data_item.size,
@@ -652,7 +652,7 @@ class ReplicaManager:
                     b=BANDWIDTH,
                     l=self.graphe_infos[int(id_node)][id_n],
                     s=data_item.size,
-                )"""
+                )
 
                 
                 """cost = minimizingTimeTransfert(
@@ -664,7 +664,7 @@ class ReplicaManager:
                     graphe_infos=self.graphe_infos
                 )"""
 
-                if cost > optimal_cost:
+                if cost < optimal_cost:
                     optimal_cost = cost
                     node = id_n
 
