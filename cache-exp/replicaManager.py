@@ -98,12 +98,30 @@ class ReplicaManager:
                 if eviction and ENABEL_MIGRATION:
                     i = 0
                     if 'keys' in self.nodes_infos[task.id_node].keys():
-                        condidates = copy.deepcopy(self.nodes_infos[task.id_node]["keys"])
+                        candidates = copy.deepcopy(self.nodes_infos[task.id_node]["keys"])
                     else:
-                        condidates = []
+                        candidates = []
+
+                    ##
+                    # 
+                    # This part is juste added to simulate the optimale execution so it must be deleted     
+                    data_to_delete = copy.deepcopy(candidates)
+                    for ds in data_to_delete:
+                        data = self.data[ds]
+                        if data.nb_requests == 0 and eviction:
+                            self.writeOutput(f"delete {condidate} from {task.id_node}\n")
+                            b = self.deleteFromCache(node_id=task.id_node,node_ip=node_ip, node_port=node_port, id_dataset=ds)
+                            if b:
+                                candidates.remove(ds)
+                            self.data[condidate].updateNbReplica(add=False)
+                            b, self.nodes_infos = self.collecteData()
+                            eviction = self.sendDataToTask(task=task, latency=latency)
+                            if not eviction:
+                                break
+                    #######
                     
-                    while eviction and len(condidates) > 0:
-                        condidate = condidates[i] 
+                    while eviction and len(candidates) > 0:
+                        condidate = candidates[i] 
                         r_eviction = self.managerAvectionM1(task.id_node, condidate)#, self.data[condidate].size)
                         if r_eviction["send"]: 
                             id_dst_node = r_eviction["id_dst_node"]
@@ -123,11 +141,11 @@ class ReplicaManager:
                 if eviction and not ENABEL_MIGRATION:
                     i = 0
 
-                    if 'keys' in self.nodes_infos[task.id_node].keys(): condidates = copy.deepcopy(self.nodes_infos[task.id_node]["keys"])
-                    else: condidates = []
+                    if 'keys' in self.nodes_infos[task.id_node].keys(): candidates = copy.deepcopy(self.nodes_infos[task.id_node]["keys"])
+                    else: candidates = []
                     print(f"task {task.id_task}")
-                    while eviction and len(condidates) > 0:
-                        condidate = condidates[i] 
+                    while eviction and len(candidates) > 0:
+                        condidate = candidates[i] 
                         self.writeOutput(f"delete {condidate} from {task.id_node}\n") 
                         d = self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
                         print(f"delete {d}\n")
@@ -148,9 +166,19 @@ class ReplicaManager:
                 time+=1
         return True
     #used a copie
-    def collecteData(self):
+    def collecteData(self, node=-1):
         if len(self.nodes_infos.keys()) == 0:
             return False, {}
+        
+        if node!=-1:
+            url = f'http://{self.nodes_infos[node]["node_ip"]}:{self.nodes_infos[node]["node_port"]}/infos'
+            response = requests.get(url).json()
+            self.nodes_infos[node]["storage_space"] = response["storage_space"]
+            self.nodes_infos[node]["remaining_space"] = response["remaining_space"]
+            self.nodes_infos[node]["keys"] = response['keys']
+            self.nodes_infos[node]["popularities"] = response["popularities"] 
+            return True, self.nodes_infos
+        
         self.location_table = {}
         for key in self.nodes_infos.keys():
             url = f'http://{self.nodes_infos[key]["node_ip"]}:{self.nodes_infos[key]["node_port"]}/infos'
@@ -434,7 +462,7 @@ class ReplicaManager:
         #print(response.json()["response"]),
         #self.writeOutput(f"resultat du transfert {response.json()}\n")
         return response.json()
-    
+
     def deleteAndSendOnThread(self, id_src_node, id_dst_node, id_dataset, ds_size):
         
         sending_process = threading.Thread(target=self.deleteAndSend, args=(id_src_node,id_dst_node, id_dataset, id_dataset,ds_size))
@@ -597,7 +625,7 @@ class ReplicaManager:
         #p = 0 if id_node not in self.previous_stats[id_ds].popularity_peer_noed.keys() else self.previous_stats[id_ds].popularity_peer_noed[id_node]
         #Ca revien a l'exp 5
 
-        """if self.data[id_ds].nb_requests_on_traces == 0:
+        if self.data[id_ds].nb_requests_on_traces == 0:
             print("deleted cause of TTL\n")
             return {"delete":True, "send":False}
             
@@ -607,7 +635,7 @@ class ReplicaManager:
             print("deleted cause of TTL\n")
             return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
         
-        """p =  self.previous_stats[id_ds].nb_requests
+        p =  self.previous_stats[id_ds].nb_requests
         if p == 0 : 
             print("deleted cause of TTL\n")
             return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
