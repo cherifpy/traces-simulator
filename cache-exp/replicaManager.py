@@ -108,7 +108,7 @@ class ReplicaManager:
                     data_to_delete = copy.deepcopy(candidates)
                     for ds in data_to_delete:
                         data = self.data[ds]
-                        if data.nb_requests == 0 and eviction:
+                        if data.nb_requests_on_traces == 0 and eviction:
                             self.writeOutput(f"delete {condidate} from {task.id_node}\n")
                             b = self.deleteFromCache(node_id=task.id_node,node_ip=node_ip, node_port=node_port, id_dataset=ds)
                             if b:
@@ -655,7 +655,7 @@ class ReplicaManager:
                 neighbors.append((n, self.nodes_infos[n]["remaining_space"]))
         
         sorted_neighbors_by_space = sorted(neighbors, key=lambda x: x[1], reverse=True)
-        optimal_cost = float('inf')
+        optimal_cost = 0
         node = None
 
         keys_peer_node = {}
@@ -668,7 +668,7 @@ class ReplicaManager:
                 self.writeOutput(f"why not to send {id_n} from {id_node} to {id_n} {self.graphe_infos[int(id_node)][id_n]}\n")
                 #p = 0 if id_node not in self.data[id_ds].popularity_peer_node.keys() else self.data[id_ds].popularity_peer_node[id_n]
 
-                """cost =  nodeImportanceV2(
+                cost =  nodeImportanceV2(
                     b=BANDWIDTH,
                     graphe_infos=self.graphe_infos,
                     s=data_item.size,
@@ -684,7 +684,7 @@ class ReplicaManager:
                 )
 
                 
-                """cost = minimizingTimeTransfert(
+                cost = minimizingTimeTransfert(
                     dataset=id_ds,
                     ds_size=data_item.size,
                     id_src=id_node,
@@ -693,7 +693,7 @@ class ReplicaManager:
                     graphe_infos=self.graphe_infos
                 )"""
 
-                if cost < optimal_cost:
+                if cost > optimal_cost:
                     optimal_cost = cost
                     node = id_n
 
