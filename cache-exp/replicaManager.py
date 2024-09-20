@@ -668,7 +668,7 @@ class ReplicaManager:
                 self.writeOutput(f"why not to send {id_n} from {id_node} to {id_n} {self.graphe_infos[int(id_node)][id_n]}\n")
                 #p = 0 if id_node not in self.data[id_ds].popularity_peer_node.keys() else self.data[id_ds].popularity_peer_node[id_n]
 
-                cost =  nodeImportanceV2(
+                """cost =  nodeImportanceV2(
                     b=BANDWIDTH,
                     graphe_infos=self.graphe_infos,
                     s=data_item.size,
@@ -676,13 +676,13 @@ class ReplicaManager:
                     nb_requests= 1 if id_n not in self.requests_processed.keys() else self.requests_processed[id_n]
                 )
 
-                """
+                
                 cost = transfertTime(
                     b=BANDWIDTH,
                     l=self.graphe_infos[int(id_node)][id_n],
                     s=data_item.size,
                 )
-
+                """
                 
                 cost = minimizingTimeTransfert(
                     dataset=id_ds,
@@ -691,7 +691,7 @@ class ReplicaManager:
                     id_dst=id_n,
                     key_peer_node=keys_peer_node,
                     graphe_infos=self.graphe_infos
-                )"""
+                )
 
                 if cost > optimal_cost:
                     optimal_cost = cost
