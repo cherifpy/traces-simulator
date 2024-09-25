@@ -336,8 +336,8 @@ class ReplicaManager:
                 if cost < min_cost:
                     min_cost = cost
                     min_cost_location = node
-             
-        if min_cost_location is None:
+        _, cost_from_repo =  djikstra(self.graphe_infos, 8, id_node)    
+        if min_cost_location > cost_from_repo:
             return None, None
         
         return min_cost, min_cost_location
