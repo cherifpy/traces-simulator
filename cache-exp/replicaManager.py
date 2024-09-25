@@ -229,7 +229,7 @@ class ReplicaManager:
                     
                     while eviction and len(candidates) > 0:
                         condidate = candidates[i] 
-                        r_eviction = self.managerAvectionM1(task.id_node, condidate)#, self.data[condidate].size)
+                        r_eviction = self.managerAvectionWithLimite(task.id_node, condidate)#, self.data[condidate].size)
                         if r_eviction["send"]: 
                             id_dst_node = r_eviction["id_dst_node"]
                             self.writeOutput(f"send {condidate} from {task.id_node} and send it to {id_dst_node}\n")
@@ -944,4 +944,4 @@ if __name__ == "__main__":
     
     
     task_manager.nodes_infos = data["infos"]
-    task_manager.startV4()
+    task_manager.startV5()
