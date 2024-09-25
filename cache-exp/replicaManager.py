@@ -538,7 +538,7 @@ class ReplicaManager:
             cost = self.transfertCost(self.graphe_infos[int(id_src_node)][int(id_dst_node)],ds_size)
             self.updateReplica(id_dataset,id_src_node, id_dst_node)
             self.writeTransfert(f"null,{id_dataset},{id_src_node},{id_dst_node},{ds_size},{cost},migration\n")
-            print("migration faire \n")
+            print("migration faite \n")
             self.nodes_infos[id_src_node]['remaining_space'] = response.json()['remaining_space']
             self.notifyNode(id_dst_node,self.nodes_infos[id_dst_node]['node_ip'],self.nodes_infos[id_dst_node]['node_port'] , id_dataset, add=True)
 
@@ -817,7 +817,7 @@ class ReplicaManager:
         """
         data_item = self.data[id_ds]
 
-        if self.data[id_ds].nb_requests_on_traces == 0 or self.replicas[(id_ds, id_node)].nb_migrations == MAX_MIGRATIONS:
+        if self.data[id_ds].nb_requests_on_traces == 0 or self.replicas[(id_ds, id_node)].nb_migrations > MAX_MIGRATIONS:
             print("deleted cause of TTL or max migration for the replica\n")
             return {"delete":True, "send":False}
         
@@ -863,10 +863,10 @@ class ReplicaManager:
 
         del self.replicas[(id_ds, id_node)]
 
-        replica.nb_migrations +=1
-        replica.id_node = destination    
-
         self.replicas[(id_ds, destination)] = replica
+        self.replicas[(id_ds, destination)].nb_migrations +=1
+        self.replicas[(id_ds, destination)].id_node = destination    
+
         return True
 
     def getPopularities(self, traces):
