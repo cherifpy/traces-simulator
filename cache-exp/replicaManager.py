@@ -863,7 +863,7 @@ class ReplicaManager:
 
         del self.replicas[(id_ds, id_node)]
 
-        replica.nb_migration +=1
+        replica.nb_migrations +=1
         replica.id_node = destination    
 
         self.replicas[(id_ds, destination)] = replica
