@@ -326,18 +326,21 @@ class ReplicaManager:
         """
         locations = []
         latency = []
+        min_cost_location = None
+        min_cost = float('inf')
         for node, c in enumerate(self.graphe_infos[id_node][:-1]):
-            if node!=id_node and node in self.nodes_infos.keys() and dataset in self.nodes_infos[node]["keys"]:
+            if node!=id_node and dataset in self.nodes_infos[node]["keys"]:
                 _, cost =  djikstra(self.graphe_infos, node, id_node)
                 locations.append(node)                
                 latency.append(cost)
-            
-        if len(locations) == 0:
+                if cost < min_cost:
+                    min_cost = cost
+                    min_cost_location = node
+             
+        if min_cost_location is None:
             return None, None
         
-        i_min = np.argmin(latency)
-
-        return latency[i_min], locations[i_min]
+        return min_cost, min_cost_location
     
     
     def sendDataToTask(self, task, latency=None):
