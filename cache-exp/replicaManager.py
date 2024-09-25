@@ -11,7 +11,8 @@ from exp.params import  (
     ENABEL_MIGRATION,
     TIME_SLOT,
     TTL_MIN,
-    EXECUTION_LOCAL
+    EXECUTION_LOCAL,
+    MAX_MIGRATIONS
 )
 
 from communication.send_data import recieveObject
@@ -25,6 +26,7 @@ from functions.costs import (
     minimizingTimeTransfert
     )
 from classes.data import Data
+from classes.replica import Replica
 from classes.djikstra import djikstra
 from typing import Optional, Dict
 import multiprocessing 
@@ -58,7 +60,7 @@ class ReplicaManager:
         self.data_sizes = {}
         self.nb_data_trasnfert_avoided = 0
         self.data: Dict[str, Data] = {}
-        self.replicas = {}
+        self.replicas: Dict[tuple, Data] = {}
         self.previous_stats: Dict[str, Data] = {}
         self.requests_processed = {}
            
@@ -156,6 +158,114 @@ class ReplicaManager:
                         print(eviction)
                         i+=1
                     self.writeOutput(f"resultats de l'envoi de la donnée {not eviction}")  
+            else:
+                self.writeTransfert(f"{task.id_task},{task.id_dataset},-1,{task.id_node},{task.ds_size},0,NoTransfert\n")
+            if time == TIME_SLOT:
+                self.data, self.previous_stats = Data.iniTDataTTL(self.data)
+                self.initNodeImportance()
+                time = 0
+            else:
+                time+=1
+        return True
+    
+    def startV5(self):
+        previous_stats = []
+        if not self.nodes_infos:
+            return False
+        traces = pd.read_csv(self.traces_path)
+
+        popularities = self.getPopularities(traces)
+        time = 0
+        for index, row in traces.iterrows():
+            
+            #self.writeOutput(f"{str(self.nodes_infos)}\n")
+            b, self.nodes_infos = self.collecteData()
+            task_infos = {'time' : row["time_compute (s)"],  'application_type': row["application_type"]}
+            task = Task(id_task=row["id_task"],id_node= row["node_id"],infos= task_infos,id_dataset= row["dataset"],ds_size=row["dataset_size"])
+
+            self.data_sizes[task.id_dataset] = task.ds_size
+            
+            if task.id_dataset not in self.data.keys(): 
+                self.data[task.id_dataset] = Data(id_dataset=task.id_dataset, size=task.ds_size, replicas_location=None,nb_requests_on_traces=popularities[task.id_dataset])
+                if task.id_dataset not in self.previous_stats:
+                    self.previous_stats[task.id_dataset] = Data(id_dataset=task.id_dataset, size=task.ds_size, replicas_location=None,nb_requests_on_traces=popularities[task.id_dataset])
+            
+            self.data[task.id_dataset].updateDataState(task.id_node)
+            
+            node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
+            node_port = self.nodes_infos[int(task.id_node)]["node_port"]
+            response, latency = self.sendTask(task,node_port, node_ip)
+            eviction = True  
+            self.writeOutput(f"==============================Task {index} {task.id_task}\n")
+            
+            if response["sendData"]:
+                eviction = self.sendDataToTask(task=task, latency=latency)
+                
+                if eviction and ENABEL_MIGRATION:
+                    i = 0
+                    if 'keys' in self.nodes_infos[task.id_node].keys():
+                        candidates = copy.deepcopy(self.nodes_infos[task.id_node]["keys"])
+                    else:
+                        candidates = []
+
+                    ##
+                    # 
+                    # This part is juste added to simulate the optimale execution so it must be deleted     
+                    data_to_delete = copy.deepcopy(candidates)
+                    for ds in data_to_delete:
+                        data = self.data[ds]
+                        if data.nb_requests_on_traces == 0 and eviction:
+                            self.writeOutput(f"delete {condidate} from {task.id_node}\n")
+                            b = self.deleteFromCache(node_id=task.id_node,node_ip=node_ip, node_port=node_port, id_dataset=ds)
+                            if b:
+                                del self.replicas[(condidate, task.id_node)]
+                                candidates.remove(ds)
+                            self.data[condidate].updateNbReplica(add=False)
+                            b, self.nodes_infos = self.collecteData()
+                            eviction = self.sendDataToTask(task=task, latency=latency)
+                            if not eviction:
+                                break
+                    #######
+                    
+                    while eviction and len(candidates) > 0:
+                        condidate = candidates[i] 
+                        r_eviction = self.managerAvectionM1(task.id_node, condidate)#, self.data[condidate].size)
+                        if r_eviction["send"]: 
+                            id_dst_node = r_eviction["id_dst_node"]
+                            self.writeOutput(f"send {condidate} from {task.id_node} and send it to {id_dst_node}\n")
+                            r = False
+                            r = self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=condidate, ds_size=self.data[condidate].size)
+
+                        if not r_eviction["send"] or not r:
+                            self.writeOutput(f"delete {condidate} from {task.id_node}\n")
+                            self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
+                            del self.replicas[(condidate, task.id_node)]
+                            self.data[condidate].updateNbReplica(add=False)
+                        b, self.nodes_infos = self.collecteData()
+                        eviction = self.sendDataToTask(task=task, latency=latency)
+                        i+=1
+                    self.writeOutput(f"resultats de l'envoi de la donnée {not eviction}\n")   
+                  
+                if eviction and not ENABEL_MIGRATION:
+                    i = 0
+
+                    if 'keys' in self.nodes_infos[task.id_node].keys(): candidates = copy.deepcopy(self.nodes_infos[task.id_node]["keys"])
+                    else: candidates = []
+                    print(f"task {task.id_task}")
+                    while eviction and len(candidates) > 0:
+                        condidate = candidates[i] 
+                        self.writeOutput(f"delete {condidate} from {task.id_node}\n") 
+                        d = self.deleteFromCache(task.id_node, node_ip, node_port, condidate)
+                        print(f"delete {d}\n")
+                        #self.deleteDataFromTable(task.id_node, condidate)
+                        self.data[condidate].updateNbReplica(add=False)
+                        b, self.nodes_infos = self.collecteData()
+                        eviction = self.sendDataToTask(task=task, latency=latency)
+                        print(eviction)
+                        i+=1
+                    self.writeOutput(f"resultats de l'envoi de la donnée {not eviction}")  
+                if not eviction:
+                    if (task.id_dataset, task.id_node) not in self.replicas.keys(): self.replicas[(task.id_dataset, task.id_node)] = Replica(task.id_dataset, task.id_node)
             else:
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},-1,{task.id_node},{task.ds_size},0,NoTransfert\n")
             if time == TIME_SLOT:
@@ -426,6 +536,7 @@ class ReplicaManager:
 
         if response.json()["sended"]:
             cost = self.transfertCost(self.graphe_infos[int(id_src_node)][int(id_dst_node)],ds_size)
+            self.updateReplica(id_dataset,id_src_node, id_dst_node)
             self.writeTransfert(f"null,{id_dataset},{id_src_node},{id_dst_node},{ds_size},{cost},migration\n")
             print("migration faire \n")
             self.nodes_infos[id_src_node]['remaining_space'] = response.json()['remaining_space']
@@ -698,8 +809,66 @@ class ReplicaManager:
                     node = id_n
 
         return {"delete":True, "send": True if not node is None else False, "id_dst_node":node}
-            
+    
+    def managerAvectionWithLimite(self,id_node,id_ds):
+        """
+            i use this function to impose limites on data migration 
+            in this function i will use the class replica 
+        """
+        data_item = self.data[id_ds]
+
+        if self.data[id_ds].nb_requests_on_traces == 0 or self.replicas[(id_ds, id_node)].nb_migrations == MAX_MIGRATIONS:
+            print("deleted cause of TTL or max migration for the replica\n")
+            return {"delete":True, "send":False}
+        
+        neighbors = []
+        storage_on_node = []
+        for n in range(len(self.graphe_infos)-1):
+            if self.graphe_infos[id_node][n] > 0 and self.nodes_infos[n]["remaining_space"] > (((data_item.size+1024)*1024)) and id_ds not in self.nodes_infos[n]['keys']:
+                neighbors.append((n, self.nodes_infos[n]["remaining_space"]))
+        
+        sorted_neighbors_by_space = sorted(neighbors, key=lambda x: x[1], reverse=True)
+        optimal_cost = 0
+        node = None
+
+        keys_peer_node = {}
+        for n in self.nodes_infos.keys():
+            keys_peer_node[n] = copy.deepcopy(self.nodes_infos[n]['keys'])
+
+        for id_n, _ in sorted_neighbors_by_space:
+            space_availabel = self.nodes_infos[id_n]["remaining_space"]
+            if  self.graphe_infos[int(id_node)][id_n] > 0 and (space_availabel > (((data_item.size+1024)*1024))):
+                self.writeOutput(f"why not to send {id_n} from {id_node} to {id_n} {self.graphe_infos[int(id_node)][id_n]}\n")
+                
+                cost = minimizingTimeTransfert(
+                    dataset=id_ds,
+                    ds_size=data_item.size,
+                    id_src=id_node,
+                    id_dst=id_n,
+                    key_peer_node=keys_peer_node,
+                    graphe_infos=self.graphe_infos
+                )
+
+                if cost > optimal_cost:
+                    optimal_cost = cost
+                    node = id_n
+
+        return {"delete":True, "send": True if not node is None else False, "id_dst_node":node} 
+
         #je suis arrivé la je continu le choix du noeud comme dicuté
+
+    def updateReplica(self, id_ds, id_node, destination):
+        
+        replica  = self.replicas[(id_ds, id_node)]  
+
+        del self.replicas[(id_ds, id_node)]
+
+        replica.nb_migration +=1
+        replica.id_node = destination    
+
+        self.replicas[(id_ds, destination)] = replica
+        return True
+
     def getPopularities(self, traces):
         unique, count = np.unique(traces['dataset'], return_counts=True)
 
@@ -755,6 +924,9 @@ class ReplicaManager:
     def initNodeImportance(self,):
         for n in self.requests_processed.keys():
             self.requests_processed[n] = 1
+
+    def lookUpNextLocation(self, index):
+        pass
 
 if __name__ == "__main__":
 

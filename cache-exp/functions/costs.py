@@ -108,7 +108,10 @@ def searchTheNearst(id_node,dataset, graphe_infos, key_peer_node):
 
 
 def minimizingTimeTransfert(dataset, ds_size,id_src, id_dst, graphe_infos, key_peer_node):
-    
+    """
+        this function used to see the def between cost befor and after migration 
+        the goal is to maci this function 
+    """
     keys = copy.deepcopy(key_peer_node)
     cost_with_ds_in_source = 0
     cost_with_ds_in_dst = 0
