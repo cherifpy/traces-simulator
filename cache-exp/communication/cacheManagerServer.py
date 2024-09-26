@@ -92,20 +92,21 @@ class CacheManagerServer:
                 #self.cache.memory_used += (task.ds_size*1024)
 
             self.writeOutput(f"task recieved {str(task)} asking th controller to send the data:{not b1}\n")
-
+            while task.id_dataset in self.cache.last_recently_used_item: self.cache.last_recently_used_item.remove(task.id_dataset)
+            self.cache.last_recently_used_item.append(task.id_dataset)
             return jsonify(processed_data)
         
         #used
         @self.app.route('/infos', methods=['GET'])
         def get_info():
             stats = self.cache.getStats()[0][1]
-            
+            keys = self.cache.getKeys()
             if stats:
                 data = {
                     "id_node": self.cache.id_node,
                     "storage_space": int(stats["maxmemory"]),
                     "remaining_space":int(stats["maxmemory"]) - (int(stats["used_memory"])),
-                    'keys': self.cache.getKeys(),
+                    'keys': keys,
                     'popularities':self.nb_requests_processed
                 }
 
@@ -130,6 +131,9 @@ class CacheManagerServer:
                     'keys': self.cache.ids_data #self.cache.getKeys()
                 }
                 self.writeOutput("not here\n")
+            for ds in self.cache.last_recently_used_item:
+                if ds not in keys:
+                    self.cache.last_recently_used_item.remove(ds)
             self.writeOutput(f"{data}")
             self.writeOutput("info sended\n")
             return jsonify(data)
