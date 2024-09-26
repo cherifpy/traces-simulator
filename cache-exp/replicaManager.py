@@ -148,6 +148,7 @@ class ReplicaManager:
             if time == TIME_SLOT:
                 self.data, self.previous_stats = Data.iniTDataTTL(self.data)
                 self.initNodeImportance()
+                self.initReplicaTTL()
                 time = 0
             else:
                 time+=1
@@ -238,6 +239,7 @@ class ReplicaManager:
                 cost = self.transfertCost(lat, task.ds_size)
                 self.nb_data_trasnfert +=1
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},{l},{task.id_node},{task.ds_size},{cost},transfert2\n")
+                self.replicas[(task.id_task, l)].nb_requests+=1
                 return not added
             
         if not added :
@@ -809,6 +811,10 @@ class ReplicaManager:
         for n in self.requests_processed.keys():
             self.requests_processed[n] = 1
 
+    def initReplicaTTL(self):
+        for key in self.replicas.keys():
+            self.replicas[key].nb_requests = 0
+        
     def lookUpNextLocation(self, index):
         pass
 
