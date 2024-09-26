@@ -618,20 +618,21 @@ class ReplicaManager:
         #p = 0 if id_node not in self.previous_stats[id_ds].popularity_peer_noed.keys() else self.previous_stats[id_ds].popularity_peer_noed[id_node]
         #Ca revien a l'exp 5
         # this is used only
-        if self.replicas[(id_ds,id_node)].nb_requests < MIN_REQUESTS:
-            print("deleted cause of TTL\n")
-            return {"delete":True, "send":False}
         
+        p = self.data[id_ds].TTL
+        if p == -1:
+            self.writeOutput("deleted cause of TTL\n")
+            return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
+        self.writeOutput("TTL esquivé \n")
         if self.replicas[(id_ds, id_node)].nb_migrations > MAX_MIGRATIONS:
-            print("deleted cause of Migration limite\n")
+            self.writeOutput("deleted cause of Migration limite\n")
             return {"delete":True, "send":False}
             
         """
-        p = self.data[id_ds].TTL
-        if p == -1:
-            print("deleted cause of TTL\n")
-            return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
         
+        if self.replicas[(id_ds,id_node)].nb_requests < MIN_REQUESTS:
+            print("deleted cause of TTL\n")
+            return {"delete":True, "send":False}
         p =  self.previous_stats[id_ds].nb_requests
         if p == 0 : 
             print("deleted cause of TTL\n")
