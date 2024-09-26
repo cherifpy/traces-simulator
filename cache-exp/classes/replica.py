@@ -11,6 +11,7 @@ class Replica:
         self.nb_access = 0
         self.nb_acces_peer_node = {}
         self.nb_migrations  = 0
+        self.nb_requests = 0
 
 
     def updateTTL(self):
