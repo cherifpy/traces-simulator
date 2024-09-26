@@ -60,7 +60,8 @@ class Cache:
     def accessData(self, id_dataset):
         client = redis.Redis(host='0.0.0.0', port=MEMCACHED_LISTENING_PORT,db=0)
         value = client.get(id_dataset) if not EXECUTION_LOCAL else True
-        
+        while id_dataset in self.last_recently_used_item: self.last_recently_used_item.remove(id_dataset)
+        self.last_recently_used_item.append(id_dataset)
         return True if value else False
     
         if not value and id_dataset in self.ids_data:
@@ -119,8 +120,8 @@ class Cache:
         used_memory = int(stats["used_memory"])
         
         if int(used_memory)+ds_size_bytes > (cache_size_bytes):
-            #return True, self.last_recently_used_item
-            return True, self.getKeys()
+            return True, self.last_recently_used_item
+            #return True, self.getKeys()
         
         return False, None
 

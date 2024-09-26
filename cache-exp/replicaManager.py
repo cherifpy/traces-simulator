@@ -621,6 +621,7 @@ class ReplicaManager:
         if self.replicas[(id_ds,id_node)].nb_requests < MIN_REQUESTS:
             print("deleted cause of TTL\n")
             return {"delete":True, "send":False}
+        
         if self.replicas[(id_ds, id_node)].nb_migrations > MAX_MIGRATIONS:
             print("deleted cause of Migration limite\n")
             return {"delete":True, "send":False}
@@ -652,7 +653,7 @@ class ReplicaManager:
                 neighbors.append((n, self.nodes_infos[n]["remaining_space"]))
         
         sorted_neighbors_by_space = sorted(neighbors, key=lambda x: x[1], reverse=True)
-        optimal_cost = 0
+        optimal_cost = float('inf')#0
         node = None
 
         keys_peer_node = {}
@@ -671,7 +672,7 @@ class ReplicaManager:
                     s=data_item.size,
                     id_node=id_n,
                     nb_requests= 1 if id_n not in self.requests_processed.keys() else self.requests_processed[id_n]
-                )
+                )"""
 
                 
                 cost = transfertTime(
@@ -688,9 +689,9 @@ class ReplicaManager:
                     id_dst=id_n,
                     key_peer_node=keys_peer_node,
                     graphe_infos=self.graphe_infos
-                )
+                )"""
 
-                if cost > optimal_cost:
+                if cost < optimal_cost:
                     optimal_cost = cost
                     node = id_n
 
