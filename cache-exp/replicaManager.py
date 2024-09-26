@@ -239,7 +239,7 @@ class ReplicaManager:
                 cost = self.transfertCost(lat, task.ds_size)
                 self.nb_data_trasnfert +=1
                 self.writeTransfert(f"{task.id_task},{task.id_dataset},{l},{task.id_node},{task.ds_size},{cost},transfert2\n")
-                self.replicas[(task.id_task, l)].nb_requests+=1
+                self.replicas[(task.id_dataset, l)].nb_requests+=1
                 return not added
             
         if not added :
