@@ -261,7 +261,7 @@ class ReplicaManager:
                         self.data[condidate].updateNbReplica(add=False)
                         b, self.nodes_infos = self.collecteData()
                         eviction = self.sendDataToTask(task=task, latency=latency)
-                        print(eviction)
+                        
                         i+=1
                     self.writeOutput(f"resultats de l'envoi de la donnée {not eviction}")  
                 if not eviction:
@@ -337,7 +337,7 @@ class ReplicaManager:
                     min_cost = cost
                     min_cost_location = node
         _, cost_from_repo =  djikstra(self.graphe_infos, 8, id_node)    
-        if min_cost_location > cost_from_repo:
+        if min_cost > cost_from_repo:
             return None, None
         
         return min_cost, min_cost_location
