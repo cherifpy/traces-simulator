@@ -174,7 +174,7 @@ def bestMigration(self):
             eviction = self.sendDataToTask(task=task, latency=latency)
             
             if eviction and ENABEL_MIGRATION:
-                i = 0
+                
                 if 'keys' in self.nodes_infos[task.id_node].keys():
                     candidates = copy.deepcopy(self.nodes_infos[task.id_node]["keys"])
                 else:
@@ -197,7 +197,7 @@ def bestMigration(self):
                         if not eviction:
                             break
                 #######
-                
+                i = 0
                 while eviction and len(candidates) > 0:
                     
                     candidate = candidates[i] 
@@ -206,20 +206,24 @@ def bestMigration(self):
                         self.deleteFromCache(task.id_node, node_ip, node_port, candidate)
                         del self.replicas[(candidate, task.id_node)]
                         self.data[candidate].updateNbReplica(add=False)
+                        
+                        
+                    else:
 
-                    r_eviction = manageEvictionForBest(self, task.id_node, candidate,popularities)#, self.data[candidate].size)
-                    
-                    if r_eviction["send"]: 
-                        id_dst_node = r_eviction["id_dst_node"]
-                        self.writeOutput(f"send {candidate} from {task.id_node} and send it to {id_dst_node}\n")
-                        r = False
-                        r = self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=candidate, ds_size=self.data[candidate].size)
+                        r_eviction = manageEvictionForBest(self, task.id_node, candidate,popularities)#, self.data[candidate].size)
+                        
+                        if r_eviction["send"]: 
+                            id_dst_node = r_eviction["id_dst_node"]
+                            self.writeOutput(f"send {candidate} from {task.id_node} and send it to {id_dst_node}\n")
+                            r = False
+                            r = self.deleteAndSend(id_src_node=task.id_node,id_dst_node=id_dst_node, id_dataset=candidate, ds_size=self.data[candidate].size)
 
-                    if not r_eviction["send"] or not r:
-                        self.writeOutput(f"delete {candidate} from {task.id_node}\n")
-                        self.deleteFromCache(task.id_node, node_ip, node_port, candidate)
-                        del self.replicas[(candidate, task.id_node)]
-                        self.data[candidate].updateNbReplica(add=False)
+                        if not r_eviction["send"] or not r:
+                            self.writeOutput(f"delete {candidate} from {task.id_node}\n")
+                            self.deleteFromCache(task.id_node, node_ip, node_port, candidate)
+                            del self.replicas[(candidate, task.id_node)]
+                            self.data[candidate].updateNbReplica(add=False)
+                            
                     b, self.nodes_infos = self.collecteData()
                     eviction = self.sendDataToTask(task=task, latency=latency)
                     i+=1
