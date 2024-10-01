@@ -19,6 +19,11 @@ from exp.params import  (
 from communication.send_data import recieveObject
 from communication.messages import Task
 from communication.replicaManagerServer import ReplicaManagerServer
+from functions.function_for_migration import (
+    manageEvictionForBest,
+    predictNextUssage,
+    bestMigration
+)
 from functions.costs import (
     nodeImportanceV2, 
     transefrtWithGain, 
@@ -29,15 +34,17 @@ from functions.costs import (
 from classes.data import Data
 from classes.replica import Replica
 from classes.djikstra import djikstra
+
 from typing import Optional, Dict
 import multiprocessing 
 import pandas as pd
 import numpy as np
 import time
 import requests
-if not EXECUTION_LOCAL: import pylibmc
 import os
 import threading
+
+
 
 class ReplicaManager:
     
@@ -745,6 +752,20 @@ class ReplicaManager:
 
         #je suis arrivé la je continu le choix du noeud comme dicuté
 
+    def decision(self, id_ds, id_node):
+
+        replica = self.replicas[(id_ds, id_node)]
+        data = self.data[id_ds]
+
+        pres = Replica.nbReplica(id_ds, self.replicas)/len(self.replicas.keys())
+
+        """
+            je vais prendre le stockage en consideration 
+            le derniere fois que la donnée a etais utilisé
+            la preence est le nombre de replica de la donnée sur le nombre de noeuds
+            
+        """
+
     def updateReplica(self, id_ds, id_node, destination):
         
         replica  = self.replicas[(id_ds, id_node)]  
@@ -836,4 +857,4 @@ if __name__ == "__main__":
     
     
     task_manager.nodes_infos = data["infos"]
-    task_manager.startV5()
+    bestMigration(task_manager)

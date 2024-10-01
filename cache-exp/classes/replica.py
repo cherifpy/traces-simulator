@@ -19,3 +19,12 @@ class Replica:
     
     def migration(self, id_new_node):
         self.id_node = id_new_node
+
+    @staticmethod
+    def nbReplica(id_data, replicas):
+        nb = 0
+        for key in replicas.keys():
+            if key[0] == id_data:
+                nb+=1
+
+        return nb
