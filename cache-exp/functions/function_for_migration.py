@@ -189,9 +189,8 @@ def bestMigration(self):
                     if data.nb_requests_on_traces == 0 and eviction:
                         self.writeOutput(f"delete {candidate} from {task.id_node}\n")
                         b = self.deleteFromCache(node_id=task.id_node,node_ip=node_ip, node_port=node_port, id_dataset=ds)
-                        if b:
-                            del self.replicas[(candidate, task.id_node)]
-                            candidates.remove(ds)
+                        del self.replicas[(ds, task.id_node)]
+                        candidates.remove(ds)
                         self.data[candidate].updateNbReplica(add=False)
                         b, self.nodes_infos = self.collecteData()
                         eviction = self.sendDataToTask(task=task, latency=latency)
@@ -239,7 +238,7 @@ def bestMigration(self):
     return True
 
 
-def predictNextUssage(traces,index, id_ds, window=20):
+def predictNextUssage(traces,index, id_ds, window=100):
     bool = False
 
     if index+window > traces.shape[0]:
@@ -272,7 +271,7 @@ def manageEvictionForBest(self,id_node,id_ds, popularities):
     neighbors = []
     storage_on_node = []
     for n in range(len(self.graphe_infos)-1):
-        if self.graphe_infos[id_node][n] > 0 and self.nodes_infos[n]["remaining_space"] > (((data_item.size+1024)*1024)) and id_ds not in self.nodes_infos[n]['keys']:
+        if self.graphe_infos[id_node][n] > 0 and self.nodes_infos[n]["remaining_space"] > (((data_item.size+100)*1024)) and id_ds not in self.nodes_infos[n]['keys']:
             neighbors.append((n, self.nodes_infos[n]["remaining_space"]))
     
     sorted_neighbors_by_space = sorted(neighbors, key=lambda x: x[1], reverse=True)
@@ -285,7 +284,7 @@ def manageEvictionForBest(self,id_node,id_ds, popularities):
 
     for id_n, _ in sorted_neighbors_by_space:
         space_availabel = self.nodes_infos[id_n]["remaining_space"]
-        if  self.graphe_infos[int(id_node)][id_n] > 0 and (space_availabel > (((data_item.size+1024)*1024))):
+        if  self.graphe_infos[int(id_node)][id_n] > 0 and (space_availabel > (((data_item.size+100)*1024))):
             self.writeOutput(f"why not to send {id_n} from {id_node} to {id_n} {self.graphe_infos[int(id_node)][id_n]}\n")
             
             cost = transfertTime(

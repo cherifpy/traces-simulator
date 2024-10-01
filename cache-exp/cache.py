@@ -119,8 +119,8 @@ class Cache:
         used_memory = int(stats["used_memory"])
         
         if int(used_memory)+ds_size_bytes > (cache_size_bytes):
-            return True, self.last_recently_used_item
-            #return True, self.getKeys()
+            #return True, self.last_recently_used_item
+            return True, self.getKeys()
         
         return False, None
 

@@ -68,7 +68,7 @@ class ReplicaManager:
         self.data_sizes = {}
         self.nb_data_trasnfert_avoided = 0
         self.data: Dict[str, Data] = {}
-        self.replicas: Dict[tuple, Data] = {}
+        self.replicas: Dict[tuple, Replica] = {}
         self.previous_stats: Dict[str, Data] = {}
         self.requests_processed = {}
            

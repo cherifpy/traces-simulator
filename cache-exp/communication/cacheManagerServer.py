@@ -128,7 +128,7 @@ class CacheManagerServer:
                     "id_node": self.cache.id_node,
                     "storage_space": self.cache.cache_size,
                     "remaining_space":self.cache.cache_size - self.cache.memory_used,
-                    'keys': self.cache.ids_data #self.cache.getKeys()
+                    'keys': self.cache.ids_data #self.cache.getKeys()#
                 }
                 self.writeOutput("not here\n")
             for ds in self.cache.last_recently_used_item:
