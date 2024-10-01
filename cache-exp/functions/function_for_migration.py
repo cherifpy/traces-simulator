@@ -223,7 +223,7 @@ def bestMigration(self):
                             self.deleteFromCache(task.id_node, node_ip, node_port, candidate)
                             del self.replicas[(candidate, task.id_node)]
                             self.data[candidate].updateNbReplica(add=False)
-                            
+
                     b, self.nodes_infos = self.collecteData()
                     eviction = self.sendDataToTask(task=task, latency=latency)
                     i+=1
@@ -242,7 +242,7 @@ def bestMigration(self):
     return True
 
 
-def predictNextUssage(traces,index, id_ds, window=100):
+def predictNextUssage(traces,index, id_ds, window=20):
     bool = False
 
     if index+window > traces.shape[0]:
@@ -279,7 +279,7 @@ def manageEvictionForBest(self,id_node,id_ds, popularities):
             neighbors.append((n, self.nodes_infos[n]["remaining_space"]))
     
     sorted_neighbors_by_space = sorted(neighbors, key=lambda x: x[1], reverse=True)
-    optimal_cost = float('inf')
+    optimal_cost = 0#float('inf')
     node = None
 
     keys_peer_node = {}
@@ -291,13 +291,16 @@ def manageEvictionForBest(self,id_node,id_ds, popularities):
         if  self.graphe_infos[int(id_node)][id_n] > 0 and (space_availabel > (((data_item.size+100)*1024))):
             self.writeOutput(f"why not to send {id_n} from {id_node} to {id_n} {self.graphe_infos[int(id_node)][id_n]}\n")
             
-            cost = transfertTime(
-                b=BANDWIDTH,
-                l=self.graphe_infos[int(id_node)][id_n],
-                s=data_item.size,
-            )
+            cost = minimizingTimeTransfert(
+                    dataset=id_ds,
+                    ds_size=data_item.size,
+                    id_src=id_node,
+                    id_dst=id_n,
+                    key_peer_node=keys_peer_node,
+                    graphe_infos=self.graphe_infos
+                )
 
-            if cost < optimal_cost:
+            if cost > optimal_cost:
                 optimal_cost = cost
                 node = id_n
 
