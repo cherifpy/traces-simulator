@@ -176,7 +176,7 @@ def bestMigration(self):
             if eviction and ENABEL_MIGRATION:
                 i = 0
                 if 'keys' in self.nodes_infos[task.id_node].keys():
-                    candidates = copy.deepcopy(reversed(response['condidates']))
+                    candidates = copy.deepcopy(self.nodes_infos[task.id_node]["keys"])
                 else:
                     candidates = []
 
