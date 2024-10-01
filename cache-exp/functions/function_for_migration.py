@@ -34,7 +34,6 @@ from classes.djikstra import djikstra
 from typing import Optional, Dict
 import multiprocessing 
 import pandas as pd
-from replicaManager import ReplicaManager
 
 def startV4(self):
     previous_stats = []
@@ -141,7 +140,7 @@ def startV4(self):
     return True
 
 
-def bestMigration(self:ReplicaManager):
+def bestMigration(self):
     previous_stats = []
     if not self.nodes_infos:
         return False
@@ -209,7 +208,7 @@ def bestMigration(self:ReplicaManager):
                         del self.replicas[(candidate, task.id_node)]
                         self.data[candidate].updateNbReplica(add=False)
 
-                    r_eviction = managerAvectionWithLimite(task.id_node, candidate)#, self.data[candidate].size)
+                    r_eviction = manageEvictionForBest(task.id_node, candidate)#, self.data[candidate].size)
                     
                     if r_eviction["send"]: 
                         id_dst_node = r_eviction["id_dst_node"]
