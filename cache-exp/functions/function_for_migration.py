@@ -58,7 +58,7 @@ def startV4(self):
                 self.previous_stats[task.id_dataset] = Data(id_dataset=task.id_dataset, size=task.ds_size, replicas_location=None,nb_requests_on_traces=popularities[task.id_dataset])
         
         self.data[task.id_dataset].updateDataState(task.id_node)
-        self.popularities[task.id_dataset] -=1
+        popularities[task.id_dataset] -=1
         node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
         node_port = self.nodes_infos[int(task.id_node)]["node_port"]
         response, latency = self.sendTask(task,node_port, node_ip)
@@ -208,7 +208,7 @@ def bestMigration(self):
                         del self.replicas[(candidate, task.id_node)]
                         self.data[candidate].updateNbReplica(add=False)
 
-                    r_eviction = manageEvictionForBest(self, task.id_node, candidate)#, self.data[candidate].size)
+                    r_eviction = manageEvictionForBest(self, task.id_node, candidate,popularities)#, self.data[candidate].size)
                     
                     if r_eviction["send"]: 
                         id_dst_node = r_eviction["id_dst_node"]
@@ -258,14 +258,14 @@ def predictNextUssage(traces,index, id_ds, window=20):
     return bool
 
 
-def manageEvictionForBest(self,id_node,id_ds):
+def manageEvictionForBest(self,id_node,id_ds, popularities):
     """
         i use this function to impose limites on data migration 
         in this function i will use the class replica 
     """
     data_item = self.data[id_ds]
     
-    if self.popularities[id_ds] == 0 or self.replicas[(id_ds, id_node)].nb_migrations > MAX_MIGRATIONS:
+    if popularities[id_ds] == 0 or self.replicas[(id_ds, id_node)].nb_migrations > MAX_MIGRATIONS:
         print("deleted cause of TTL or max migration for the replica\n")
         return {"delete":True, "send":False}
     
