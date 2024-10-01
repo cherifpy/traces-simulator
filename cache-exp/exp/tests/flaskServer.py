@@ -27,3 +27,8 @@ url = f'http://172.16.96.71:8888/hello'
 response = requests.get(url)
 
 print(response.text)
+url = f'http://http://172.16.52.10:8880/send-and-delete'
+
+response = requests.get(url, params={
+    
+})
