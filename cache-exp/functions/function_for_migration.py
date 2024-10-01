@@ -176,7 +176,7 @@ def bestMigration(self):
             if eviction and ENABEL_MIGRATION:
                 i = 0
                 if 'keys' in self.nodes_infos[task.id_node].keys():
-                    candidates = copy.deepcopy(self.nodes_infos[task.id_node]["keys"])
+                    candidates = copy.deepcopy(reversed(response['condidates']))
                 else:
                     candidates = []
 
@@ -208,7 +208,7 @@ def bestMigration(self):
                         del self.replicas[(candidate, task.id_node)]
                         self.data[candidate].updateNbReplica(add=False)
 
-                    r_eviction = manageEvictionForBest(task.id_node, candidate)#, self.data[candidate].size)
+                    r_eviction = manageEvictionForBest(self, task.id_node, candidate)#, self.data[candidate].size)
                     
                     if r_eviction["send"]: 
                         id_dst_node = r_eviction["id_dst_node"]
