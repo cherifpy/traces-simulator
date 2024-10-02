@@ -445,7 +445,7 @@ def manageUsingKNN(self):
                         last_time_used=last_used,
                         s_classe=p_software
                     )
-                    r_eviction = decideOnMigrationUsingKNN( traces,condidate, task.id_node, index,model)
+                    r_eviction = evictionUsingKNN(self,traces, condidate, task.id_node, index,model)
                     #r_eviction = self.managerAvectionM1(task.id_node, condidate)#, self.data[condidate].size)
                     if r_eviction["send"]: 
                         id_dst_node = r_eviction["id_dst_node"]
@@ -569,7 +569,7 @@ def updateKNNModel(dataset, min_traces=100,k=3):
 
 
 
-def decideOnMigrationUsingKNN( traces,id_ds, id_node, index,model,model_ready=True):
+def decideOnMigrationUsingKNN(traces,id_ds, id_node, index,model,model_ready=True):
     if model is None:
         if random.random() > 0.5:
             return True
@@ -587,12 +587,12 @@ def decideOnMigrationUsingKNN( traces,id_ds, id_node, index,model,model_ready=Tr
         return False
 
 
-def evictionUsingKNN(self, id_ds, id_node, ):
+def evictionUsingKNN(self,traces, id_ds, id_node,index, model ):#self,condidate, task.id_node, index,model
     #partie TTL
     data_item = self.data[id_ds]
     
     p = self.data[id_ds].TTL
-    if not decideOnMigrationUsingKNN():
+    if not decideOnMigrationUsingKNN(traces, id_ds, id_node,index, model,):
         self.writeOutput("deleted cause of TTL\n")
         return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
     
