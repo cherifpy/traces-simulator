@@ -484,7 +484,8 @@ def manageUsingKNN(self):
                 if (task.id_dataset, task.id_node) not in self.replicas.keys(): self.replicas[(task.id_dataset, task.id_node)] = Replica(task.id_dataset, task.id_node)
         else:
             self.writeTransfert(f"{task.id_task},{task.id_dataset},-1,{task.id_node},{task.ds_size},0,NoTransfert\n")
-        
+    df = pd.DataFrame(data_for_knn)
+    df.to_csv("/tmp/data_used_for_KNN.csv")
     return True
 
 
@@ -553,7 +554,7 @@ def updateKNNModel(dataset, min_traces=100,k=3):
         return False, None, None
     
     X = np.array(data[['popularity_on_node','popularity_on_neighbors','last_time_used']])
-    y = np.array(data['labels'])
+    y = np.array(data['decision'])
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)   
     
