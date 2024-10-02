@@ -548,8 +548,8 @@ def updateKNNModel(dataset, min_traces=100,k=3):
     previous_data = copy.deepcopy(dataset)
     data = pd.DataFrame(dataset)
     
-    if len(data.shape[0]) < min_traces:
-        print("Not enough data points for prediction.")
+    if data.shape[0] < min_traces:
+        #print("Not enough data points for prediction.")
         return False, None, None
     
     X = np.array(data[['popularity_on_node','popularity_on_neighbors','last_time_used']])
@@ -570,7 +570,11 @@ def updateKNNModel(dataset, min_traces=100,k=3):
 
 
 def decideOnMigrationUsingKNN( traces,id_ds, id_node, index,model,model_ready=True):
-
+    if model is None:
+        if random.random() > 0.5:
+            return True
+        else:
+            return False
     if random.random() > THRESHOLD:
         p_node, p_neighbors, p_software, last_used = getStat(traces ,id_ds,id_node,index)
         prediction  = model.predict([[p_node, p_neighbors,last_used]])
