@@ -13,7 +13,8 @@ from exp.params import  (
     TTL_MIN,
     EXECUTION_LOCAL,
     MAX_MIGRATIONS,
-    MIN_REQUESTS
+    MIN_REQUESTS,
+    THRESHOLD
 )
 
 from communication.send_data import recieveObject
@@ -22,7 +23,8 @@ from communication.replicaManagerServer import ReplicaManagerServer
 from functions.function_for_migration import (
     manageEvictionForBest,
     predictNextUssage,
-    bestMigration
+    bestMigration,
+    manageUsingKNN
 )
 from functions.costs import (
     nodeImportanceV2, 
@@ -31,6 +33,7 @@ from functions.costs import (
     nodeImportance,
     minimizingTimeTransfert
     )
+
 from classes.data import Data
 from classes.replica import Replica
 from classes.djikstra import djikstra
@@ -43,7 +46,7 @@ import time
 import requests
 import os
 import threading
-
+import random
 
 
 class ReplicaManager:
@@ -752,19 +755,27 @@ class ReplicaManager:
 
         #je suis arrivé la je continu le choix du noeud comme dicuté
 
-    def decision(self, id_ds, id_node):
+    def decideOnMigration(self, id_ds, id_node, model):
 
         replica = self.replicas[(id_ds, id_node)]
         data = self.data[id_ds]
 
         pres = Replica.nbReplica(id_ds, self.replicas)/len(self.replicas.keys())
 
+        if random.random() > THRESHOLD:
+            pass
+            
+        else:
+            print("deleted cause of random")
+            return {"delete":True, "send":False}
         """
             je vais prendre le stockage en consideration 
             le derniere fois que la donnée a etais utilisé
             la preence est le nombre de replica de la donnée sur le nombre de noeuds
             
         """
+        return None
+
 
     def updateReplica(self, id_ds, id_node, destination):
         
@@ -857,4 +868,4 @@ if __name__ == "__main__":
     
     
     task_manager.nodes_infos = data["infos"]
-    bestMigration(task_manager)
+    manageUsingKNN(task_manager)
