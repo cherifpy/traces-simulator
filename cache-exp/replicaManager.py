@@ -20,6 +20,7 @@ from exp.params import  (
 from communication.send_data import recieveObject
 from communication.messages import Task
 from communication.replicaManagerServer import ReplicaManagerServer
+from protos.migration_using_KNN import manageUsingKNN
 from protos.migration_best_case import (
     manageEvictionForBest,
     predictNextUssage,
@@ -868,4 +869,4 @@ if __name__ == "__main__":
     
     
     task_manager.nodes_infos = data["infos"]
-    task_manager.startV5()
+    manageUsingKNN(task_manager)
