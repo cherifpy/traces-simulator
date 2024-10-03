@@ -572,19 +572,17 @@ def updateKNNModel(dataset, min_traces=100,k=3):
 
 def decideOnMigrationUsingKNN(traces,id_ds, id_node, index,model,model_ready=True):
     if model is None:
-        if random.random() > 0.5:
+        if random.random() > THRESHOLD:
             return True
         else:
             return False
-    if random.random() > THRESHOLD:
-        p_node, p_neighbors, p_software, last_used = getStat(traces ,id_ds,id_node,index)
-        prediction  = model.predict([[p_node, p_neighbors,last_used]])
-        if prediction[0] > 0.5:
-            return True
-        else:
-            return False
+    
+    p_node, p_neighbors, p_software, last_used = getStat(traces ,id_ds,id_node,index)
+    prediction  = model.predict([[p_node, p_neighbors,last_used]])
+    print(f"prediction {prediction[0]}")
+    if prediction[0] > 0.5:
+        return True
     else:
-        print("deleted cause of random")
         return False
 
 
