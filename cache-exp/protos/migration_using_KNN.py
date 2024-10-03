@@ -214,8 +214,28 @@ def updateDataset(dataset, id_dataset, time, window_size):
 
 def updateKNNModel(dataset, min_traces=100,k=3):
     previous_data = copy.deepcopy(dataset)
-    data = pd.DataFrame(dataset)
-    data = data[data["decision"] is not None]
+    data_filtred = {
+        'id_dataset':[],
+        'time':[],
+        'popularity_on_node' : [],
+        'popularity_on_neighbors' :[],
+        'softwar_classe':[],
+        'last_time_used':[],
+        'decision':[]
+    }
+
+    for i in range(len(dataset["id_dataset"])):
+        if dataset['decision'][i] is not None:
+            data_filtred['id_dataset'].append(dataset['id_dataset'])
+            data_filtred['time'].append(dataset['time'])
+            data_filtred['popularity_on_node' ].append(dataset['popularity_on_node' ])
+            data_filtred['popularity_on_neighbors'].append(dataset['popularity_on_neighbors'])
+            data_filtred['softwar_classe'].append(dataset['softwar_classe'])
+            data_filtred['last_time_used'].append(dataset['last_time_used'])
+            data_filtred['decision'].append(dataset['decision'])
+
+    data = pd.DataFrame(data_filtred)
+    
     if data.shape[0] < 10:
         #print("Not enough data points for prediction.")
         return False, None, None
