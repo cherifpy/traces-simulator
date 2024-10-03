@@ -20,12 +20,12 @@ from exp.params import  (
 from communication.send_data import recieveObject
 from communication.messages import Task
 from communication.replicaManagerServer import ReplicaManagerServer
-from functions.function_for_migration import (
+from protos.migration_best_case import (
     manageEvictionForBest,
     predictNextUssage,
     bestMigration,
-    manageUsingKNN
 )
+
 from functions.costs import (
     nodeImportanceV2, 
     transefrtWithGain, 
