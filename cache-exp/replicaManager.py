@@ -868,4 +868,4 @@ if __name__ == "__main__":
     
     
     task_manager.nodes_infos = data["infos"]
-    manageUsingKNN(task_manager)
+    task_manager.startV5()
