@@ -549,7 +549,7 @@ def updateKNNModel(dataset, min_traces=100,k=3):
     previous_data = copy.deepcopy(dataset)
     data = pd.DataFrame(dataset)
     
-    if data.shape[0] < min_traces:
+    if data.shape[0] < 10:
         #print("Not enough data points for prediction.")
         return False, None, None
     

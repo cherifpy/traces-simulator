@@ -1,7 +1,6 @@
 import time
 import numpy as np
 from exp.params import MEMCACHED_LISTENING_PORT, EXECUTION_LOCAL
-if not EXECUTION_LOCAL: import pylibmc
 import redis
 import os
 import copy 
@@ -36,10 +35,7 @@ class Cache:
             content = p.read()
         
         servers = [f"{ip_dst}:{MEMCACHED_LISTENING_PORT}"]  # Adresse du serveur Memcached
-        
-        #TODO Check if the data is sended and ask the client to access id to set the LRU
-        #client_tmp = pylibmc.Client(servers, binary=True, behaviors={"tcp_nodelay": True})
-        #r = client_tmp.set(id_dataset, content)
+
         r = redis.Redis(host=ip_dst, port=MEMCACHED_LISTENING_PORT, db=0, decode_responses=True)
 
         try:
@@ -102,8 +98,7 @@ class Cache:
     def getStats(self, verbos=False):
         if EXECUTION_LOCAL:
             return [("0", {"used_memory":f'{self.memory_used}',"maxmemory":f'{self.cache_size}'})]
-        
-        #stats = pylibmc.Client([f'0.0.0.0:{MEMCACHED_LISTENING_PORT}'], binary=True, behaviors={"tcp_nodelay": True}).get_stats()
+
         r = redis.Redis(host='0.0.0.0', port=MEMCACHED_LISTENING_PORT,db=0)
         memory_info = r.info('memory')
         stats = [('this',memory_info)]
@@ -162,12 +157,7 @@ class Cache:
             print(f"Error connecting to Redis: {e}")
             return None
     def connectToMemcache(self):
-        try:
-            self.client = pylibmc.Client([f'0.0.0.0:{MEMCACHED_LISTENING_PORT}'], binary=True, behaviors={"tcp_nodelay": True})
-            return self.client
-        except Exception as e:
-            print(f"Error connecting to Memcached: {e}")
-            return None
+        pass
 
     #TODO a revoire le return true dans except
     def deleteFromCache(self, key,ds_size=0):
@@ -176,8 +166,7 @@ class Cache:
             self.memory_used-=(ds_size*1024+100)
             return True
         try:
-            
-            #client = pylibmc.Client([f'0.0.0.0:{MEMCACHED_LISTENING_PORT}'], binary=True, behaviors={"tcp_nodelay": True})
+
             client = redis.Redis(host='0.0.0.0', port=MEMCACHED_LISTENING_PORT, db=0,decode_responses=True)
             r = client.delete(key)
             return True
