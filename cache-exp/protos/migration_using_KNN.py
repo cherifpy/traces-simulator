@@ -41,6 +41,10 @@ import random
 
 
 def manageUsingKNN(self):
+    knn_accuracy = {
+        "time" : [],
+        "accuracy" : []
+    }
 
     if not self.nodes_infos:
         return False
@@ -77,6 +81,8 @@ def manageUsingKNN(self):
         data_for_knn = updateDataset(dataset=data_for_knn, id_dataset=task.id_dataset, time=index, window_size=WINDOW_SIZE)
         
         model_ready, accuracy, model = updateKNNModel(data_for_knn)
+        knn_accuracy['time'].append(index)
+        knn_accuracy['accuracy'].append(accuracy)
 
         node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
         node_port = self.nodes_infos[int(task.id_node)]["node_port"]
@@ -153,6 +159,9 @@ def manageUsingKNN(self):
             self.writeTransfert(f"{task.id_task},{task.id_dataset},-1,{task.id_node},{task.ds_size},0,NoTransfert\n")
     df = pd.DataFrame(data_for_knn)
     df.to_csv("/tmp/data_used_for_KNN.csv")
+
+    df = pd.DataFrame(knn_accuracy)
+    df.tp_csv('/tmp/knn_accuracy.csv')
     return True
 
 
@@ -238,7 +247,7 @@ def updateKNNModel(dataset, min_traces=100,k=3):
 
     if data.shape[0] < 10:
         #print("Not enough data points for prediction.")
-        return False, None, None
+        return False, 0, None
     
     X = np.array(data[['popularity_on_node','popularity_on_neighbors','last_time_used']])
     y = np.array(data['decision'])
