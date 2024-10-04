@@ -37,7 +37,7 @@ import numpy as np
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, roc_auc_score, roc_curve
-
+from sklearn.preprocessing import LabelEncoder
 import random
 
 
@@ -85,7 +85,7 @@ def manageUsingKNN(self):
 
         data_for_knn = updateDataset(dataset=data_for_knn, id_dataset=task.id_dataset, time=index, window_size=WINDOW_SIZE)
 
-        if index % 50 == 0:
+        if index%50 == 0:
             model_ready, accuracy, model = updateKNNModel(data_for_knn, knn_accuracy)
 
         node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
@@ -170,7 +170,7 @@ def manageUsingKNN(self):
 
 
 def getStat(dataset,id_ds, id_node, index):
-    w_size = 20
+    w_size = 50
     p_node = 0
     p_neighbors = 0
     last_used = w_size
@@ -225,7 +225,7 @@ def updateDataset(dataset, id_dataset, time, window_size):
                 dataset['decision'][i] = 0
     return dataset
 
-def updateKNNModel(dataset, knn, knn_accuracy,min_traces=100,k=3):
+def updateKNNModel(dataset, knn_accuracy,min_traces=100,k=5):
     previous_data = copy.deepcopy(dataset)
     data_filtred = {
         'id_dataset':[],
@@ -237,24 +237,20 @@ def updateKNNModel(dataset, knn, knn_accuracy,min_traces=100,k=3):
         'decision':[]
     }
 
-    for i in range(len(dataset["id_dataset"])):
-        if dataset['decision'][i] is not None:
-            data_filtred['id_dataset'].append(dataset['id_dataset'][i])
-            data_filtred['time'].append(dataset['time'][i])
-            data_filtred['popularity_on_node' ].append(dataset['popularity_on_node' ][i])
-            data_filtred['popularity_on_neighbors'].append(dataset['popularity_on_neighbors'][i])
-            data_filtred['softwar_classe'].append(dataset['softwar_classe'][i])
-            data_filtred['last_time_used'].append(dataset['last_time_used'][i])
-            data_filtred['decision'].append(dataset['decision'][i])
 
     data = pd.DataFrame(data_filtred)
+    data_cleaned = data.dropna()
+
+
+    label_encoder = LabelEncoder()
+    data_cleaned['id_dataset_encoded'] = label_encoder.fit_transform(data_cleaned['id_dataset'])
 
     if data.shape[0] < 10:
         #print("Not enough data points for prediction.")
         return False, 0, None
     
-    X = np.array(data[['popularity_on_node','popularity_on_neighbors','last_time_used']])
-    y = np.array(data['decision'])
+    X = np.array(data_cleaned[['id_dataset_encoded','popularity_on_node','popularity_on_neighbors','last_time_used']])
+    y = np.array(data_cleaned['decision'])
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)   
     
@@ -262,7 +258,7 @@ def updateKNNModel(dataset, knn, knn_accuracy,min_traces=100,k=3):
     
     knn.fit(X_train, y_train)
     y_pred = knn.predict(X_test)
-    y_prob = knn.predict_proba(X_test)[:, 1]
+    y_prob = knn.predict_proba(X_test)
     accuracy = accuracy_score(y_test, y_pred)
 
     knn_accuracy['accuracy_score'].append(accuracy)
