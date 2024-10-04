@@ -161,7 +161,7 @@ def manageUsingKNN(self):
     df.to_csv("/tmp/data_used_for_KNN.csv")
 
     df = pd.DataFrame(knn_accuracy)
-    df.tp_csv('/tmp/knn_accuracy.csv')
+    df.to_csv('/tmp/knn_accuracy.csv')
     return True
 
 
