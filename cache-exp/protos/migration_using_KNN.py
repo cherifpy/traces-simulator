@@ -36,14 +36,19 @@ import pandas as pd
 import numpy as np
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, roc_auc_score, roc_curve
+
 import random
 
 
 def manageUsingKNN(self):
     knn_accuracy = {
-        "time" : [],
-        "accuracy" : []
+        'accuracy_score' : [],
+        'precision_score' : [],
+        'recall_score' : [],
+        'f1_score' : [],
+        'confusion_matrix' : [],
+        'roc_auc_score' : [],
     }
 
     if not self.nodes_infos:
@@ -79,10 +84,9 @@ def manageUsingKNN(self):
         self.data[task.id_dataset].updateDataState(task.id_node)
 
         data_for_knn = updateDataset(dataset=data_for_knn, id_dataset=task.id_dataset, time=index, window_size=WINDOW_SIZE)
-        
-        model_ready, accuracy, model = updateKNNModel(data_for_knn)
-        knn_accuracy['time'].append(index)
-        knn_accuracy['accuracy'].append(accuracy)
+
+        if index % 50 == 0:
+            model_ready, accuracy, model = updateKNNModel(data_for_knn, knn_accuracy)
 
         node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
         node_port = self.nodes_infos[int(task.id_node)]["node_port"]
@@ -221,7 +225,7 @@ def updateDataset(dataset, id_dataset, time, window_size):
                 dataset['decision'][i] = 0
     return dataset
 
-def updateKNNModel(dataset, min_traces=100,k=3):
+def updateKNNModel(dataset, knn, knn_accuracy,min_traces=100,k=3):
     previous_data = copy.deepcopy(dataset)
     data_filtred = {
         'id_dataset':[],
@@ -252,15 +256,21 @@ def updateKNNModel(dataset, min_traces=100,k=3):
     X = np.array(data[['popularity_on_node','popularity_on_neighbors','last_time_used']])
     y = np.array(data['decision'])
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)   
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)   
     
     knn = KNeighborsClassifier(n_neighbors=k)
     
     knn.fit(X_train, y_train)
     y_pred = knn.predict(X_test)
-
+    y_prob = knn.predict_proba(X_test)[:, 1]
     accuracy = accuracy_score(y_test, y_pred)
-    print(f'Accuracy: {accuracy*100:.2f}%')
+
+    knn_accuracy['accuracy_score'].append(accuracy)
+    knn_accuracy['precision_score'].append(precision_score(y_test, y_pred))
+    knn_accuracy['recall_score'].append(recall_score(y_test, y_pred))
+    knn_accuracy['f1_score'].append(f1_score(y_test, y_pred))
+    knn_accuracy['confusion_matrix'].append(confusion_matrix(y_test, y_pred))
+    knn_accuracy['roc_auc_score'].append(roc_auc_score(y_test, y_prob))
     
     return True, accuracy, knn
 
