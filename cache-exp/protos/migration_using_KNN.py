@@ -42,7 +42,7 @@ import random
 
 
 def manageUsingKNN(self):
-    knn_accuracy = {
+    knn_metrics = {
         'accuracy_score' : [],
         'precision_score' : [],
         'recall_score' : [],
@@ -86,7 +86,7 @@ def manageUsingKNN(self):
         data_for_knn = updateDataset(dataset=data_for_knn, id_dataset=task.id_dataset, time=index, window_size=WINDOW_SIZE)
 
         if index%50 == 0:
-            model_ready, accuracy, model = updateKNNModel(data_for_knn, knn_accuracy)
+            model_ready, knn_metrics, model = updateKNNModel(data_for_knn, knn_metrics)
 
         node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
         node_port = self.nodes_infos[int(task.id_node)]["node_port"]
@@ -164,8 +164,8 @@ def manageUsingKNN(self):
     df = pd.DataFrame(data_for_knn)
     df.to_csv("/tmp/data_used_for_KNN.csv")
 
-    df = pd.DataFrame(knn_accuracy)
-    df.to_csv('/tmp/knn_accuracy.csv')
+    df = pd.DataFrame(knn_metrics)
+    df.to_csv('/tmp/knn_metrics.csv')
     return True
 
 
@@ -225,7 +225,7 @@ def updateDataset(dataset, id_dataset, time, window_size):
                 dataset['decision'][i] = 0
     return dataset
 
-def updateKNNModel(dataset, knn_accuracy,min_traces=100,k=5):
+def updateKNNModel(dataset, knn_metrics,min_traces=100,k=5):
     previous_data = copy.deepcopy(dataset)
     data_filtred = {
         'id_dataset':[],
@@ -261,14 +261,14 @@ def updateKNNModel(dataset, knn_accuracy,min_traces=100,k=5):
     y_prob = knn.predict_proba(X_test)
     accuracy = accuracy_score(y_test, y_pred)
 
-    knn_accuracy['accuracy_score'].append(accuracy)
-    knn_accuracy['precision_score'].append(precision_score(y_test, y_pred))
-    knn_accuracy['recall_score'].append(recall_score(y_test, y_pred))
-    knn_accuracy['f1_score'].append(f1_score(y_test, y_pred))
-    knn_accuracy['confusion_matrix'].append(confusion_matrix(y_test, y_pred))
-    knn_accuracy['roc_auc_score'].append(roc_auc_score(y_test, y_prob))
+    knn_metrics['accuracy_score'].append(accuracy)
+    knn_metrics['precision_score'].append(precision_score(y_test, y_pred))
+    knn_metrics['recall_score'].append(recall_score(y_test, y_pred))
+    knn_metrics['f1_score'].append(f1_score(y_test, y_pred))
+    knn_metrics['confusion_matrix'].append(confusion_matrix(y_test, y_pred))
+    knn_metrics['roc_auc_score'].append(roc_auc_score(y_test, y_prob))
     
-    return True, accuracy, knn
+    return True, knn_metrics, knn
 
 
 
