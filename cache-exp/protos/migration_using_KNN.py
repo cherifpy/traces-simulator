@@ -164,8 +164,8 @@ def manageUsingKNN(self):
     df = pd.DataFrame(data_for_knn)
     df.to_csv("/tmp/data_used_for_KNN.csv")
 
-    df = pd.DataFrame(knn_metrics)
-    df.to_csv('/tmp/knn_metrics.csv')
+    df1 = pd.DataFrame(knn_metrics)
+    df1.to_csv("/tmp/knn_metrics.csv")
     return True
 
 
