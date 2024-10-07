@@ -86,7 +86,7 @@ def manageUsingKNN(self):
         data_for_knn = updateDataset(dataset=data_for_knn, id_dataset=task.id_dataset, time=index, window_size=WINDOW_SIZE)
 
         if index%50 == 0:
-            model_ready, knn_metrics, model = updateKNNModel(data_for_knn, knn_metrics)
+            model_ready, accuracy, model = updateKNNModel(data_for_knn, knn_metrics)
 
         node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
         node_port = self.nodes_infos[int(task.id_node)]["node_port"]
@@ -265,10 +265,10 @@ def updateKNNModel(dataset, knn_metrics,min_traces=100,k=5):
     knn_metrics['precision_score'].append(precision_score(y_test, y_pred))
     knn_metrics['recall_score'].append(recall_score(y_test, y_pred))
     knn_metrics['f1_score'].append(f1_score(y_test, y_pred))
-    knn_metrics['confusion_matrix'].append(confusion_matrix(y_test, y_pred))
-    knn_metrics['roc_auc_score'].append(roc_auc_score(y_test, y_prob))
-    
-    return True, knn_metrics, knn
+    knn_metrics['confusion_matrix'].append(None)#confusion_matrix(y_test, y_pred))
+    knn_metrics['roc_auc_score'].append(None)#roc_auc_score(y_test, y_prob))
+
+    return True, accuracy, knn
 
 
 
@@ -286,9 +286,9 @@ def decideOnMigrationUsingKNN(traces,id_ds, id_node, index,model,model_ready=Tru
         return True
     else:
         return False
-
-
+    
 def evictionUsingKNN(self,traces, id_ds, id_node,index, model ):#self,condidate, task.id_node, index,model
+    
     #partie TTL
     data_item = self.data[id_ds]
     
@@ -301,7 +301,6 @@ def evictionUsingKNN(self,traces, id_ds, id_node,index, model ):#self,condidate,
     if self.replicas[(id_ds, id_node)].nb_migrations > MAX_MIGRATIONS:
         self.writeOutput("deleted cause of Migration limite\n")
         return {"delete":True, "send":False}
-    
     
     neighbors = []
     storage_on_node = []
