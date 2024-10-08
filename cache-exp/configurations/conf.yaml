@@ -1,5 +1,5 @@
 ---
-job_name: test_conf
+job_name: data_migration
 user_id: csimohammed
 exp_env: debian11-min
 exp_walltime: 01:15:00
