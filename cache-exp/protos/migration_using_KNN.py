@@ -234,18 +234,9 @@ def updateDataset(dataset, id_dataset, time, window_size):
 def updateKNNModel(dataset,min_traces=100,k=5):
     previous_data = copy.deepcopy(dataset)
 
-    data_filtred = {
-        'id_dataset':[],
-        'time':[],
-        'popularity_on_node' : [],
-        'popularity_on_neighbors' :[],
-        'softwar_classe':[],
-        'last_time_used':[],
-        'decision':[]
-    }
 
     metrics = {}
-    data = pd.DataFrame(data_filtred)
+    data = pd.DataFrame(dataset)
     data_cleaned = data.dropna()
 
 
