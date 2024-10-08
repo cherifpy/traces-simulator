@@ -86,11 +86,11 @@ def manageUsingKNN(self):
 
         data_for_knn = updateDataset(dataset=data_for_knn, id_dataset=task.id_dataset, time=index, window_size=WINDOW_SIZE)
 
-        #if index%10 == 0:
-        model_ready, metrics, model = updateKNNModel(data_for_knn)
+        if index%20 == 0:
+            model_ready, metrics, model = updateKNNModel(data_for_knn)
 
-        for key in metrics.keys():
-            knn_metrics[key].append(metrics[key])
+            for key in metrics.keys():
+                knn_metrics[key].append(metrics[key])
 
         node_ip = self.nodes_infos[int(task.id_node)]["node_ip"]
         node_port = self.nodes_infos[int(task.id_node)]["node_port"]
