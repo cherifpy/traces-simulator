@@ -199,8 +199,8 @@ def getStat(dataset,id_ds, id_node, index):
                     if last_used == w_size: last_used = i
                 else: p_neighbors += 1
                 p_software.append(dataset.iloc[index-i]["node_id"])
-    p_machine = max(set(p_software), key=p_software.count)
-    return p_node,p_neighbors,p_machine,last_used
+    #p_machine = max(set(p_software), key=p_software.count)
+    return p_node,p_neighbors,p_software,last_used
 
 def saveData(dataset, id_ds, time,p_node, p_neighbors, s_classe, last_time_used):
     """
