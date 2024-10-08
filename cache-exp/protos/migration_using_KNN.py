@@ -216,7 +216,7 @@ def saveData(dataset, id_ds, time,p_node, p_neighbors, s_classe, last_time_used)
     dataset['softwar_classe'].append(s_classe)
     dataset['last_time_used'].append(last_time_used)
     dataset['decision'].append(None)
-    print(f"taille du dataset = {len(dataset['id_dataset'])}")
+    #print(f"taille du dataset = {len(dataset['id_dataset'])}")
     return dataset
 
 def updateDataset(dataset, id_dataset, time, window_size):
@@ -242,9 +242,9 @@ def updateKNNModel(dataset,min_traces=100,k=5):
 
     label_encoder = LabelEncoder()
     data_cleaned['id_dataset_encoded'] = label_encoder.fit_transform(data_cleaned['id_dataset'])
-    print(f"{data_cleaned.shape}\n")
-    if data_cleaned.shape[0] < 10:
-        print(f"Manque de donnée\n")
+    #print(f"{data_cleaned.shape}\n")
+    if data_cleaned.shape[0] < 100:
+        #print(f"Manque de donnée\n")
         metrics['accuracy_score'] = 0.
         metrics['precision_score'] = 0.
         metrics['recall_score'] = 0.
@@ -271,7 +271,7 @@ def updateKNNModel(dataset,min_traces=100,k=5):
     metrics['recall_score'] = recall_score(y_test, y_pred)
     metrics['f1_score'] = f1_score(y_test, y_pred)
     metrics['confusion_matrix'] = confusion_matrix(y_test, y_pred)
-    metrics['roc_auc_score'] = roc_auc_score(y_test, y_prob)
+    metrics['roc_auc_score'] =  0. #roc_auc_score(y_test, y_prob)
 
     return True, metrics, knn
 
@@ -286,7 +286,7 @@ def decideOnMigrationUsingKNN(traces,id_ds, id_node, index,model,model_ready=Tru
     
     p_node, p_neighbors, p_software, last_used = getStat(traces ,id_ds,id_node,index)
     prediction  = model.predict([[p_node, p_neighbors,last_used]])
-    print(f"prediction {prediction[0]}")
+    #print(f"prediction {prediction[0]}")
     if prediction[0] > 0.5:
         return True
     else:
