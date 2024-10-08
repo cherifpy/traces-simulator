@@ -199,8 +199,8 @@ def getStat(dataset,id_ds, id_node, index):
                     if last_used == w_size: last_used = i
                 else: p_neighbors += 1
                 p_software.append(dataset.iloc[index-i]["node_id"])
-
-    return p_node,p_neighbors,p_software,last_used
+    p_machine = max(set(p_software), key=p_software.count)
+    return p_node,p_neighbors,p_machine,last_used
 
 def saveData(dataset, id_ds, time,p_node, p_neighbors, s_classe, last_time_used):
     """
@@ -285,7 +285,8 @@ def decideOnMigrationUsingKNN(traces,id_ds, id_node, index,model,model_ready=Tru
             return False
     
     p_node, p_neighbors, p_software, last_used = getStat(traces ,id_ds,id_node,index)
-    prediction  = model.predict([[p_node, p_neighbors,last_used]])
+    id_dataset = int(id_ds[2:])
+    prediction  = model.predict([[id_dataset, p_node, p_neighbors,last_used]])
     #print(f"prediction {prediction[0]}")
     if prediction[0] > 0.5:
         return True
