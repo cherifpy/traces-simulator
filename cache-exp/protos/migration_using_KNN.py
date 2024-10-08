@@ -86,7 +86,7 @@ def manageUsingKNN(self):
 
         data_for_knn = updateDataset(dataset=data_for_knn, id_dataset=task.id_dataset, time=index, window_size=WINDOW_SIZE)
 
-        if index%50 == 0:
+        if index%10 == 0:
             model_ready, metrics, model = updateKNNModel(data_for_knn)
 
             for key in metrics.keys():
@@ -206,6 +206,8 @@ def saveData(dataset, id_ds, time,p_node, p_neighbors, s_classe, last_time_used)
     """
         function to save data on the dataset
 
+        params : dataset, id_ds, time,p_node, p_neighbors, s_classe, last_time_used
+
     """
     dataset['id_dataset'].append(id_ds)
     dataset['time'].append(time)
@@ -214,7 +216,7 @@ def saveData(dataset, id_ds, time,p_node, p_neighbors, s_classe, last_time_used)
     dataset['softwar_classe'].append(s_classe)
     dataset['last_time_used'].append(last_time_used)
     dataset['decision'].append(None)
-
+    print(f"taille du dataset = {len(dataset['id_dataset'])}")
     return dataset
 
 def updateDataset(dataset, id_dataset, time, window_size):
@@ -231,7 +233,7 @@ def updateDataset(dataset, id_dataset, time, window_size):
 
 def updateKNNModel(dataset,min_traces=100,k=5):
     previous_data = copy.deepcopy(dataset)
-    
+
     data_filtred = {
         'id_dataset':[],
         'time':[],
@@ -250,14 +252,20 @@ def updateKNNModel(dataset,min_traces=100,k=5):
     label_encoder = LabelEncoder()
     data_cleaned['id_dataset_encoded'] = label_encoder.fit_transform(data_cleaned['id_dataset'])
 
-    if data.shape[0] < 10:
+    if data_cleaned.shape[0] < 10:
+        metrics['accuracy_score'] = 0.
+        metrics['precision_score'] = 0.
+        metrics['recall_score'] = 0.
+        metrics['f1_score'] = 0.
+        metrics['confusion_matrix'] = []
+        metrics['roc_auc_score'] = 0.
         #print("Not enough data points for prediction.")
-        return False, 0, None
+        return False, metrics, None
     
     X = np.array(data_cleaned[['id_dataset_encoded','popularity_on_node','popularity_on_neighbors','last_time_used']])
     y = np.array(data_cleaned['decision'])
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)   
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)   
     
     knn = KNeighborsClassifier(n_neighbors=k)
     
