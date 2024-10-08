@@ -251,8 +251,9 @@ def updateKNNModel(dataset,min_traces=100,k=5):
 
     label_encoder = LabelEncoder()
     data_cleaned['id_dataset_encoded'] = label_encoder.fit_transform(data_cleaned['id_dataset'])
-
+    print(f"{data_cleaned.shape}\n")
     if data_cleaned.shape[0] < 10:
+        print(f"Manque de donnée\n")
         metrics['accuracy_score'] = 0.
         metrics['precision_score'] = 0.
         metrics['recall_score'] = 0.
@@ -261,7 +262,7 @@ def updateKNNModel(dataset,min_traces=100,k=5):
         metrics['roc_auc_score'] = 0.
         #print("Not enough data points for prediction.")
         return False, metrics, None
-    
+    print(f"Donnée ok\n")
     X = np.array(data_cleaned[['id_dataset_encoded','popularity_on_node','popularity_on_neighbors','last_time_used']])
     y = np.array(data_cleaned['decision'])
 
