@@ -66,7 +66,8 @@ def manageUsingKNN(self):
         'popularity_on_neighbors' :[],
         'softwar_classe':[],
         'last_time_used':[],
-        'decision':[]
+        'decision':[],
+        'model_decision':[]
     }
 
     for index, row in traces.iterrows():
@@ -116,7 +117,7 @@ def manageUsingKNN(self):
                     
                     p_node, p_neighbors, p_software, last_used = getStat(traces,condidate,task.id_node,index)
                     
-                    data_for_knn = saveData(
+                    """data_for_knn = saveData(
                         dataset=data_for_knn,
                         id_ds=condidate,
                         time=index,
@@ -124,9 +125,20 @@ def manageUsingKNN(self):
                         p_node=p_node,
                         last_time_used=last_used,
                         s_classe=p_software
-                    )
+                    )"""
                     
-                    r_eviction = evictionUsingKNN(self,traces, condidate, task.id_node, index,model)
+                    r_eviction, decision = evictionUsingKNN(self,traces, condidate, task.id_node, index,model)
+
+                    data_for_knn = saveData(
+                        dataset=data_for_knn,
+                        id_ds=condidate,
+                        time=index,
+                        p_neighbors=p_neighbors,
+                        p_node=p_node,
+                        last_time_used=last_used,
+                        s_classe=p_software,
+                        model_decision=decision 
+                    )
                     
                     if r_eviction["send"]: 
                         id_dst_node = r_eviction["id_dst_node"]
@@ -202,7 +214,7 @@ def getStat(dataset,id_ds, id_node, index):
     #p_machine = max(set(p_software), key=p_software.count)
     return p_node,p_neighbors,p_software,last_used
 
-def saveData(dataset, id_ds, time,p_node, p_neighbors, s_classe, last_time_used):
+def saveData(dataset, id_ds, time,p_node, p_neighbors, s_classe, last_time_used,model_decision):
     """
         function to save data on the dataset
 
@@ -216,6 +228,7 @@ def saveData(dataset, id_ds, time,p_node, p_neighbors, s_classe, last_time_used)
     dataset['softwar_classe'].append(s_classe)
     dataset['last_time_used'].append(last_time_used)
     dataset['decision'].append(None)
+    dataset['model_decision'].append(model_decision)
     #print(f"taille du dataset = {len(dataset['id_dataset'])}")
     return dataset
 
@@ -254,7 +267,7 @@ def updateKNNModel(dataset,min_traces=100,k=5):
         #print("Not enough data points for prediction.")
         return False, metrics, None
     print(f"Donnée ok\n")
-    X = np.array(data_cleaned[['id_dataset_encoded','popularity_on_node','popularity_on_neighbors','last_time_used']])
+    X = np.array(data_cleaned[['popularity_on_node','popularity_on_neighbors','last_time_used']])
     y = np.array(data_cleaned['decision'])
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)   
@@ -286,7 +299,7 @@ def decideOnMigrationUsingKNN(traces,id_ds, id_node, index,model,model_ready=Tru
     
     p_node, p_neighbors, p_software, last_used = getStat(traces ,id_ds,id_node,index)
     id_dataset = int(id_ds[2:])
-    prediction  = model.predict([[id_dataset, p_node, p_neighbors,last_used]])
+    prediction  = model.predict([[p_node, p_neighbors,last_used]])
     #print(f"prediction {prediction[0]}")
     if prediction[0] > 0.5:
         return True
@@ -299,7 +312,8 @@ def evictionUsingKNN(self,traces, id_ds, id_node,index, model ):#self,condidate,
     data_item = self.data[id_ds]
     
     p = self.data[id_ds].TTL
-    if not decideOnMigrationUsingKNN(traces, id_ds, id_node,index, model,):
+    decision = decideOnMigrationUsingKNN(traces, id_ds, id_node,index, model,)
+    if not decision:
         self.writeOutput("deleted cause of TTL\n")
         return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
     
@@ -340,4 +354,4 @@ def evictionUsingKNN(self,traces, id_ds, id_node,index, model ):#self,condidate,
                 optimal_cost = cost
                 node = id_n
 
-    return {"delete":True, "send": True if not node is None else False, "id_dst_node":node}
+    return {"delete":True, "send": True if not node is None else False, "id_dst_node":node}, 1 if decision else 0
