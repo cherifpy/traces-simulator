@@ -127,7 +127,7 @@ def manageUsingKNN(self):
                         s_classe=p_software
                     )"""
                     
-                    r_eviction, decision = evictionUsingKNN(self,traces, condidate, task.id_node, index,model)
+                    r_eviction = evictionUsingKNN(self,traces, condidate, task.id_node, index,model)
 
                     data_for_knn = saveData(
                         dataset=data_for_knn,
@@ -137,10 +137,10 @@ def manageUsingKNN(self):
                         p_node=p_node,
                         last_time_used=last_used,
                         s_classe=p_software,
-                        model_decision=decision 
+                        model_decision=r_eviction[1]
                     )
                     
-                    if r_eviction["send"]: 
+                    if r_eviction[0]["send"]: 
                         id_dst_node = r_eviction["id_dst_node"]
                         self.writeOutput(f"send {condidate} from {task.id_node} and send it to {id_dst_node}\n")
                         r = False
