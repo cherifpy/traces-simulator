@@ -348,10 +348,10 @@ def evictionUsingKNN(self,traces, id_ds, id_node,index, model ):#self,condidate,
                 id_dst=id_n,
                 key_peer_node=keys_peer_node,
                 graphe_infos=self.graphe_infos
-            )
+            )   
 
             if cost > optimal_cost:
                 optimal_cost = cost
                 node = id_n
 
-    return {"delete":True, "send": True if not node is None else False, "id_dst_node":node}, 1 if decision else 0
+    return {"delete":True, "send": True if not node is None else False, "id_dst_node":node}, decision
