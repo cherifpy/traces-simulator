@@ -127,7 +127,7 @@ def manageUsingKNN(self):
                         s_classe=p_software
                     )"""
                     
-                    r_eviction = evictionUsingKNN(self,traces, condidate, task.id_node, index,model)
+                    result = evictionUsingKNN(self,traces, condidate, task.id_node, index,model)
 
                     data_for_knn = saveData(
                         dataset=data_for_knn,
@@ -137,10 +137,10 @@ def manageUsingKNN(self):
                         p_node=p_node,
                         last_time_used=last_used,
                         s_classe=p_software,
-                        model_decision=r_eviction[1]
+                        model_decision=result[1]
                     )
-                    
-                    if r_eviction[0]["send"]: 
+                    r_eviction = result[0]
+                    if r_eviction["send"]: 
                         id_dst_node = r_eviction["id_dst_node"]
                         self.writeOutput(f"send {condidate} from {task.id_node} and send it to {id_dst_node}\n")
                         r = False
@@ -315,12 +315,12 @@ def evictionUsingKNN(self,traces, id_ds, id_node,index, model ):#self,condidate,
     decision = decideOnMigrationUsingKNN(traces, id_ds, id_node,index, model,)
     if not decision:
         self.writeOutput("deleted cause of TTL\n")
-        return {"delete":True, "send":False} #supp si le TTL l'exige => bcp de donnée dans l'infra
+        return {"delete":True, "send":False}, 0 #supp si le TTL l'exige => bcp de donnée dans l'infra
     
     self.writeOutput("TTL esquivé \n")
     if self.replicas[(id_ds, id_node)].nb_migrations > MAX_MIGRATIONS:
         self.writeOutput("deleted cause of Migration limite\n")
-        return {"delete":True, "send":False}
+        return {"delete":True, "send":False}, 0
     
     neighbors = []
     storage_on_node = []
